@@ -1,191 +1,300 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>模块库</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #f5f5f7; padding-bottom: 60px; }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>模块库</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+  }
+  #main {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+  }
 
-    /* 主页面 */
-    #main { display: block; }
-    .header {
-      background: #fff;
-      padding: 12px 16px;
-      display: flex; align-items: center; gap: 12px;
-      position: sticky; top: 0; z-index: 10;
-    }
-    .search-bar {
-      flex: 1;
-      background: #f2f2f7;
-      border-radius: 10px;
-      padding: 8px 12px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .search-bar input {
-      background: transparent;
-      border: none;
-      outline: none;
-      width: 100%;
-      font-size: 16px;
-    }
-    .banner-box { position: relative; }
-    .banner {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-    .banner-text {
-      position: absolute;
-      top: 20px; left: 20px;
-      color: #fff;
-      font-size: 20px;
-      text-shadow: 0 0 5px #000;
-    }
-    .tabs {
-      display: flex;
-      background: #fff;
-      padding: 12px 16px;
-      gap: 12px;
-      overflow-x: auto;
-    }
-    .tab {
-      background: #f2f2f7;
-      padding: 8px 16px;
-      border-radius: 20px;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 14px;
-    }
-    .user-bar {
-      display: flex; align-items: center;
-      padding: 16px;
-      background: #fff;
-    }
-    .avatar {
-      width: 50px; height: 50px;
-      border-radius: 50%;
-      background: url('https://i.imgur.com/9oZsUeF.jpeg') center / cover;
-      margin-right: 16px;
-    }
-    .username {
-      font-size: 18px;
-      font-weight: 500;
-    }
-    .notice {
-      padding: 12px 16px;
-      background: #f2f2f7;
-      font-size: 16px;
-    }
-    .file-item {
-      display: flex; align-items: center;
-      padding: 16px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: #000;
-    }
-    .file-icon {
-      width: 40px; height: 40px;
-      margin-right: 12px;
-    }
-    .file-name {
-      flex: 1;
-      font-size: 16px;
-    }
+  .search-bar {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  .search-input {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #f2f2f2;
+    border: 2px solid #333;
+    border-radius: 20px;
+    padding: 6px 12px;
+    margin-right: 10px;
+  }
+  .search-input i {
+    margin-right: 8px;
+    color: #999;
+  }
+  .search-input input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 15px;
+  }
+  .search-star {
+    font-size: 20px;
+    color: #999;
+  }
+  .toolbox {
+    font-size: 20px;
+    color: #999;
+    margin-left: 10px;
+  }
 
-    /* 滚动歌词 */
-    .lyric-box {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      padding: 12px;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    .lyric {
-      display: inline-block;
-      animation: scroll 15s linear infinite;
-    }
-    @keyframes scroll {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-  </style>
+  .banner {
+    width: 100%;
+    height: 120px;
+    position: relative;
+    overflow: hidden;
+  }
+  .banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .banner-tip {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    text-shadow: 0 0 4px rgba(0,0,0,0.5);
+  }
+
+  .tabs {
+    display: flex;
+    padding: 10px 16px;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .tab-btn {
+    padding: 6px 12px;
+    background: #f2f2f2;
+    border-radius: 18px;
+    font-size: 13px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .tab-btn:hover {
+    background: #e0e0e0;
+  }
+  .tab-btn i {
+    font-size: 14px;
+  }
+  .tab-btn.active {
+    background: #007AFF;
+    color: #fff;
+  }
+
+  .user-bar {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid #eee;
+  }
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    background: url("https://imgtu.com/i/9gBvHn") no-repeat center/cover;
+  }
+  .user-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .report-btn {
+    color: #999;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .file-list {
+    padding: 0 16px;
+  }
+  .file-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+  .file-icon {
+    width: 36px;
+    height: 36px;
+    margin-right: 10px;
+    background: url("https://img.icons8.com/fluency/48/e84393/folder.png") no-repeat center/cover;
+  }
+  .file-name {
+    flex: 1;
+    font-size: 15px;
+  }
+  .file-arrow {
+    color: #999;
+    font-size: 16px;
+  }
+
+  .footer-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+  }
+  .footer-icon {
+    font-size: 20px;
+    color: #999;
+  }
+  .footer-icon.badge {
+    position: relative;
+  }
+  .footer-icon.badge::after {
+    content: "11";
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff3b30;
+    color: #fff;
+    font-size: 10px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
 </head>
 <body>
-  <audio id="bgm" autoplay loop>
-    <source src="https://cdn.isang.cc/music/%E9%82%B3%E7%B4%AB%E6%A3%8B-%E5%94%AF%E4%B8%80.mp3" type="audio/mpeg">
-  
 
-  <div id="main">
-    <div class="header">
-      <div class="search-bar">
-        <span>🔍</span>
-        <input placeholder="模块库">
-        <span>⭐</span>
-      </div>
-      <span>🧰</span>
+<div id="main">
+  <div class="search-bar">
+    <div class="search-input">
+      <i>🔍</i>
+      <input type="text" placeholder="模块库">
+      <i>⚠️</i>
     </div>
+    <div class="search-star">⭐</div>
+    <div class="toolbox">🧰</div>
+  </div>
 
-    <div class="banner-box">
-      <img class="banner" src="https://i.imgur.com/8X7Z1yY.jpeg" alt="背景图">
-      <div class="banner-text">欢迎使用夏风音乐播放器！</div>
+  <div class="banner">
+    <img class="banner-img" src="https://picsum.photos/1920/1080?random" alt="Banner">
+    <div class="banner-tip">欢迎使用模块库</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab-btn">
+      <i>🔵</i> 官方群聊
     </div>
-
-    <div class="tabs">
-      <div class="tab">🔵 官方群聊</div>
-      <div class="tab">🔗 官方频道</div>
-      <div class="tab">🐧 QQ历史</div>
-      <div class="tab">💚 微信历史</div>
+    <div class="tab-btn">
+      <i>🔗</i> 官方频道
     </div>
-
-    <div class="user-bar">
-      <div class="avatar"></div>
-      <div class="username">满天猴子我腚最红</div>
+    <div class="tab-btn active" onclick="safeOpen('https://m.wandoujia.com/apps/566489/history')">
+      <i>🐧</i> QQ历史
     </div>
+    <div class="tab-btn" onclick="safeOpen('https://m.wandoujia.com/apps/596157/history')">
+      <i>💚</i> 微信历史
+    </div>
+  </div>
 
-    <div class="notice">本盘实时更新各类增加模块，欢迎访问</div>
+  <div class="user-bar">
+    <div class="user-avatar"></div>
+    <div class="user-name">满山猴子我腚最红</div>
+    <div class="report-btn">举报</div>
+  </div>
 
-    <a class="file-item" href="https://m.wandoujia.com/apps/566489/history" target="_blank">
-      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/qq.png" alt="QQ图标">
-      <div class="file-name">QQ历史版本</div>
-      <span>></span>
-    </a>
-    <a class="file-item" href="https://m.wandoujia.com/apps/596157/history" target="_blank">
-      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/wechat.png" alt="微信图标">
-      <div class="file-name">微信历史版本</div>
-      <span>></span>
-    </a>
-    <a class="file-item" href="#">
-      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/software-box.png" alt="软件图标">
+  <div class="file-list">
+    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/566489/history')">
+      <div class="file-icon"></div>
       <div class="file-name">实用软件</div>
-      <span>></span>
-    </a>
-    <a class="file-item" href="#">
-      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/stack.png" alt="框架图标">
+      <span class="file-arrow">→</span>
+    </div>
+    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/596157/history')">
+      <div class="file-icon"></div>
       <div class="file-name">应用框架</div>
-      <span>></span>
-    </a>
+      <span class="file-arrow">→</span>
+    </div>
+    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/566489/history')">
+      <div class="file-icon"></div>
+      <div class="file-name">QQ_模块</div>
+      <span class="file-arrow">→</span>
+    </div>
+    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/596157/history')">
+      <div class="file-icon"></div>
+      <div class="file-name">微信模块</div>
+      <span class="file-arrow">→</span>
+    </div>
   </div>
 
-  <div class="lyric-box">
-    <div class="lyric">你真的懂唯一 的定义 不只是如影随形</div>
+  <div class="footer-bar">
+    <span class="footer-icon">←</span>
+    <span class="footer-icon">🔍</span>
+    <span class="footer-icon">☰</span>
+    <span class="footer-icon badge">🔔</span>
+    <span class="footer-icon">🔄</span>
   </div>
+</div>
 
-  <script>
-    const audio = document.getElementById('bgm');
-    // 兼容自动播放策略
-    document.body.addEventListener('click', () => {
-      audio.play().catch(e => console.log("播放失败:", e));
-    }, { once: true });
-  </script>
+<script>
+  window.onload = function() {
+    const imgList = [
+      { src: 'https://imgtu.com/i/9gBvHn', selector: '.user-avatar' },
+      { src: 'https://picsum.photos/1920/1080?random', selector: '.banner-img' }
+    ];
+
+    imgList.forEach(img => {
+      const imgElement = new Image();
+      imgElement.src = img.src;
+      imgElement.onload = function() {
+        const target = document.querySelector(img.selector);
+        if (img.selector.includes('img')) {
+          target.src = this.src;
+        } else {
+          target.style.backgroundImage = `url(${this.src})`;
+        }
+      };
+      imgElement.onerror = function() {
+        console.error(`图片加载失败: ${img.src}`);
+      };
+    });
+  };
+
+  function safeOpen(url) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.click();
+  }
+</script>
 </body>
 </html>
