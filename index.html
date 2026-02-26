@@ -5,44 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>模块库</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, sans-serif; background: #f5f5f7; }
-
-    /* 登录页 */
-    .login {
-      position: fixed; inset: 0;
-      background: #fff;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      z-index: 999;
-      text-align: center;
-    }
-    .login-img {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      margin-bottom: 20px;
-      object-fit: cover;
-    }
-    .login h2 { margin-bottom: 20px; color: #333; }
-    .login input {
-      width: 80%; max-width: 300px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-      border: 1px solid #e5e5ea;
-      border-radius: 10px;
-      background: #f2f2f7;
-      font-size: 16px;
-    }
-    .login button {
-      padding: 12px 32px;
-      background: #007AFF; color: #fff;
-      border: none; border-radius: 10px;
-      font-size: 16px;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f5f5f7; padding-bottom: 60px; }
 
     /* 主页面 */
-    #main { display: none; }
+    #main { display: block; }
     .header {
       background: #fff;
       padding: 12px 16px;
@@ -54,33 +21,27 @@
       background: #f2f2f7;
       border-radius: 10px;
       padding: 8px 12px;
-      display: flex; align-items: center; gap: 8px;
+      display: flex; align-items: center; gap: 6px;
     }
     .search-bar input {
-      border: none; background: transparent;
-      outline: none; font-size: 16px;
-    }
-    .music-btn {
-      display: block;
-      margin: 10px auto;
-      padding: 8px 16px;
-      background: #007AFF;
-      color: #fff;
+      background: transparent;
       border: none;
-      border-radius: 8px;
-      font-size: 14px;
+      outline: none;
+      width: 100%;
+      font-size: 16px;
     }
     .banner-box { position: relative; }
     .banner {
-      width: 100%; height: 180px;
+      width: 100%;
+      height: 200px;
       object-fit: cover;
     }
-    .lyric {
+    .banner-text {
       position: absolute;
-      bottom: 20px; left: 20px;
+      top: 20px; left: 20px;
       color: #fff;
-      font-size: 16px;
-      text-shadow: 0 0 3px #000;
+      font-size: 20px;
+      text-shadow: 0 0 5px #000;
     }
     .tabs {
       display: flex;
@@ -90,66 +51,80 @@
       overflow-x: auto;
     }
     .tab {
-      padding: 6px 14px;
       background: #f2f2f7;
-      border-radius: 18px;
-      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 20px;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
     }
     .user-bar {
       display: flex; align-items: center;
-      padding: 12px 16px;
+      padding: 16px;
       background: #fff;
     }
     .avatar {
-      width: 40px; height: 40px;
+      width: 50px; height: 50px;
       border-radius: 50%;
-      background: url(https://i.imgur.com/9oZsUeF.jpeg) center / cover;
-      margin-right: 12px;
+      background: url('https://i.imgur.com/9oZsUeF.jpeg') center / cover;
+      margin-right: 16px;
     }
     .username {
-      flex: 1;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 500;
     }
     .notice {
-      background: #f2f2f7;
       padding: 12px 16px;
-      font-size: 15px;
-    }
-    .file-list {
-      background: #fff;
-      margin-top: 12px;
+      background: #f2f2f7;
+      font-size: 16px;
     }
     .file-item {
       display: flex; align-items: center;
       padding: 16px;
-      border-bottom: 1px solid #f2f2f7;
+      background: #fff;
+      border-bottom: 1px solid #eee;
       text-decoration: none;
-      color: inherit;
+      color: #000;
     }
     .file-icon {
       width: 40px; height: 40px;
       margin-right: 12px;
     }
-    .file-name { flex: 1; font-size: 16px; }
-    .file-arrow { color: #c7c7cc; }
+    .file-name {
+      flex: 1;
+      font-size: 16px;
+    }
+
+    /* 滚动歌词 */
+    .lyric-box {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 12px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .lyric {
+      display: inline-block;
+      animation: scroll 15s linear infinite;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
   </style>
 </head>
 <body>
-  <audio id="bgm" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  <audio id="bgm" autoplay loop>
+    <source src="https://cdn.isang.cc/music/%E9%82%B3%E7%B4%AB%E6%A3%8B-%E5%94%AF%E4%B8%80.mp3" type="audio/mpeg">
   
 
-  <!-- 登录页 -->
-  <div class="login" id="login">
-    <img class="login-img" src="https://i.imgur.com/9oZsUeF.jpeg" alt="小黑猫">
-    <h2>请输入密码进入</h2>
-    <input type="password" id="pwd" placeholder="输入密码">
-    <button onclick="check()">进入</button>
-  </div>
-
-  <!-- 主页面 -->
   <div id="main">
     <div class="header">
       <div class="search-bar">
@@ -160,11 +135,9 @@
       <span>🧰</span>
     </div>
 
-    <button class="music-btn" onclick="toggleMusic()">播放/暂停音乐</button>
-
     <div class="banner-box">
-      <img class="banner" src="https://i.imgur.com/9oZsUeF.jpeg" alt="Banner">
-      <div class="lyric">你真的懂唯一 的定义</div>
+      <img class="banner" src="https://i.imgur.com/8X7Z1yY.jpeg" alt="背景图">
+      <div class="banner-text">欢迎使用夏风音乐播放器！</div>
     </div>
 
     <div class="tabs">
@@ -181,52 +154,38 @@
 
     <div class="notice">本盘实时更新各类增加模块，欢迎访问</div>
 
-    <div class="file-list">
-      <div class="file-item">
-        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/software-box.png">
-        <div class="file-name">实用软件</div>
-        <span class="file-arrow">></span>
-      </div>
-      <div class="file-item">
-        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/stack.png">
-        <div class="file-name">应用框架</div>
-        <span class="file-arrow">></span>
-      </div>
-      <div class="file-item">
-        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/qq.png">
-        <div class="file-name">QQ_模块</div>
-        <span class="file-arrow">></span>
-      </div>
-      <div class="file-item">
-        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/wechat.png">
-        <div class="file-name">微信模块</div>
-        <span class="file-arrow">></span>
-      </div>
-    </div>
+    <a class="file-item" href="https://m.wandoujia.com/apps/566489/history" target="_blank">
+      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/qq.png" alt="QQ图标">
+      <div class="file-name">QQ历史版本</div>
+      <span>></span>
+    </a>
+    <a class="file-item" href="https://m.wandoujia.com/apps/596157/history" target="_blank">
+      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/wechat.png" alt="微信图标">
+      <div class="file-name">微信历史版本</div>
+      <span>></span>
+    </a>
+    <a class="file-item" href="#">
+      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/software-box.png" alt="软件图标">
+      <div class="file-name">实用软件</div>
+      <span>></span>
+    </a>
+    <a class="file-item" href="#">
+      <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/stack.png" alt="框架图标">
+      <div class="file-name">应用框架</div>
+      <span>></span>
+    </a>
+  </div>
+
+  <div class="lyric-box">
+    <div class="lyric">你真的懂唯一 的定义 不只是如影随形</div>
   </div>
 
   <script>
-    const pwd = "2026";
-    const login = document.getElementById("login");
-    const main = document.getElementById("main");
-    const audio = document.getElementById("bgm");
-
-    function check() {
-      if (document.getElementById("pwd").value === pwd) {
-        login.style.display = "none";
-        main.style.display = "block";
-      } else {
-        alert("密码错误");
-      }
-    }
-
-    function toggleMusic() {
-      if (audio.paused) {
-        audio.play().catch(e => console.log("播放失败:", e));
-      } else {
-        audio.pause();
-      }
-    }
+    const audio = document.getElementById('bgm');
+    // 兼容自动播放策略
+    document.body.addEventListener('click', () => {
+      audio.play().catch(e => console.log("播放失败:", e));
+    }, { once: true });
   </script>
 </body>
 </html>
