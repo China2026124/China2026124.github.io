@@ -1,270 +1,232 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>模块库</title>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-    background: #f5f5f7;
-  }
-  .login {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-  }
-  .login h2 {
-    margin-bottom: 20px;
-    color: #333;
-  }
-  .login input {
-    width: 80%;
-    padding: 12px 16px;
-    margin-bottom: 16px;
-    border: 1px solid #e5e5ea;
-    border-radius: 10px;
-    font-size: 16px;
-    background: #f2f2f7;
-  }
-  .login button {
-    padding: 12px 32px;
-    background: #007AFF;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-  }
-  .header {
-    background: #fff;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .search-bar {
-    flex: 1;
-    background: #f2f2f7;
-    border-radius: 10px;
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .search-bar input {
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 16px;
-    width: 100%;
-    color: #1c1c1e;
-  }
-  .toolbox {
-    font-size: 24px;
-  }
-  .banner {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-  }
-  .music-tip {
-    position: absolute;
-    top: 60px;
-    left: 0;
-    right: 0;
-    background: rgba(0,0,0,0.4);
-    color: #fff;
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-  .tabs {
-    display: flex;
-    background: #fff;
-    padding: 12px 16px;
-    gap: 12px;
-    overflow-x: auto;
-    border-bottom: 1px solid #f2f2f7;
-  }
-  .tab {
-    padding: 6px 14px;
-    background: #f2f2f7;
-    border-radius: 18px;
-    font-size: 14px;
-    white-space: nowrap;
-    color: #1c1c1e;
-  }
-  .user-bar {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    background: #fff;
-    border-bottom: 1px solid #f2f2f7;
-  }
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #333;
-    margin-right: 12px;
-  }
-  .username {
-    flex: 1;
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .report {
-    color: #8e8e93;
-    font-size: 14px;
-  }
-  .notice {
-    background: #f2f2f7;
-    padding: 12px 16px;
-    color: #1c1c1e;
-    font-size: 15px;
-  }
-  .file-list {
-    background: #fff;
-    margin-top: 12px;
-  }
-  .file-item {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    border-bottom: 1px solid #f2f2f7;
-    text-decoration: none;
-    color: inherit;
-  }
-  .file-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 12px;
-  }
-  .file-name {
-    flex: 1;
-    font-size: 16px;
-    color: #1c1c1e;
-  }
-  .file-arrow {
-    color: #c7c7cc;
-    font-size: 18px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模块库</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, sans-serif; background: #f5f5f7; }
+
+    /* 登录页 */
+    .login {
+      position: fixed; inset: 0;
+      background: #fff;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 999;
+      text-align: center;
+    }
+    .login-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      object-fit: cover;
+    }
+    .login h2 { margin-bottom: 20px; color: #333; }
+    .login input {
+      width: 80%; max-width: 300px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      border: 1px solid #e5e5ea;
+      border-radius: 10px;
+      background: #f2f2f7;
+      font-size: 16px;
+    }
+    .login button {
+      padding: 12px 32px;
+      background: #007AFF; color: #fff;
+      border: none; border-radius: 10px;
+      font-size: 16px;
+    }
+
+    /* 主页面 */
+    #main { display: none; }
+    .header {
+      background: #fff;
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 12px;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .search-bar {
+      flex: 1;
+      background: #f2f2f7;
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .search-bar input {
+      border: none; background: transparent;
+      outline: none; font-size: 16px;
+    }
+    .music-btn {
+      display: block;
+      margin: 10px auto;
+      padding: 8px 16px;
+      background: #007AFF;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .banner-box { position: relative; }
+    .banner {
+      width: 100%; height: 180px;
+      object-fit: cover;
+    }
+    .lyric {
+      position: absolute;
+      bottom: 20px; left: 20px;
+      color: #fff;
+      font-size: 16px;
+      text-shadow: 0 0 3px #000;
+    }
+    .tabs {
+      display: flex;
+      background: #fff;
+      padding: 12px 16px;
+      gap: 12px;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 6px 14px;
+      background: #f2f2f7;
+      border-radius: 18px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .user-bar {
+      display: flex; align-items: center;
+      padding: 12px 16px;
+      background: #fff;
+    }
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: url(https://i.imgur.com/9oZsUeF.jpeg) center / cover;
+      margin-right: 12px;
+    }
+    .username {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .notice {
+      background: #f2f2f7;
+      padding: 12px 16px;
+      font-size: 15px;
+    }
+    .file-list {
+      background: #fff;
+      margin-top: 12px;
+    }
+    .file-item {
+      display: flex; align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid #f2f2f7;
+      text-decoration: none;
+      color: inherit;
+    }
+    .file-icon {
+      width: 40px; height: 40px;
+      margin-right: 12px;
+    }
+    .file-name { flex: 1; font-size: 16px; }
+    .file-arrow { color: #c7c7cc; }
+  </style>
 </head>
 <body>
+  <audio id="bgm" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  
 
-<div class="login" id="login">
-  <h2>请输入密码进入</h2>
-  <input type="password" id="pwd" placeholder="输入密码">
-  <button onclick="check()">进入</button>
-</div>
+  <!-- 登录页 -->
+  <div class="login" id="login">
+    <img class="login-img" src="https://i.imgur.com/9oZsUeF.jpeg" alt="小黑猫">
+    <h2>请输入密码进入</h2>
+    <input type="password" id="pwd" placeholder="输入密码">
+    <button onclick="check()">进入</button>
+  </div>
 
-<div id="main" style="display: none;">
-  <div class="header">
-    <div class="search-bar">
-      <span>🔍</span>
-      <input type="text" placeholder="模块库">
-      <span>⭐</span>
+  <!-- 主页面 -->
+  <div id="main">
+    <div class="header">
+      <div class="search-bar">
+        <span>🔍</span>
+        <input placeholder="模块库">
+        <span>⭐</span>
+      </div>
+      <span>🧰</span>
     </div>
-    <span class="toolbox">🧰</span>
-  </div>
 
-  <div style="position: relative;">
-    <img class="banner" src="https://p.qqan.com/up/2021-10/16336862248944188.jpg" alt="Banner">
-    <div class="music-tip">开始从QQ音乐播放：Dear D (亲爱的告诉你)</div>
-  </div>
+    <button class="music-btn" onclick="toggleMusic()">播放/暂停音乐</button>
 
-  <div class="tabs">
-    <div class="tab">🔵 官方群聊</div>
-    <div class="tab">🔗 官方频道</div>
-    <div class="tab">🐧 QQ历史</div>
-    <div class="tab">💚 微信历史</div>
-  </div>
+    <div class="banner-box">
+      <img class="banner" src="https://i.imgur.com/9oZsUeF.jpeg" alt="Banner">
+      <div class="lyric">你真的懂唯一 的定义</div>
+    </div>
 
-  <div class="user-bar">
-    <div class="avatar"></div>
-    <div class="username">夏风云</div>
-    <div class="report">举报</div>
-  </div>
+    <div class="tabs">
+      <div class="tab">🔵 官方群聊</div>
+      <div class="tab">🔗 官方频道</div>
+      <div class="tab">🐧 QQ历史</div>
+      <div class="tab">💚 微信历史</div>
+    </div>
 
-  <div class="notice">
-    本盘实时更新各类增加模块，欢迎访问
-  </div>
+    <div class="user-bar">
+      <div class="avatar"></div>
+      <div class="username">满天猴子我腚最红</div>
+    </div>
 
-  <div class="file-list" id="list">
-    <!-- 文件列表会自动生成在这里 -->
-  </div>
-</div>
+    <div class="notice">本盘实时更新各类增加模块，欢迎访问</div>
 
-<script>
-const RIGHT_PWD = "2026";
-
-// 定义不同文件夹的图标颜色
-const folderIcons = {
-  "实用软件": "https://img.icons8.com/fluency/48/000000/software-box.png",
-  "应用框架": "https://img.icons8.com/fluency/48/000000/stack.png",
-  "QQ_模块": "https://img.icons8.com/fluency/48/000000/qq.png",
-  "微信模块": "https://img.icons8.com/fluency/48/000000/wechat.png"
-};
-
-function check() {
-  const p = document.getElementById("pwd").value;
-  if (p === RIGHT_PWD) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("main").style.display = "block";
-    loadFiles();
-  } else {
-    alert("密码错误");
-  }
-}
-
-async function loadFiles() {
-  const list = document.getElementById("list");
-  list.innerHTML = '';
-  try {
-    const res = await fetch("https://api.github.com/repos/China2026124/China2026124.github.io/contents/");
-    const files = await res.json();
-
-    files.forEach(file => {
-      if (file.name === "index.html") return;
-      const item = document.createElement("a");
-      item.href = file.download_url;
-      item.className = "file-item";
-      item.download = file.name;
-      
-      // 根据文件名选择对应图标
-      let icon = "https://img.icons8.com/fluency/48/000000/folder-invoices.png";
-      if (folderIcons[file.name]) {
-        icon = folderIcons[file.name];
-      }
-      
-      item.innerHTML = `
-        <img class="file-icon" src="${icon}" alt="folder">
-        <div class="file-name">${file.name}</div>
+    <div class="file-list">
+      <div class="file-item">
+        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/software-box.png">
+        <div class="file-name">实用软件</div>
         <span class="file-arrow">></span>
-      `;
-      list.appendChild(item);
-    });
-  } catch (e) {
-    list.innerHTML = '<div style="padding:20px;text-align:center;color:#8e8e93;">加载失败，请检查网络</div>';
-  }
-}
-</script>
+      </div>
+      <div class="file-item">
+        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/stack.png">
+        <div class="file-name">应用框架</div>
+        <span class="file-arrow">></span>
+      </div>
+      <div class="file-item">
+        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/qq.png">
+        <div class="file-name">QQ_模块</div>
+        <span class="file-arrow">></span>
+      </div>
+      <div class="file-item">
+        <img class="file-icon" src="https://img.icons8.com/fluency/48/000000/wechat.png">
+        <div class="file-name">微信模块</div>
+        <span class="file-arrow">></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pwd = "2026";
+    const login = document.getElementById("login");
+    const main = document.getElementById("main");
+    const audio = document.getElementById("bgm");
+
+    function check() {
+      if (document.getElementById("pwd").value === pwd) {
+        login.style.display = "none";
+        main.style.display = "block";
+      } else {
+        alert("密码错误");
+      }
+    }
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play().catch(e => console.log("播放失败:", e));
+      } else {
+        audio.pause();
+      }
+    }
+  </script>
 </body>
 </html>
