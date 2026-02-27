@@ -39,7 +39,7 @@ body{background:#f5f5f7}
   <img class="banner" id="bannerImg">
   <div class="lyric-overlay">
     <div class="lyric-wrapper" id="lyricWrapper">
-      <div class="lyric-line" data-time="0">起风了 - 买辣椒也用券</div>
+      <div class="lyric-line" data-time="0">起风了 - 纯音乐版</div>
       <div class="lyric-line" data-time="14">这一路上走走停停</div>
       <div class="lyric-line" data-time="19">顺着少年漂流的痕迹</div>
       <div class="lyric-line" data-time="24">迈出车站的前一刻</div>
@@ -87,18 +87,19 @@ avatar.style.backgroundImage = 'url(https://img.remit.ee/api/file/BQACAgUAAyEGAA
 bannerImg.src = 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS89poRxjX_mfw9ehbcydVIeti6E1egACxRsAAladCVWqLjx-6LXcszoE.jpeg';
 
 const audio = document.getElementById('audio');
-audio.src = "https://cdn.pixabay.com/download/audio/2024/05/28/audio_9c9e9798888.mp3";
+audio.src = "https://freetestmusic.oss-cn-hangzhou.aliyuncs.com/test_music_1min.mp3";
+
 let isPlaying = false;
 
-function togglePlay(){
-  if(isPlaying){
+function togglePlay() {
+  if (isPlaying) {
     audio.pause();
-    playBtn.textContent='▶️';
-  }else{
+    playBtn.textContent = '▶️';
+  } else {
     audio.play();
-    playBtn.textContent='⏸️';
+    playBtn.textContent = '⏸️';
   }
-  isPlaying=!isPlaying;
+  isPlaying = !isPlaying;
 }
 
 audio.addEventListener('timeupdate',()=>{
