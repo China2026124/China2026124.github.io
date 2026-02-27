@@ -5,53 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>模块库</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-body{background:#f5f5f7;-webkit-tap-highlight-color:transparent}
-#app{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:70px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Roboto,sans-serif}
+body{background:#f5f5f7}
+#app{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:120px}
+
+.lyric-container {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  max-width: 600px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, rgba(20,20,35,0.85), rgba(0,0,0,0.9));
+  color: #ccc;
+  padding: 12px 16px;
+  font-size:14px;
+  text-align:center;
+  z-index:100;
+  height:70px;
+  overflow:hidden;
+  box-shadow:0 -2px 15px rgba(0,0,0,0.4);
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.lyric-line {
+  margin:5px 0;
+  transition:all 0.4s ease;
+  opacity:0.7;
+}
+.lyric-line.active {
+  color:#fff;
+  font-size:16px;
+  font-weight:500;
+  opacity:1;
+  text-shadow:0 1px 4px rgba(0,0,0,0.6);
+}
+
 .header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:99}
 .search-bar{flex:1;background:#fff;border:1px solid #d1d1d6;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px}
 .search-bar input{background:transparent;border:none;outline:none;width:100%;font-size:16px;color:#333}
 .search-bar input::placeholder{color:#999}
-.icon-btn{font-size:22px;color:#555;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.icon-btn{font-size:22px;color:#555}
 .icon-btn span{font-size:12px}
+
 .banner-box{position:relative;width:100%;height:180px;overflow:hidden}
 .banner{width:100%;height:100%;object-fit:cover}
-.tabs{display:flex;background:#fff;padding:12px 16px;gap:10px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid #f0f0f0}
+
+.tabs{display:flex;background:#fff;padding:12px 16px;gap:10px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{background:#f2f2f7;padding:9px 16px;border-radius:20px;white-space:nowrap;display:flex;align-items:center;gap:6px;font-size:14px;color:#333;cursor:pointer}
+.tab{background:#f2f2f7;padding:9px 16px;border-radius:20px;white-space:nowrap;font-size:14px;color:#333}
 .tab.active{background:#007AFF;color:#fff}
+
 .user-bar{display:flex;align-items:center;padding:14px 16px;background:#fff;border-bottom:1px solid #f0f0f0}
 .avatar{width:50px;height:50px;border-radius:50%;background:#000 center/cover;margin-right:12px}
-.user-info{flex:1}
-.user-name{font-size:16px;font-weight:500;color:#222}
-.report-btn{color:#999;font-size:14px;cursor:pointer}
-.welcome{padding:12px 16px;background:#f9f9f9;color:#666;font-size:15px;border-bottom:1px solid #f0f0f0}
-.file-list{padding:0 16px;background:#fff}
-.file-item{display:flex;align-items:center;padding:16px 0;border-bottom:1px solid #f0f0f0;cursor:pointer}
-.file-icon{width:40px;height:40px;background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHBhdGggZmlsbD0iI2ZmY2MwMCIgZD0iTTQgMTBoMTZsMiA0aDI0VjhIMThsLTItNEg0VjB6bTAgMTR2MjRoNDBWMTRINHoiLz48L3N2Zz4=") no-repeat center/cover;margin-right:12px}
-.file-name{flex:1;font-size:16px;color:#222}
+.user-name{font-size:16px;font-weight:500}
+.report-btn{color:#999;font-size:14px}
+
+.welcome{padding:12px 16px;background:#f9f9f9;color:#666;border-bottom:1px solid #f0f0f0}
+.file-list{padding:0 16px}
+.file-item{display:flex;align-items:center;padding:16px 0;border-bottom:1px solid #f0f0f0}
+.file-icon{width:40px;height:40px;background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHBhdGggZmlsbD0iI2ZmY2MwMCIgZD0iTTQgMTBoMTZsMiA0aDI0VjhIMThsLTItNEg0VjB6bTAgMTR2MjRoNDBWMTRINHoiLz48L3N2Zz4=") no-repeat center;margin-right:12px}
+.file-name{flex:1;font-size:16px}
 .file-arrow{font-size:18px;color:#999}
+
 .footer{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;height:60px;background:#fff;border-top:1px solid #e5e5ea;display:flex;justify-content:space-around;align-items:center;z-index:99}
-.footer-icon{font-size:24px;color:#555;position:relative;cursor:pointer}
+.footer-icon{font-size:24px;color:#555}
+
+#bgm {
+  position:fixed;
+  bottom:150px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:101;
+}
 </style>
 </head>
 <body>
+
 <div id="app">
 <div class="header">
 <div class="search-bar"><span>🔍</span><span>🛡️</span><input id="search" placeholder="模块库"><span>⭐</span></div>
 <div class="icon-btn"><span>🧰</span><span style="font-size:12px">工具箱</span></div>
 </div>
 
-<div class="banner-box"><img class="banner" id="bannerImg" src=""></div>
+<div class="banner-box">
+<img class="banner" id="bannerImg" src="https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSidpoOzt4lQf-yXHAAGyNFaPMmLTQ6sAAngZAAJWnQlVB5CMUwbJfTw6BA.jpeg">
+</div>
 
 <div class="tabs">
 <div class="tab" onclick="setTab(this)">官方群聊</div>
 <div class="tab" onclick="setTab(this)">官方频道</div>
-<div class="tab" onclick="setTab(this);go('https://m.wandoujia.com/apps/566489/history')">🐧 QQ历史</div>
-<div class="tab" onclick="setTab(this);go('https://m.wandoujia.com/apps/596157/history')">💚 微信历史</div>
-<div class="tab active" onclick="setTab(this);go('https://www.pandashi8.com/')">🔢 资源分享</div>
-<div class="tab" onclick="setTab(this);go('https://www.urlc.cn/')">🔗 短链生成</div>
-<div class="tab" onclick="setTab(this);go('https://dy.kukutool.com/')">🎬 视频解析</div>
+<div class="tab" onclick="go('https://m.wandoujia.com/apps/566489/history')">🐧 QQ历史</div>
+<div class="tab" onclick="go('https://m.wandoujia.com/apps/596157/history')">💚 微信历史</div>
+<div class="tab active" onclick="go('https://www.pandashi8.com/')">🔢 资源分享</div>
+<div class="tab" onclick="go('https://www.urlc.cn/')">🔗 短链生成</div>
+<div class="tab" onclick="go('https://dy.kukutool.com/')">🎬 视频解析</div>
 <div class="tab" onclick="setTab(this)">👤 待添加</div>
 </div>
 
@@ -63,59 +110,104 @@ body{background:#f5f5f7;-webkit-tap-highlight-color:transparent}
 
 <div class="welcome">本盘实时更新各类增加模块，欢迎访问</div>
 
-<div class="file-list" id="fileList">
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">实用软件</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">应用框架</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">QQ_模块</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">微信模块</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">Java脚本</div><span class="file-arrow">→</span></div>
+<div class="file-list">
+<div class="file-item"><div class="file-icon"></div><div class="file-name">实用软件</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">应用框架</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">QQ_模块</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">微信模块</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">Java脚本</div><span class="file-arrow">→</span></div>
 </div>
 
 <div class="footer">
 <div class="footer-icon">←</div>
 <div class="footer-icon">→</div>
 <div class="footer-icon">☰</div>
-<div class="footer-icon"><span style="font-size:16px;border:1px solid #555;padding:2px 6px;border-radius:4px">10</span></div>
+<div class="footer-icon">10</div>
 <div class="footer-icon">🔄</div>
 </div>
 </div>
+<div class="lyric-container" id="lyricContainer">
+<div class="lyric-line" data-time="0">起风了 - 买辣椒也用券</div>
+<div class="lyric-line" data-time="16">这一路上走走停停</div>
+<div class="lyric-line" data-time="20">顺着少年漂流的痕迹</div>
+<div class="lyric-line" data-time="24">迈出车站的前一刻</div>
+<div class="lyric-line" data-time="28">竟有些犹豫</div>
 
-<audio id="bgm" autoplay loop controls>
+<div class="lyric-line" data-time="32">不禁笑这近乡情怯</div>
+<div class="lyric-line" data-time="36">仍无可避免</div>
+<div class="lyric-line" data-time="40">而长野的天</div>
+<div class="lyric-line" data-time="43">依旧那么暖</div>
+<div class="lyric-line" data-time="46">风吹起了从前</div>
+
+<div class="lyric-line" data-time="51">从前初识这世间</div>
+<div class="lyric-line" data-time="55">万般流连</div>
+<div class="lyric-line" data-time="58">看着天边似在眼前</div>
+<div class="lyric-line" data-time="63">也甘愿赴汤蹈火去走它一遍</div>
+
+<div class="lyric-line" data-time="71">如今走过这世间</div>
+<div class="lyric-line" data-time="75">万般流连</div>
+<div class="lyric-line" data-time="78">翻过岁月不同侧脸</div>
+<div class="lyric-line" data-time="83">措不及防闯入你的笑颜</div>
+
+<div class="lyric-line" data-time="91">我曾难自拔于世界之大</div>
+<div class="lyric-line" data-time="96">也沉溺于其中梦话</div>
+<div class="lyric-line" data-time="100">不得真假 不做挣扎 不惧笑话</div>
+
+<div class="lyric-line" data-time="107">我曾将青春翻涌成她</div>
+<div class="lyric-line" data-time="112">也曾指尖弹出盛夏</div>
+<div class="lyric-line" data-time="116">心之所动 且就随缘去吧</div>
+<div class="lyric-line" data-time="123">逆着光行走 任风吹雨打</div>
+
+<div class="lyric-line" data-time="131">短短的路走走停停</div>
+<div class="lyric-line" data-time="135">也有了几分的距离</div>
+<div class="lyric-line" data-time="139">不知抚摸的是故事 还是段心情</div>
+<div class="lyric-line" data-time="144">也许期待的不过是 与时间为敌</div>
+
+<div class="lyric-line" data-time="149">再次看到你</div>
+<div class="lyric-line" data-time="152">微凉晨光里</div>
+<div class="lyric-line" data-time="155">笑得很甜蜜</div>
+
+<div class="lyric-line" data-time="232">晚风吹起你鬓间的白发</div>
+<div class="lyric-line" data-time="237">抚平回忆留下的疤</div>
+<div class="lyric-line" data-time="241">你的眼中 明暗交杂 一笑生花</div>
+
+<div class="lyric-line" data-time="264">我仍感叹于世界之大</div>
+<div class="lyric-line" data-time="269">也沉醉于儿时情话</div>
+<div class="lyric-line" data-time="273">不剩真假 不做挣扎 无谓笑话</div>
+
+<div class="lyric-line" data-time="280">我终将青春还给了她</div>
+<div class="lyric-line" data-time="285">连同指尖弹出的盛夏</div>
+<div class="lyric-line" data-time="289">心之所动 就随风去了</div>
+<div class="lyric-line" data-time="296">以爱之名 你还愿意吗</div>
+</div>
+<audio id="bgm" controls>
 <source src="https://music.163.com/song/media/outer/url?id=1330348068.mp3" type="audio/mpeg">
 
 <script>
-const avatarList = [
-'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSihpoO1-rYqzOIAhnXV5Bsya-kU_lAACfhkAAladCVWaA7h-mrOZfzoE.jpeg'
-];
-const bannerList = [
-'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSidpoOzt4lQf-yXHAAGyNFaPMmLTQ6sAAngZAAJWnQlVB5CMUwbJfTw6BA.jpeg'
-];
+const avatarList = ['https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSihpoO1-rYqzOIAhnXV5Bsya-kU_lAACfhkAAladCVWaA7h-mrOZfzoE.jpeg'];
+const bannerList = ['https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSidpoOzt4lQf-yXHAAGyNFaPMmLTQ6sAAngZAAJWnQlVB5CMUwbJfTw6BA.jpeg'];
 
-function rand(list){return list[Math.floor(Math.random()*list.length)]}
 window.onload=()=>{
-document.getElementById('avatar').style.backgroundImage='url('+rand(avatarList)+')'
-document.getElementById('bannerImg').src=rand(bannerList)
-
-const audio = document.getElementById('bgm');
-audio.muted = true;
-audio.play().then(() => {
-audio.muted = false;
-}).catch(()=>{});
+document.getElementById('avatar').style.backgroundImage='url('+avatarList[0]+')'
+document.getElementById('bannerImg').src=bannerList[0]
 }
 
 function setTab(el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
-function go(u){u!='#'&&window.open(u,'_blank')}
+function go(u){u&&window.open(u,'_blank')}
 
-document.getElementById('search').oninput=function(){
-const k=this.value.toLowerCase()
-document.querySelectorAll('.file-item').forEach(i=>{
-i.style.display=i.querySelector('.file-name').innerText.toLowerCase().includes(k)?'flex':'none'
-})}
-
-document.addEventListener('click',()=>{
 const audio=document.getElementById('bgm');
-if(audio.paused)audio.play();
-},{once:true})
+const lines=document.querySelectorAll('.lyric-line');
+audio.addEventListener('timeupdate',()=>{
+  let t=audio.currentTime;
+  lines.forEach(line=>{
+    let lt=+line.dataset.time;
+    if(t>=lt){
+      lines.forEach(l=>l.classList.remove('active'));
+      line.classList.add('active');
+      line.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+  })
+})
 </script>
 </body>
 </html>
