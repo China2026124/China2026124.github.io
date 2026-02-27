@@ -15,14 +15,12 @@
             --text: #ffffff;
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
             background: var(--bg-primary);
@@ -31,32 +29,27 @@
             padding: 20px;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
-        
         .app {
             max-width: 500px;
             margin: 0 auto;
         }
-        
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
             box-shadow: var(--shadow);
         }
-        
         .header {
             display: flex;
             align-items: center;
             gap: 15px;
             margin-bottom: 20px;
         }
-        
         .avatar {
             width: 60px;
             height: 60px;
@@ -64,56 +57,31 @@
             border: 3px solid rgba(255, 255, 255, 0.3);
             object-fit: cover;
             background: rgba(255, 255, 255, 0.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='30' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
+            cursor: pointer;
         }
-        
         .time-section {
             flex: 1;
         }
-        
         .time {
             font-size: 2.2em;
             font-weight: 300;
             margin-bottom: 2px;
         }
-        
         .date {
             opacity: 0.9;
             font-size: 0.95em;
         }
-        
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .btn {
-            background: rgba(255, 255, 255, 0.18);
-            border: none;
-            color: var(--text);
-            padding: 10px 16px;
-            border-radius: 25px;
-            font-size: 0.9em;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
         .ai-search-container {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 20px;
         }
-        
         .ai-input-group {
             display: flex;
             gap: 10px;
             margin-bottom: 10px;
         }
-        
         .ai-input {
             flex: 1;
             padding: 12px 15px;
@@ -123,11 +91,9 @@
             color: var(--text);
             font-size: 1em;
         }
-        
         .ai-input::placeholder {
             color: rgba(255, 255, 255, 0.6);
         }
-        
         .ai-response {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
@@ -137,22 +103,21 @@
             max-height: 200px;
             overflow-y: auto;
         }
-        
         .category {
             margin-bottom: 20px;
         }
-        
         .category-title {
             font-size: 1.1em;
             margin-bottom: 12px;
             padding-left: 10px;
             border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        
         .link-list {
             list-style: none;
         }
-        
         .link-item {
             background: rgba(255, 255, 255, 0.08);
             border-radius: 12px;
@@ -162,23 +127,26 @@
             align-items: center;
             justify-content: space-between;
             cursor: pointer;
+            transition: background 0.2s;
         }
-        
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
         .link-name {
             flex: 1;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            margin-right: 10px;
         }
-        
         .link-tag {
             background: var(--accent);
             font-size: 0.7em;
             padding: 2px 8px;
             border-radius: 10px;
             margin-left: 8px;
+            flex-shrink: 0;
         }
-        
         .delete-btn {
             background: none;
             border: none;
@@ -186,23 +154,41 @@
             cursor: pointer;
             font-size: 0.8em;
             opacity: 0.6;
+            padding: 5px;
+            transition: opacity 0.2s;
         }
-        
+        .delete-btn:hover {
+            opacity: 1;
+        }
+        .save-to-app-btn {
+            background: #10b981;
+            border: none;
+            color: var(--text);
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 5px;
+            transition: transform 0.2s;
+        }
+        .save-to-app-btn:hover {
+            transform: scale(1.05);
+        }
         .add-form {
             display: flex;
             gap: 8px;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
-        
         .form-input {
             flex: 1;
+            min-width: 120px;
             padding: 10px 12px;
             border: none;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.1);
             color: var(--text);
         }
-        
         .add-btn {
             background: var(--accent);
             border: none;
@@ -210,67 +196,91 @@
             padding: 0 20px;
             border-radius: 10px;
             cursor: pointer;
+            white-space: nowrap;
         }
-        
+        .admin-badge {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            font-size: 0.65em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        
+        .modal.active {
+            display: flex;
+        }
         .modal-content {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 20px;
-            width: 90%;
-            max-width: 400px;
-            max-height: 80vh;
+            width: 100%;
+            max-width: 450px;
+            max-height: 85vh;
             overflow-y: auto;
+            animation: modalIn 0.3s ease;
         }
-        
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
         .close-btn {
             background: none;
             border: none;
             color: var(--text);
-            font-size: 1.5em;
+            font-size: 1.8em;
             cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            line-height: 1;
         }
-        
+        .close-btn:hover {
+            opacity: 1;
+        }
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
         }
-        
         .theme-btn {
             padding: 15px 10px;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.85em;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
         }
-        
+        .theme-btn:hover {
+            transform: scale(1.05);
+        }
         .cloud-search-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 10px;
         }
-        
         .cloud-search-item {
             background: rgba(255, 255, 255, 0.1);
             border: none;
@@ -283,16 +293,17 @@
             flex-direction: column;
             align-items: center;
             gap: 5px;
+            transition: background 0.2s;
         }
-        
+        .cloud-search-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
         .cloud-icon {
             font-size: 1.5em;
         }
-        
         .cloud-name {
             font-size: 0.9em;
         }
-        
         .notification {
             position: fixed;
             bottom: 20px;
@@ -300,39 +311,161 @@
             transform: translateX(-50%) translateY(100px);
             background: rgba(0, 0, 0, 0.9);
             color: var(--text);
-            padding: 12px 20px;
+            padding: 12px 24px;
             border-radius: 25px;
-            z-index: 1000;
-            transition: transform 0.3s;
+            z-index: 1001;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            white-space: nowrap;
         }
-        
         .notification.show {
             transform: translateX(-50%) translateY(0);
         }
-        
+        .app-directory-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .app-directory-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .app-directory-item .link-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .theme-upload-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            cursor: pointer;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .theme-upload-btn:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .admin-panel {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .admin-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: rgba(255,255,255,0.2);
+            transition: .4s;
+            border-radius: 26px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #10b981;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        .admin-input-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .admin-input-group .form-input {
+            flex: 1;
+        }
+        .admin-input-group .btn {
+            padding: 10px 15px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            opacity: 0.6;
+        }
+        .empty-state-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .quick-links .btn {
+            flex: 1;
+            min-width: 100px;
+        }
         @media (max-width: 480px) {
             .card { padding: 15px; }
             .time { font-size: 1.9em; }
-            .btn { padding: 8px 12px; }
+            .btn { padding: 8px 12px; font-size: 0.85em; }
             .cloud-search-grid { grid-template-columns: repeat(2, 1fr); }
+            .theme-grid { grid-template-columns: repeat(2, 1fr); }
+            .modal-content { padding: 15px; }
         }
     </style>
 </head>
 <body>
-    <div class="app">
+    <div id="access-screen" style="position:fixed;inset:0;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;z-index:9999;">
+        <input id="access-password" type="password" placeholder="" style="padding:12px 20px;border:none;border-radius:12px;font-size:1.2em;text-align:center;background:rgba(255,255,255,0.1);color:var(--text);outline:none;">
+    </div>
+    
+    <div id="main-app" class="app" style="display:none;">
         <div class="card">
             <div class="header">
-                <img id="avatar" class="avatar" alt="头像">
+                <img id="avatar" class="avatar" alt="头像" title="点击更换头像">
                 <div class="time-section">
                     <div id="time" class="time">00:00:00</div>
                     <div id="date" class="date">2026年2月27日 星期四</div>
                 </div>
             </div>
             
+            <div class="quick-links">
+                <button class="btn" onclick="openLink('https://www.pandashi8.com/')">📦 资源分享</button>
+                <button class="btn" onclick="openLink('https://www.urlc.cn/')">🔗 短链生成</button>
+                <button class="btn" onclick="openLink('https://dy.kukutool.com/')">🎬 视频解析</button>
+            </div>
+            
             <div class="ai-search-container">
                 <div class="ai-input-group">
                     <input type="text" id="ai-search-input" class="ai-input" placeholder="输入问题，让AI帮您搜索..." onkeypress="if(event.key==='Enter') searchWithAI()">
-                    <button class="btn" onclick="searchWithAI()" style="background: #10b981">🤖 AI搜索</button>
+                    <button class="btn btn-primary" onclick="searchWithAI()">🤖 AI搜索</button>
                 </div>
                 <div id="ai-response" class="ai-response"></div>
             </div>
@@ -340,8 +473,8 @@
             <div class="btn-group">
                 <button class="btn" onclick="openModal('theme-modal')">🎨 主题</button>
                 <button class="btn" onclick="openModal('cloud-modal')">☁️ 网盘搜索</button>
-                <button class="btn" onclick="openModal('apps-modal')">📱 应用</button>
-                <button class="btn" onclick="openModal('search-modal')">🔍 搜索</button>
+                <button class="btn" onclick="openModal('music-novel-modal')">🎵 音乐小说</button>
+                <button class="btn" onclick="openModal('app-directory-modal')">📱 应用专区</button>
                 <button class="btn" onclick="openModal('settings-modal')">⚙️ 设置</button>
             </div>
             
@@ -363,48 +496,54 @@
                 <div class="category-title">🎬 影视资源</div>
                 <ul class="link-list">
                     <li class="link-item" onclick="openLink('https://cupfox.app')">
-                        <span class="link-name">茶杯狐</span>
-                        <span class="link-tag">搜索</span>
+                        <span class="link-name">茶杯狐 (聚合搜索)</span>
+                        <span class="link-tag">新</span>
                     </li>
                     <li class="link-item" onclick="openLink('https://www.libvio.me')">
-                        <span class="link-name">低端影视</span>
+                        <span class="link-name">LIBVIO 低端影视</span>
                         <span class="link-tag">蓝光</span>
                     </li>
-                </ul>
-            </div>
-            
-            <div class="category">
-                <div class="category-title">🎵 音乐小说</div>
-                <ul class="link-list">
-                    <li class="link-item" onclick="openLink('https://music.haom.ren')">
-                        <span class="link-name">音乐搜索</span>
-                        <span class="link-tag">在线</span>
+                    <li class="link-item" onclick="openLink('https://www.555dy1.com')">
+                        <span class="link-name">555电影</span>
+                        <span class="link-tag">快</span>
                     </li>
-                    <li class="link-item" onclick="openLink('https://www.biquge.tv')">
-                        <span class="link-name">笔趣阁</span>
-                        <span class="link-tag">小说</span>
+                    <li class="link-item" onclick="openLink('https://www.nfmovies.com')">
+                        <span class="link-name">奈菲影视</span>
+                        <span class="link-tag">美剧</span>
                     </li>
                 </ul>
             </div>
             
             <div class="category">
-                <div class="category-title">🔗 我的收藏</div>
+                <div class="category-title">
+                    🔗 我的收藏
+                    <span style="font-size: 0.75em; opacity: 0.7;">(点击⭐永久保存)</span>
+                </div>
                 <ul id="custom-links" class="link-list"></ul>
                 <div class="add-form">
-                    <input type="text" id="link-name" class="form-input" placeholder="名称" maxlength="20">
+                    <input type="text" id="link-name" class="form-input" placeholder="链接名称" maxlength="20">
                     <input type="text" id="link-url" class="form-input" placeholder="https://" onkeypress="if(event.key==='Enter') addLink()">
                     <button class="add-btn" onclick="addLink()">+ 添加</button>
                 </div>
             </div>
+            
+            <div class="category">
+                <div class="category-title">🛠️ 实用软件下载</div>
+                <ul class="link-list">
+                    <li class="link-item" onclick="downloadApk()">
+                        <span class="link-name">TCQT 工具箱 v3.6.1</span>
+                        <span class="link-tag">APK</span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     
-    <!-- 主题弹窗 -->
     <div id="theme-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="category-title">🎨 主题选择</div>
-                <button class="close-btn" onclick="closeModal('theme-modal')">×</button>
+                <button class="close-btn" onclick="closeModal('theme-modal')">&times;</button>
             </div>
             <div class="theme-grid">
                 <button class="theme-btn" style="background:linear-gradient(135deg,#667eea,#764ba2)" onclick="setTheme('default')">默认</button>
@@ -414,15 +553,18 @@
                 <button class="theme-btn" style="background:linear-gradient(135deg,#ff6b6b,#ff8e53)" onclick="setTheme('orange')">橙色</button>
                 <button class="theme-btn" style="background:linear-gradient(135deg,#3498db,#2980b9)" onclick="setTheme('blue')">蓝色</button>
             </div>
+            <div class="theme-upload-btn" onclick="document.getElementById('theme-upload-input').click()">
+                📁 上传自定义主题 (.json)
+            </div>
+            <input type="file" id="theme-upload-input" accept=".json" style="display: none;">
         </div>
     </div>
     
-    <!-- 网盘搜索弹窗 -->
     <div id="cloud-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="category-title">☁️ 网盘搜索</div>
-                <button class="close-btn" onclick="closeModal('cloud-modal')">×</button>
+                <button class="close-btn" onclick="closeModal('cloud-modal')">&times;</button>
             </div>
             <div class="cloud-search-grid">
                 <button class="cloud-search-item" onclick="searchCloud('百度网盘')">
@@ -449,136 +591,186 @@
                     <span class="cloud-icon">💾</span>
                     <span class="cloud-name">OneDrive</span>
                 </button>
-                <button class="cloud-search-item" onclick="searchCloud('Google Drive')">
-                    <span class="cloud-icon">🌐</span>
-                    <span class="cloud-name">Google Drive</span>
-                </button>
-                <button class="cloud-search-item" onclick="searchCloud('夸克网盘')">
-                    <span class="cloud-icon">🚀</span>
-                    <span class="cloud-name">夸克网盘</span>
-                </button>
             </div>
         </div>
     </div>
     
-    <!-- 应用弹窗 -->
-    <div id="apps-modal" class="modal">
+    <div id="music-novel-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="category-title">📱 应用管理</div>
-                <button class="close-btn" onclick="closeModal('apps-modal')">×</button>
+                <div class="category-title">🎵 音乐 & 📖 小说</div>
+                <button class="close-btn" onclick="closeModal('music-novel-modal')">&times;</button>
             </div>
             <ul class="link-list">
-                <li class="link-item" onclick="openLink('https://www.urlc.cn')">
-                    <span class="link-name">短链生成</span>
-                    <span class="link-tag">工具</span>
+                <li class="link-item" onclick="openLink('https://music.haom.ren')">
+                    <span class="link-name">音乐搜索器 (HaoM)</span>
+                    <span class="link-tag">在线</span>
                 </li>
-                <li class="link-item" onclick="openLink('https://dy.kukutool.com')">
-                    <span class="link-name">视频解析</span>
-                    <span class="link-tag">工具</span>
+                <li class="link-item" onclick="openLink('https://flac.life')">
+                    <span class="link-name">无损生活 (FLAC)</span>
+                    <span class="link-tag">高音质</span>
                 </li>
-                <li class="link-item" onclick="openLink('https://www.pandashi8.com')">
-                    <span class="link-name">资源分享</span>
-                    <span class="link-tag">下载</span>
+                <li class="link-item" onclick="openLink('https://www.kugou.com')">
+                    <span class="link-name">酷狗音乐</span>
+                    <span class="link-tag">官方</span>
                 </li>
-                <li class="link-item" onclick="openLink('https://ezgif.com')">
-                    <span class="link-name">GIF制作</span>
-                    <span class="link-tag">图片</span>
+                <li class="link-item" onclick="openLink('https://www.kuwo.cn')">
+                    <span class="link-name">酷我音乐</span>
+                    <span class="link-tag">官方</span>
+                </li>
+                <li class="link-item" onclick="openLink('https://www.biquge.tv')">
+                    <span class="link-name">笔趣阁 (官方)</span>
+                    <span class="link-tag">无广</span>
+                </li>
+                <li class="link-item" onclick="openLink('https://www.69shuba.com')">
+                    <span class="link-name">69书吧</span>
+                    <span class="link-tag">快</span>
+                </li>
+                <li class="link-item" onclick="openLink('https://www.qidian.com')">
+                    <span class="link-name">起点中文网</span>
+                    <span class="link-tag">正版</span>
+                </li>
+                <li class="link-item" onclick="openLink('https://www.zongheng.com')">
+                    <span class="link-name">纵横中文网</span>
+                    <span class="link-tag">正版</span>
                 </li>
             </ul>
         </div>
     </div>
     
-    <!-- 搜索弹窗 -->
-    <div id="search-modal" class="modal">
+    <div id="app-directory-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="category-title">🔍 搜索工具</div>
-                <button class="close-btn" onclick="closeModal('search-modal')">×</button>
+                <div class="category-title">
+                    📱 应用专区
+                    <span id="admin-badge" class="admin-badge" style="display: none;">管理员模式</span>
+                </div>
+                <button class="close-btn" onclick="closeModal('app-directory-modal')">&times;</button>
             </div>
-            <div class="theme-grid">
-                <button class="theme-btn" onclick="searchEngine('https://www.baidu.com/s?wd=')">百度</button>
-                <button class="theme-btn" onclick="searchEngine('https://www.google.com/search?q=')">Google</button>
-                <button class="theme-btn" onclick="searchEngine('https://www.bing.com/search?q=')">Bing</button>
-                <button class="theme-btn" onclick="searchEngine('https://www.sogou.com/web?query=')">搜狗</button>
-                <button class="theme-btn" onclick="searchEngine('https://duckduckgo.com/?q=')">DuckDuckGo</button>
-                <button class="theme-btn" onclick="searchEngine('https://github.com/search?q=')">GitHub</button>
+            <div id="app-directory-list"></div>
+            <div id="admin-panel" class="admin-panel" style="display: block;">
+                <div class="admin-toggle">
+                    <span>启用管理员创建模式</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="admin-mode-toggle" onchange="toggleAdminMode()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div id="admin-create-form" class="admin-input-group" style="display: none;">
+                    <input type="text" id="admin-link-name" class="form-input" placeholder="链接名称">
+                    <input type="text" id="admin-link-url" class="form-input" placeholder="https://">
+                    <input type="password" id="admin-password" class="form-input" placeholder="管理员密码" style="max-width:100px;">
+                    <button class="btn btn-primary" onclick="addAppDirectoryLink()">添加</button>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- 设置弹窗 -->
     <div id="settings-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="category-title">⚙️ 设置</div>
-                <button class="close-btn" onclick="closeModal('settings-modal')">×</button>
+                <button class="close-btn" onclick="closeModal('settings-modal')">&times;</button>
             </div>
             <button class="btn" style="width:100%;margin-bottom:10px" onclick="backupData()">💾 备份数据</button>
             <button class="btn" style="width:100%;margin-bottom:10px" onclick="restoreData()">📂 恢复数据</button>
-            <button class="btn" style="width:100%;background:#ff6b6b" onclick="if(confirm('确定清空所有数据？')) clearData()">🗑️ 清空数据</button>
+            <button class="btn" style="width:100%;margin-bottom:10px" onclick="openModal('about-modal')">ℹ️ 关于</button>
+            <button class="btn" style="width:100%;background:#ff6b6b" onclick="clearData()">🗑️ 清空数据</button>
+        </div>
+    </div>
+    
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="category-title">ℹ️ 关于百宝袋AI</div>
+                <button class="close-btn" onclick="closeModal('about-modal')">&times;</button>
+            </div>
+            <div style="line-height: 1.6; padding: 10px 0;">
+                <p><strong>版本:</strong> 2.1 访问密码+管理员密码版</p>
+                <p><strong>功能亮点:</strong></p>
+                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                    <li>🔒 进入网站需访问密码 2025（无提示）</li>
+                    <li>🎨 6种预设主题 + 自定义主题上传</li>
+                    <li>🎵 全网音乐资源</li>
+                    <li>📖 全网小说资源</li>
+                    <li>☁️ 网盘搜索</li>
+                    <li>📱 应用专区 (仅管理员可创建/删除，访客可查看下载)</li>
+                    <li>🔗 我的收藏 (临时保存，可转存至专区)</li>
+                    <li>🤖 AI智能搜索</li>
+                    <li>📦 快捷入口：资源分享 / 短链生成 / 视频解析</li>
+                    <li>🛠️ 实用软件下载</li>
+                </ul>
+                <p><strong>使用说明:</strong></p>
+                <ol style="margin-left: 20px; margin-bottom: 15px;">
+                    <li>首次打开输入访问密码 2025 进入主界面。</li>
+                    <li>在"我的收藏"添加链接，点击"⭐"永久保存至应用专区。</li>
+                    <li>进入"应用专区"后，开启管理员创建模式并输入管理员密码(2026)即可添加或删除链接。</li>
+                </ol>
+                <p style="text-align: center; margin-top: 20px; opacity: 0.8;">© 2026 百宝袋AI - 全能工具箱</p>
+            </div>
         </div>
     </div>
     
     <div id="notification" class="notification"></div>
+    <input type="file" id="avatar-input" accept="image/*" style="display: none;">
     
     <script>
-        // 应用数据
-        const appData = {
-            customLinks: [],
-            settings: {
-                theme: 'default',
-                avatar: null
-            }
-        };
-
-        // 主题配置
+        const ACCESS_PASSWORD = '2025';
+        const ADMIN_PASSWORD = '2026';
+        
+        const STORAGE_KEY = 'baibaodai';
+        
         const THEMES = {
             default: {
                 primary: '#667eea',
                 secondary: '#764ba2',
                 accent: '#ff6b6b',
                 bgPrimary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)'
+                cardBg: 'rgba(255, 255, 255, 0.12)',
+                name: '默认主题'
             },
             dark: {
                 primary: '#2c3e50',
                 secondary: '#1a1a2e',
                 accent: '#ff6b6b',
                 bgPrimary: 'linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.08)'
+                cardBg: 'rgba(255, 255, 255, 0.08)',
+                name: '深色主题'
             },
             green: {
                 primary: '#00b09b',
                 secondary: '#96c93d',
                 accent: '#ff6b6b',
                 bgPrimary: 'linear-gradient(135deg, #00b09b 0%, #96c93d 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)'
+                cardBg: 'rgba(255, 255, 255, 0.12)',
+                name: '绿色主题'
             },
             purple: {
                 primary: '#9d50bb',
                 secondary: '#6e48aa',
                 accent: '#ff6b6b',
                 bgPrimary: 'linear-gradient(135deg, #9d50bb 0%, #6e48aa 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)'
+                cardBg: 'rgba(255, 255, 255, 0.12)',
+                name: '紫色主题'
             },
             orange: {
                 primary: '#ff6b6b',
                 secondary: '#ff8e53',
                 accent: '#3498db',
                 bgPrimary: 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)'
+                cardBg: 'rgba(255, 255, 255, 0.12)',
+                name: '橙色主题'
             },
             blue: {
                 primary: '#3498db',
                 secondary: '#2980b9',
                 accent: '#ff6b6b',
                 bgPrimary: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)'
+                cardBg: 'rgba(255, 255, 255, 0.12)',
+                name: '蓝色主题'
             }
         };
 
-        // 网盘搜索配置
         const CLOUD_SEARCH = {
             '百度网盘': [
                 { name: '云盘精灵', url: 'https://www.yunpanjingling.com/search/' },
@@ -587,427 +779,333 @@
             ],
             '阿里云盘': [
                 { name: 'UP云搜', url: 'https://www.upyunso.com/' },
-                { name: '阿里云盘资源', url: 'https://www.aliyundrive.com/' },
-                { name: '阿里云盘社区', url: 'https://www.aliyundrive.com/community' }
+                { name: '阿里云盘资源', url: 'https://www.aliyundrive.com/' }
             ],
             '蓝奏云': [
-                { name: '蓝奏云资源', url: 'https://www.lanzou.com/' },
-                { name: '蓝奏云搜索', url: 'https://www.baidu.com/s?wd=site:lanzou.com+' }
+                { name: '蓝奏云资源', url: 'https://www.lanzou.com/' }
             ],
             '迅雷云盘': [
-                { name: '迅雷云盘', url: 'https://pan.xunlei.com/' },
-                { name: '迅雷云盘搜索', url: 'https://www.baidu.com/s?wd=site:pan.xunlei.com+' }
+                { name: '迅雷云盘', url: 'https://pan.xunlei.com/' }
             ],
             '天翼云盘': [
-                { name: '天翼云盘', url: 'https://cloud.189.cn/' },
-                { name: '天翼云盘搜索', url: 'https://www.baidu.com/s?wd=site:cloud.189.cn+' }
+                { name: '天翼云盘', url: 'https://cloud.189.cn/' }
             ],
             'OneDrive': [
                 { name: 'OneDrive搜索', url: 'https://www.bing.com/search?q=site%3Aonedrive.live.com+' }
-            ],
-            'Google Drive': [
-                { name: 'Google Drive搜索', url: 'https://www.google.com/search?q=site%3Adrive.google.com+' }
-            ],
-            '夸克网盘': [
-                { name: '夸克网盘', url: 'https://pan.quark.cn/' },
-                { name: '夸克网盘搜索', url: 'https://www.baidu.com/s?wd=site:pan.quark.cn+' }
             ]
         };
 
-        // 安全AI配置
-        const AI_CONFIG = {
-            safeMode: true,
-            maxResponseLength: 1000,
-            allowedDomains: ['deepseek.com', 'openai.com'],
-            encryptionKey: 'user-defined-secret-key-2026',
-            rateLimit: 10 // 每分钟请求次数
+        let appData = {
+            customLinks: [],
+            appDirectory: [],
+            settings: { theme: 'default', avatar: null, customThemes: [] }
         };
+        let isAdminMode = false;
+        const dom = {};
 
-        // 初始化应用
-        function init() {
-            loadData();
+        function cacheDom() {
+            ['main-app','time','date','avatar','ai-search-input','ai-response','custom-links','app-directory-list','admin-badge','admin-panel','admin-mode-toggle','admin-create-form','admin-link-name','admin-link-url','admin-password','theme-upload-input','avatar-input','notification','access-screen','access-password'].forEach(id => dom[id] = document.getElementById(id));
+        }
+
+        function checkAccessPassword() {
+            const input = dom['access-password'];
+            input.focus();
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    if (this.value === ACCESS_PASSWORD) {
+                        dom['access-screen'].style.display = 'none';
+                        dom['main-app'].style.display = 'block';
+                        initMainApp();
+                    } else {
+                        this.value = '';
+                    }
+                }
+            });
+        }
+
+        function initMainApp() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { appData = JSON.parse(saved); } catch {}
+            }
+            if (appData.settings.theme) setTheme(appData.settings.theme);
+            loadAvatar();
             updateTime();
             setInterval(updateTime, 1000);
-            loadAvatar();
-            
-            // 绑定头像上传事件
-            const avatarInput = document.createElement('input');
-            avatarInput.type = 'file';
-            avatarInput.accept = 'image/*';
-            avatarInput.style.display = 'none';
-            avatarInput.id = 'avatar-input';
-            avatarInput.onchange = handleAvatarUpload;
-            document.body.appendChild(avatarInput);
-            
-            document.getElementById('avatar').onclick = () => {
-                avatarInput.click();
-            };
-            
-            // 键盘快捷键
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeAllModals();
-                }
-                if (e.ctrlKey && e.key === 'k') {
-                    e.preventDefault();
-                    document.getElementById('ai-search-input').focus();
-                }
-                if (e.ctrlKey && e.key === 'b') {
-                    e.preventDefault();
-                    openModal('cloud-modal');
-                }
+            renderAppDirectory();
+            renderCustomLinks();
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') closeAllModals();
+                if (e.ctrlKey && e.key === 'k') { e.preventDefault(); dom['ai-search-input'].focus(); }
+                if (e.ctrlKey && e.key === 'b') { e.preventDefault(); openModal('cloud-modal'); }
             });
         }
 
-        // 更新时间
         function updateTime() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
-            const dateStr = now.toLocaleDateString('zh-CN', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                weekday: 'long'
-            });
-            document.getElementById('time').textContent = timeStr;
-            document.getElementById('date').textContent = dateStr;
+            const n = new Date();
+            dom.time.textContent = n.toLocaleTimeString('zh-CN', { hour12: false });
+            dom.date.textContent = n.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
         }
 
-        // 设置主题
-        function setTheme(themeName) {
-            const theme = THEMES[themeName] || THEMES.default;
-            
-            document.documentElement.style.setProperty('--primary', theme.primary);
-            document.documentElement.style.setProperty('--secondary', theme.secondary);
-            document.documentElement.style.setProperty('--accent', theme.accent);
-            document.documentElement.style.setProperty('--bg-primary', theme.bgPrimary);
-            document.documentElement.style.setProperty('--card-bg', theme.cardBg);
-            
-            appData.settings.theme = themeName;
+        function setTheme(name) {
+            const t = THEMES[name] || THEMES.default;
+            applyTheme(t);
+            appData.settings.theme = name;
             saveData();
             closeModal('theme-modal');
-            showNotification(`已切换为${themeName}主题`);
+            showNotification(`已切换为${t.name || name}主题`);
         }
 
-        // 安全AI搜索功能
+        function applyTheme(t) {
+            const root = document.documentElement;
+            root.style.setProperty('--primary', t.primary);
+            root.style.setProperty('--secondary', t.secondary);
+            root.style.setProperty('--accent', t.accent);
+            root.style.setProperty('--bg-primary', t.bgPrimary);
+            root.style.setProperty('--card-bg', t.cardBg);
+        }
+
+        function handleThemeUpload(e) {
+            const f = e.target.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = ev => {
+                try {
+                    const d = JSON.parse(ev.target.result);
+                    if (!d.name || !d.primary || !d.secondary) { showNotification('主题文件格式错误'); return; }
+                    appData.settings.customThemes = appData.settings.customThemes || [];
+                    appData.settings.customThemes.push(d);
+                    applyTheme(d);
+                    appData.settings.theme = 'custom';
+                    saveData();
+                    showNotification(`✅ 已应用自定义主题: ${d.name}`);
+                    closeModal('theme-modal');
+                } catch { showNotification('❌ 主题文件解析失败'); }
+            };
+            r.readAsText(f);
+        }
+
         async function searchWithAI() {
-            const input = document.getElementById('ai-search-input');
-            const question = input.value.trim();
-            const responseEl = document.getElementById('ai-response');
-            
-            if (!question) {
-                showNotification('请输入问题');
-                return;
-            }
-            
-            // 安全检查
-            if (!isSafeContent(question)) {
-                responseEl.innerHTML = '⚠️ 问题包含不安全内容，已过滤';
-                return;
-            }
-            
-            responseEl.innerHTML = '🤔 AI思考中...';
-            responseEl.style.opacity = '0.7';
-            
+            const q = dom['ai-search-input'].value.trim();
+            const rEl = dom['ai-response'];
+            if (!q) { showNotification('请输入问题'); return; }
+            rEl.innerHTML = '🤔 AI思考中...';
+            rEl.style.opacity = '0.7';
             try {
-                // 使用本地安全AI响应
-                const response = getSafeAIResponse(question);
-                
-                // 模拟网络延迟
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                responseEl.innerHTML = response;
-                responseEl.style.opacity = '1';
-                
-                // 自动清空输入框
-                input.value = '';
-                
-            } catch (error) {
-                responseEl.innerHTML = '😵 AI服务暂时不可用，请稍后重试';
-                showNotification('AI搜索失败，请检查网络');
-            }
+                await new Promise(r => setTimeout(r, 800));
+                const msgs = [
+                    `关于"${q}"，我为您找到以下安全信息：\n\n1. 这是一个常见的查询，建议通过正规渠道获取信息\n2. 您可以在百宝袋的搜索工具中使用多个搜索引擎对比结果\n3. 相关学习资源请访问官方教育网站`,
+                    `针对"${q}"的问题：\n\n🔍 安全提示：请勿点击来源不明的链接\n💡 建议使用官方认证的工具和网站\n📚 正规资源可以在百宝袋的应用管理中找到`,
+                    `关于${q}的解答：\n\n📱 您可以使用百宝袋内置的安全工具\n🎯 保护个人隐私，避免在不可信网站输入敏感信息\n🔗 推荐使用HTTPS加密的网站进行访问`
+                ];
+                rEl.innerHTML = msgs[Math.floor(Math.random() * msgs.length)];
+                rEl.style.opacity = '1';
+                dom['ai-search-input'].value = '';
+            } catch { rEl.innerHTML = '😵 AI服务暂时不可用，请稍后重试'; showNotification('AI搜索失败，请检查网络'); }
         }
 
-        // 安全检查
-        function isSafeContent(content) {
-            const unsafePatterns = [
-                /script/i,
-                /javascript:/i,
-                /data:/i,
-                /on\w+\s*=/i,
-                /<[^>]*>/i
-            ];
-            
-            return !unsafePatterns.some(pattern => pattern.test(content));
-        }
-
-        // 安全AI响应
-        function getSafeAIResponse(question) {
-            const safeResponses = [
-                `关于"${question}"，我为您找到以下安全信息：\n\n1. 这是一个常见的查询，建议通过正规渠道获取信息\n2. 您可以在百宝袋的搜索工具中使用多个搜索引擎对比结果\n3. 相关学习资源请访问官方教育网站`,
-                `针对"${question}"的问题：\n\n🔍 安全提示：请勿点击来源不明的链接\n💡 建议使用官方认证的工具和网站\n📚 正规资源可以在百宝袋的应用管理中找到`,
-                `关于${question}的解答：\n\n📱 您可以使用百宝袋内置的安全工具\n🎯 保护个人隐私，避免在不可信网站输入敏感信息\n🔗 推荐使用HTTPS加密的网站进行访问`
-            ];
-            
-            return safeResponses[Math.floor(Math.random() * safeResponses.length)];
-        }
-
-        // 网盘搜索
-        function searchCloud(cloudName) {
-            const searchEngines = CLOUD_SEARCH[cloudName];
-            if (!searchEngines) {
-                showNotification('该网盘搜索功能暂不可用');
-                return;
-            }
-            
-            const query = prompt(`请输入要在${cloudName}中搜索的内容:`);
-            if (query && query.trim()) {
-                const searchQuery = encodeURIComponent(query.trim());
-                const searchUrl = searchEngines[0].url + searchQuery;
-                openLink(searchUrl);
+        function searchCloud(name) {
+            const engines = CLOUD_SEARCH[name];
+            if (!engines) { showNotification('该网盘搜索功能暂不可用'); return; }
+            const q = prompt(`请输入要在${name}中搜索的内容:`);
+            if (q && q.trim()) {
+                const u = engines[0].url + encodeURIComponent(q.trim());
+                openLink(u);
                 closeModal('cloud-modal');
-                showNotification(`正在搜索${cloudName}资源`);
+                showNotification(`正在搜索${name}资源`);
             }
         }
 
-        // 搜索引擎跳转
-        function searchEngine(engineUrl) {
-            const query = prompt('请输入搜索关键词:');
-            if (query && query.trim()) {
-                openLink(engineUrl + encodeURIComponent(query.trim()));
-                closeModal('search-modal');
-            }
-        }
-
-        // 打开链接
         function openLink(url) {
             if (!url) return;
-            
-            if (url.startsWith('./') || url.startsWith('/')) {
-                // 本地文件下载
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = url.split('/').pop();
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } else {
-                // 外部链接
-                if (!url.startsWith('http')) {
-                    url = 'https://' + url;
-                }
-                // 安全检查
-                if (isSafeUrl(url)) {
-                    window.open(url, '_blank', 'noopener,noreferrer');
-                } else {
-                    showNotification('链接安全检查未通过');
-                }
-            }
+            if (!url.startsWith('http')) url = 'https://' + url;
+            window.open(url, '_blank', 'noopener,noreferrer');
         }
 
-        // URL安全检查
-        function isSafeUrl(url) {
-            try {
-                const urlObj = new URL(url);
-                const safeProtocols = ['http:', 'https:'];
-                const unsafeHosts = ['malicious.com', 'phishing.com'];
-                
-                return safeProtocols.includes(urlObj.protocol) && 
-                       !unsafeHosts.includes(urlObj.hostname);
-            } catch {
-                return false;
-            }
+        function downloadApk() {
+            const a = document.createElement('a');
+            a.href = './TCQT_3.6.1.r386.APK';
+            a.download = 'TCQT_3.6.1.r386.APK';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showNotification('已开始下载 TCQT 工具箱');
         }
 
-        // 弹窗控制
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function closeAllModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        function closeAllModals() {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.style.display = 'none';
-            });
-        }
-
-        // 添加自定义链接
         function addLink() {
-            const nameInput = document.getElementById('link-name');
-            const urlInput = document.getElementById('link-url');
-            const name = nameInput.value.trim();
-            let url = urlInput.value.trim();
-            
-            if (!name || !url) {
-                showNotification('请填写完整信息');
-                return;
-            }
-            
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
-            
-            // URL安全检查
-            if (!isSafeUrl(url)) {
-                showNotification('链接不安全，请检查URL');
-                return;
-            }
-            
-            appData.customLinks.push({ name, url });
+            const n = document.getElementById('link-name').value.trim();
+            let u = document.getElementById('link-url').value.trim();
+            if (!n || !u) { showNotification('请填写完整信息'); return; }
+            if (!u.startsWith('http')) u = 'https://' + u;
+            appData.customLinks.push({ name: n, url: u });
             saveData();
             renderCustomLinks();
-            
-            nameInput.value = '';
-            urlInput.value = '';
-            showNotification('链接已添加');
+            document.getElementById('link-name').value = '';
+            document.getElementById('link-url').value = '';
+            showNotification('链接已添加到我的收藏');
         }
 
-        // 删除链接
-        function deleteLink(index) {
+        function saveToAppDirectory(n, u) {
+            if (appData.appDirectory.some(i => i.url === u)) { showNotification('该链接已存在于应用专区'); return; }
+            appData.appDirectory.push({ name: n, url: u });
+            saveData();
+            renderAppDirectory();
+            showNotification('✅ 链接已永久保存到应用专区');
+        }
+
+        function deleteLink(idx) {
             if (confirm('确定删除这个链接吗？')) {
-                appData.customLinks.splice(index, 1);
+                appData.customLinks.splice(idx, 1);
                 saveData();
                 renderCustomLinks();
                 showNotification('链接已删除');
             }
         }
 
-        // 渲染自定义链接
+        function deleteFromAppDirectory(idx) {
+            if (confirm('确定从应用专区删除这个链接吗？')) {
+                appData.appDirectory.splice(idx, 1);
+                saveData();
+                renderAppDirectory();
+                showNotification('链接已从应用专区删除');
+            }
+        }
+
         function renderCustomLinks() {
-            const container = document.getElementById('custom-links');
-            container.innerHTML = '';
-            
-            appData.customLinks.forEach((link, index) => {
+            const c = dom['custom-links'];
+            c.innerHTML = '';
+            if (!appData.customLinks.length) { c.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><div>暂无收藏，快去添加吧</div></div>'; return; }
+            appData.customLinks.forEach((l, i) => {
                 const li = document.createElement('li');
                 li.className = 'link-item';
-                li.innerHTML = `
-                    <span class="link-name">${link.name}</span>
-                    <button class="delete-btn" onclick="event.stopPropagation();deleteLink(${index})">删除</button>
-                `;
-                li.onclick = () => openLink(link.url);
-                container.appendChild(li);
+                li.innerHTML = `<span class="link-name">${l.name}</span><div><button class="save-to-app-btn" onclick="event.stopPropagation();saveToAppDirectory('${l.name.replace(/'/g, "\\'")}', '${l.url.replace(/'/g, "\\'")}')">⭐ 永久保存</button><button class="delete-btn" onclick="event.stopPropagation();deleteLink(${i})">删除</button></div>`;
+                li.onclick = () => openLink(l.url);
+                c.appendChild(li);
             });
         }
 
-        // 头像上传
-        function handleAvatarUpload(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                // 文件大小限制（2MB）
-                if (file.size > 2 * 1024 * 1024) {
-                    showNotification('图片大小不能超过2MB');
-                    return;
+        function renderAppDirectory() {
+            const c = dom['app-directory-list'];
+            c.innerHTML = '';
+            if (!appData.appDirectory.length) { c.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div>应用专区为空<br><small>您可以在"我的收藏"中保存链接到这里</small></div></div>'; return; }
+            appData.appDirectory.forEach((l, i) => {
+                const d = document.createElement('div');
+                d.className = 'app-directory-item';
+                d.innerHTML = `<span class="link-name">${l.name}</span>`;
+                if (isAdminMode) {
+                    d.innerHTML += `<button class="delete-btn" onclick="event.stopPropagation();deleteFromAppDirectory(${i})">删除</button>`;
                 }
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    document.getElementById('avatar').src = event.target.result;
-                    appData.settings.avatar = event.target.result;
-                    saveData();
-                    showNotification('头像已更新');
-                };
-                reader.readAsDataURL(file);
-            }
+                d.onclick = () => openLink(l.url);
+                c.appendChild(d);
+            });
         }
 
-        // 加载头像
-        function loadAvatar() {
-            const avatar = document.getElementById('avatar');
-            if (appData.settings.avatar) {
-                avatar.src = appData.settings.avatar;
-            } else {
-                // 使用默认头像
-                avatar.src = 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS8ZpoRtcH2zjIcbVV9depdoQKe_4QwACuBsAAladCVV_1D50jotFjjoE.jpg';
-            }
+        function toggleAdminMode() {
+            isAdminMode = dom['admin-mode-toggle'].checked;
+            dom['admin-badge'].style.display = isAdminMode ? 'inline-block' : 'none';
+            dom['admin-create-form'].style.display = isAdminMode ? 'flex' : 'none';
         }
 
-        // 数据管理
-        function backupData() {
-            const data = {
-                customLinks: appData.customLinks,
-                settings: appData.settings
+        function addAppDirectoryLink() {
+            if (!isAdminMode) { showNotification('请先启用管理员创建模式'); return; }
+            const pwd = dom['admin-password'].value;
+            if (pwd !== ADMIN_PASSWORD) { showNotification('管理员密码错误'); dom['admin-password'].value = ''; return; }
+            const n = dom['admin-link-name'].value.trim();
+            let u = dom['admin-link-url'].value.trim();
+            if (!n || !u) { showNotification('请填写完整信息'); return; }
+            if (!u.startsWith('http')) u = 'https://' + u;
+            appData.appDirectory.push({ name: n, url: u });
+            saveData();
+            renderAppDirectory();
+            dom['admin-link-name'].value = '';
+            dom['admin-link-url'].value = '';
+            dom['admin-password'].value = '';
+            showNotification('✅ 链接已添加到应用专区');
+        }
+
+        function handleAvatarUpload(e) {
+            const f = e.target.files[0];
+            if (!f || !f.type.startsWith('image/')) return;
+            if (f.size > 2 * 1024 * 1024) { showNotification('图片大小不能超过2MB'); return; }
+            const r = new FileReader();
+            r.onload = ev => {
+                dom.avatar.src = ev.target.result;
+                appData.settings.avatar = ev.target.result;
+                saveData();
+                showNotification('头像已更新');
             };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
+            r.readAsDataURL(f);
+        }
+
+        function loadAvatar() {
+            if (appData.settings.avatar) dom.avatar.src = appData.settings.avatar;
+        }
+
+        function backupData() {
+            const data = { customLinks: appData.customLinks, appDirectory: appData.appDirectory, settings: appData.settings };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = '百宝袋数据备份.json';
             a.click();
             URL.revokeObjectURL(url);
-            showNotification('数据备份成功');
+            showNotification('✅ 数据备份成功');
         }
 
         function restoreData() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        try {
-                            const data = JSON.parse(e.target.result);
-                            if (data.customLinks) appData.customLinks = data.customLinks;
-                            if (data.settings) {
-                                appData.settings = { ...appData.settings, ...data.settings };
-                                setTheme(appData.settings.theme);
-                                loadAvatar();
-                            }
-                            saveData();
-                            renderCustomLinks();
-                            showNotification('数据恢复成功');
-                        } catch (err) {
-                            showNotification('数据恢复失败：格式错误');
+            const inp = document.createElement('input');
+            inp.type = 'file';
+            inp.accept = '.json';
+            inp.onchange = e => {
+                const f = e.target.files[0];
+                if (!f) return;
+                const r = new FileReader();
+                r.onload = ev => {
+                    try {
+                        const d = JSON.parse(ev.target.result);
+                        if (d.customLinks) appData.customLinks = d.customLinks;
+                        if (d.appDirectory) appData.appDirectory = d.appDirectory;
+                        if (d.settings) {
+                            appData.settings = { ...appData.settings, ...d.settings };
+                            setTheme(appData.settings.theme);
+                            loadAvatar();
                         }
-                    };
-                    reader.readAsText(file);
-                }
+                        saveData();
+                        renderCustomLinks();
+                        renderAppDirectory();
+                        showNotification('✅ 数据恢复成功');
+                    } catch { showNotification('❌ 数据恢复失败：格式错误'); }
+                };
+                r.readAsText(f);
             };
-            input.click();
+            inp.click();
         }
 
         function clearData() {
-            if (confirm('确定清空所有数据？此操作不可撤销！')) {
-                localStorage.removeItem('baibaodai');
+            if (confirm('确定清空所有数据吗？\n\n⚠️ 注意：应用专区的链接也会被清空！')) {
+                localStorage.removeItem(STORAGE_KEY);
                 location.reload();
             }
         }
 
-        // 通知
-        function showNotification(message) {
-            const noti = document.getElementById('notification');
-            noti.textContent = message;
-            noti.classList.add('show');
-            setTimeout(() => noti.classList.remove('show'), 2000);
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+        
+        function showNotification(msg) {
+            const n = dom.notification;
+            n.textContent = msg;
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 2500);
         }
 
-        // 数据持久化
-        function saveData() {
-            localStorage.setItem('baibaodai', JSON.stringify(appData));
-        }
-
-        function loadData() {
-            const saved = localStorage.getItem('baibaodai');
-            if (saved) {
-                const data = JSON.parse(saved);
-                if (data.customLinks) appData.customLinks = data.customLinks;
-                if (data.settings) {
-                    appData.settings = { ...appData.settings, ...data.settings };
-                    setTheme(appData.settings.theme);
-                }
-                renderCustomLinks();
-            }
-        }
-
-        // 启动应用
-        window.onload = init;
+        window.onload = function() {
+            cacheDom();
+            checkAccessPassword();
+        };
     </script>
 </body>
 </html>
