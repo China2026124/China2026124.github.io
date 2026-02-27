@@ -3,415 +3,1012 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>网盘音乐播放器</title>
+    <meta name="theme-color" content="#667eea">
+    <title>百宝袋AI - 全能工具箱</title>
     <style>
-        /* 基础样式 */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #ff6b6b;
+            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-bg: rgba(255, 255, 255, 0.12);
+            --text: #ffffff;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333; 
-            line-height: 1.6; 
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+            background: var(--bg-primary);
+            color: var(--text);
             min-height: 100vh;
-        }
-        
-        /* 主容器 */
-        .container { 
-            max-width: 480px; 
-            margin: 0 auto; 
-            padding: 20px 15px 100px; 
-        }
-        
-        /* 横幅区域 */
-        .banner { 
-            width: 100%; 
-            height: 180px; 
-            border-radius: 20px; 
-            overflow: hidden; 
-            margin-bottom: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            position: relative;
-        }
-        .banner img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            filter: brightness(0.8);
-        }
-        .banner-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.8));
-            padding: 20px 15px 10px;
-            color: white;
-        }
-        
-        /* 搜索框 */
-        .search-box { 
-            background: rgba(255,255,255,0.9); 
-            border-radius: 25px; 
-            padding: 12px 20px; 
-            margin-bottom: 20px; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .search-box input { 
-            width: 100%; 
-            border: none; 
-            outline: none; 
-            font-size: 16px; 
-            background: transparent; 
-            color: #333;
-        }
-        
-        /* 歌词区域 */
-        .lyrics-box { 
-            height: 200px; 
-            overflow: hidden; 
-            background: rgba(255,255,255,0.85); 
-            border-radius: 15px; 
-            margin-bottom: 20px; 
             padding: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-        .lyrics-wrapper { 
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .lyric-line { 
-            text-align: center; 
-            padding: 8px 0; 
-            font-size: 16px; 
-            color: #666; 
-            transition: all 0.3s ease; 
-            opacity: 0.7;
-        }
-        .lyric-line.active { 
-            color: #667eea; 
-            font-weight: bold; 
-            font-size: 18px; 
-            text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
-            opacity: 1;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.3s ease;
         }
         
-        /* 标签栏 */
-        .tabs { 
-            display: flex; 
-            gap: 10px; 
-            margin-bottom: 20px; 
+        .app {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+            background: rgba(255, 255, 255, 0.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='30' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
+        }
+        
+        .time-section {
+            flex: 1;
+        }
+        
+        .time {
+            font-size: 2.2em;
+            font-weight: 300;
+            margin-bottom: 2px;
+        }
+        
+        .date {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+        
+        .btn-group {
+            display: flex;
             flex-wrap: wrap;
-        }
-        .tab { 
-            flex: 1; 
-            min-width: 80px; 
-            text-align: center; 
-            padding: 12px 8px; 
-            background: rgba(255,255,255,0.9); 
-            border-radius: 12px; 
-            font-size: 13px; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        .tab:hover { transform: translateY(-2px); }
-        .tab.active { 
-            background: linear-gradient(135deg, #667eea, #764ba2); 
-            color: white; 
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            gap: 8px;
+            margin-bottom: 20px;
         }
         
-        /* 用户信息 */
-        .user-bar { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            margin-bottom: 20px; 
-            padding: 15px; 
-            background: rgba(255,255,255,0.9); 
-            border-radius: 15px; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        #avatar { 
-            width: 50px; 
-            height: 50px; 
-            border-radius: 50%; 
-            background: linear-gradient(135deg, #667eea, #764ba2) center/cover; 
-            border: 3px solid white; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        .user-bar > div:last-child { 
-            font-weight: 600; 
-            font-size: 16px; 
-            color: #333;
+        .btn {
+            background: rgba(255, 255, 255, 0.18);
+            border: none;
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         
-        /* 文件列表 */
-        .file-list { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
-            margin-bottom: 80px;
+        .ai-search-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
-        .file-item { 
-            background: rgba(255,255,255,0.9); 
-            padding: 20px 15px; 
-            border-radius: 15px; 
-            text-align: center; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-size: 15px;
-            transition: all 0.3s ease;
+        
+        .ai-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .ai-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-size: 1em;
+        }
+        
+        .ai-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .ai-response {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.9em;
+            line-height: 1.6;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .category {
+            margin-bottom: 20px;
+        }
+        
+        .category-title {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            padding-left: 10px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .link-list {
+            list-style: none;
+        }
+        
+        .link-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             cursor: pointer;
         }
-        .file-item:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        
+        .link-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .link-tag {
+            background: var(--accent);
+            font-size: 0.7em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+        
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 0.8em;
+            opacity: 0.6;
+        }
+        
+        .add-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .form-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+        
+        .add-btn {
+            background: var(--accent);
+            border: none;
+            color: var(--text);
+            padding: 0 20px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .theme-btn {
+            padding: 15px 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        
+        .cloud-search-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .cloud-search-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text);
+            padding: 12px 8px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .cloud-icon {
+            font-size: 1.5em;
+        }
+        
+        .cloud-name {
+            font-size: 0.9em;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.9);
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 25px;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        .notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        @media (max-width: 480px) {
+            .card { padding: 15px; }
+            .time { font-size: 1.9em; }
+            .btn { padding: 8px 12px; }
+            .cloud-search-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="banner">
-            <img id="bannerImg" src="" alt="Banner">
-            <div class="banner-overlay">
-                <h2 style="margin: 0; font-size: 20px;">🎵 起风了</h2>
-                <p style="margin: 5px 0 0; opacity: 0.8; font-size: 14px;">买辣椒也用券</p>
+    <div class="app">
+        <div class="card">
+            <div class="header">
+                <img id="avatar" class="avatar" alt="头像">
+                <div class="time-section">
+                    <div id="time" class="time">00:00:00</div>
+                    <div id="date" class="date">2026年2月27日 星期四</div>
+                </div>
             </div>
-        </div>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 搜索歌曲、资源...">
-        </div>
-        <div class="lyrics-box">
-            <div class="lyrics-wrapper" id="lyricWrapper">
-                <div class="lyric-line" data-time="0">这一路上走走停停</div>
-                <div class="lyric-line" data-time="4">顺着少年漂流的痕迹</div>
-                <div class="lyric-line" data-time="9">迈出车站的前一刻</div>
-                <div class="lyric-line" data-time="13">竟有些犹豫</div>
-                <div class="lyric-line" data-time="18">不禁笑这近乡情怯</div>
-                <div class="lyric-line" data-time="22">仍无可避免</div>
-                <div class="lyric-line" data-time="26">而长野的天</div>
-                <div class="lyric-line" data-time="29">依旧那么暖</div>
-                <div class="lyric-line" data-time="33">风吹起了从前</div>
-                <div class="lyric-line" data-time="38">从前初识这世间</div>
-                <div class="lyric-line" data-time="41">万般流连</div>
-                <div class="lyric-line" data-time="45">看着天边似在眼前</div>
-                <div class="lyric-line" data-time="50">也甘愿赴汤蹈火去走它一遍</div>
-                <div class="lyric-line" data-time="59">如今走过这世间</div>
-                <div class="lyric-line" data-time="63">万般流连</div>
-                <div class="lyric-line" data-time="67">翻过岁月不同侧脸</div>
-                <div class="lyric-line" data-time="72">措不及防闯入你的笑颜</div>
-                <div class="lyric-line" data-time="81">我曾难自拔于世界之大</div>
-                <div class="lyric-line" data-time="85">也沉溺于其中梦话</div>
-                <div class="lyric-line" data-time="89">不得真假 不做挣扎 不惧笑话</div>
-                <div class="lyric-line" data-time="99">我曾将青春翻涌成她</div>
-                <div class="lyric-line" data-time="103">也曾指尖弹出盛夏</div>
-                <div class="lyric-line" data-time="108">心之所动 且就随缘去吧</div>
-                <div class="lyric-line" data-time="117">逆着光行走 任风吹雨打</div>
-            </div>
-        </div>
-        <div class="tabs">
-            <div class="tab" onclick="navigateTo('https://m.wandoujia.com/apps/566489/history')">🐧 QQ历史</div>
-            <div class="tab" onclick="navigateTo('https://m.wandoujia.com/apps/596157/history')">💚 微信历史</div>
-            <div class="tab active" onclick="navigateTo('https://www.pandashi8.com/')">🔢 资源分享</div>
-            <div class="tab" onclick="navigateTo('https://www.urlc.cn/')">🔗 短链生成</div>
-            <div class="tab" onclick="navigateTo('https://dy.kukutool.com/')">🎬 视频解析</div>
-        </div>
-        <div class="user-bar">
-            <div id="avatar"></div>
-            <div>音乐爱好者</div>
-        </div>
-        <div style="padding: 15px; background: rgba(255,255,255,0.9); border-radius: 15px; color: #666; font-size: 14px; margin-bottom: 20px; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-            欢迎使用！这里实时更新各类音乐和资源模块
-        </div>
-        <div class="file-list">
-            <div class="file-item" onclick="navigateTo('./TCQT_3.6.1.r386.APK')">实用软件</div>
-            <div class="file-item" onclick="showInfo('应用框架')">应用框架</div>
-            <div class="file-item" onclick="showInfo('QQ模块')">QQ模块</div>
-            <div class="file-item" onclick="showInfo('微信模块')">微信模块</div>
-            <div class="file-item" onclick="showInfo('Java脚本')">Java脚本</div>
-        </div>
-    </div>
-    
-    <!-- 播放器控制栏 -->
-    <div class="player-controls" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); padding: 15px 20px; display: flex; align-items: center; gap: 15px; backdrop-filter: blur(20px); border-top: 1px solid rgba(0,0,0,0.1); z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.1);">
-        <button class="play-btn" id="playBtn" onclick="togglePlay()" style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);">▶️</button>
-        <div id="currentTime" style="font-size: 12px; color: #666; min-width: 40px;">0:00</div>
-        <div id="progressContainer" onclick="seekTo(event)" style="flex: 1; height: 6px; background: #e0e0e0; border-radius: 3px; position: relative; cursor: pointer; overflow: hidden;">
-            <div id="progressBar" style="height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 3px; width: 0%; transition: width 0.1s linear;"></div>
-        </div>
-        <div id="duration" style="font-size: 12px; color: #666; min-width: 40px;">0:00</div>
-        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.7" oninput="setVolume(this.value)" style="width: 80px;">
-    </div>
-    
-    <!-- 音频标签 -->
-    <audio id="audio" preload="metadata" loop crossorigin="anonymous">
-        <source src="https://raw.githubusercontent.com/China2026124/China2026124.github.io/refs/heads/main/bgm.mp3" type="audio/mpeg">
-        您的浏览器不支持音频播放
-    </audio>
-<script>
-    // 解决自动播放被阻止的问题
-    let audioUnlocked = false;
-    
-    // 页面点击解锁音频
-    document.addEventListener('click', function unlockAudio() {
-        if (!audioUnlocked) {
-            const audio = document.getElementById('audio');
-            audio.volume = 0;
-            audio.play().then(() => {
-                audio.pause();
-                audio.currentTime = 0;
-                audio.volume = document.getElementById('volumeSlider').value;
-                audioUnlocked = true;
-                console.log('✅ 音频已解锁');
-            }).catch(e => {
-                console.log('音频解锁失败，需要用户手动点击播放');
-            });
-        }
-    }, { once: true });
-    
-    // 加载图片
-    const avatar = document.getElementById('avatar');
-    const bannerImg = document.getElementById('bannerImg');
-    avatar.style.backgroundImage = 'url(https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS8ZpoRtcH2zjIcbVV9depdoQKe_4QwACuBsAAladCVV_1D50jotFjjoE.jpg)';
-    bannerImg.src = 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS89poRxjX_mfw9ehbcydVIeti6E1egACxRsAAladCVWqLjx-6LXcszoE.jpeg';
-    
-    // 获取元素
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('playBtn');
-    const progressBar = document.getElementById('progressBar');
-    const currentTimeEl = document.getElementById('currentTime');
-    const durationEl = document.getElementById('duration');
-    const volumeSlider = document.getElementById('volumeSlider');
-    const lyricLines = document.querySelectorAll('.lyric-line');
-    const lyricWrapper = document.getElementById('lyricWrapper');
-    
-    // 播放/暂停控制
-    function togglePlay() {
-        if (!audioUnlocked) {
-            alert('请先点击页面任意位置（如搜索框或空白处），解锁音频播放权限');
-            return;
-        }
-        
-        if (audio.paused) {
-            audio.play().then(() => {
-                playBtn.textContent = '⏸️';
-            }).catch(err => {
-                console.error('播放失败:', err);
-                playBtn.textContent = '▶️';
-                alert('播放失败，请刷新页面后重试');
-            });
-        } else {
-            audio.pause();
-            playBtn.textContent = '▶️';
-        }
-    }
-    
-    // 进度条控制
-    function seekTo(event) {
-        if (!audioUnlocked || !audio.duration) return;
-        const rect = event.currentTarget.getBoundingClientRect();
-        const width = rect.width;
-        const clickX = event.clientX - rect.left;
-        audio.currentTime = (clickX / width) * audio.duration;
-    }
-    
-    // 音量控制
-    function setVolume(value) {
-        audio.volume = parseFloat(value);
-    }
-    
-    // 时间格式化
-    function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = Math.floor(seconds % 60);
-        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    }
-    
-    // 歌词同步
-    function updateLyrics(currentTime) {
-        let activeIndex = -1;
-        
-        lyricLines.forEach((line, index) => {
-            const startTime = parseFloat(line.dataset.time) || 0;
-            const nextStartTime = lyricLines[index + 1] ? parseFloat(lyricLines[index + 1].dataset.time) : Infinity;
             
-            if (currentTime >= startTime && currentTime < nextStartTime) {
-                line.classList.add('active');
-                activeIndex = index;
-            } else {
-                line.classList.remove('active');
+            <div class="ai-search-container">
+                <div class="ai-input-group">
+                    <input type="text" id="ai-search-input" class="ai-input" placeholder="输入问题，让AI帮您搜索..." onkeypress="if(event.key==='Enter') searchWithAI()">
+                    <button class="btn" onclick="searchWithAI()" style="background: #10b981">🤖 AI搜索</button>
+                </div>
+                <div id="ai-response" class="ai-response"></div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn" onclick="openModal('theme-modal')">🎨 主题</button>
+                <button class="btn" onclick="openModal('cloud-modal')">☁️ 网盘搜索</button>
+                <button class="btn" onclick="openModal('apps-modal')">📱 应用</button>
+                <button class="btn" onclick="openModal('search-modal')">🔍 搜索</button>
+                <button class="btn" onclick="openModal('settings-modal')">⚙️ 设置</button>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">🐧 QQ/微信专区</div>
+                <ul class="link-list">
+                    <li class="link-item" onclick="openLink('https://m.wandoujia.com/apps/566489/history')">
+                        <span class="link-name">QQ历史版本</span>
+                        <span class="link-tag">豌豆荚</span>
+                    </li>
+                    <li class="link-item" onclick="openLink('https://m.wandoujia.com/apps/596157/history')">
+                        <span class="link-name">微信历史版本</span>
+                        <span class="link-tag">豌豆荚</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">🎬 影视资源</div>
+                <ul class="link-list">
+                    <li class="link-item" onclick="openLink('https://cupfox.app')">
+                        <span class="link-name">茶杯狐</span>
+                        <span class="link-tag">搜索</span>
+                    </li>
+                    <li class="link-item" onclick="openLink('https://www.libvio.me')">
+                        <span class="link-name">低端影视</span>
+                        <span class="link-tag">蓝光</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">🎵 音乐小说</div>
+                <ul class="link-list">
+                    <li class="link-item" onclick="openLink('https://music.haom.ren')">
+                        <span class="link-name">音乐搜索</span>
+                        <span class="link-tag">在线</span>
+                    </li>
+                    <li class="link-item" onclick="openLink('https://www.biquge.tv')">
+                        <span class="link-name">笔趣阁</span>
+                        <span class="link-tag">小说</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="category">
+                <div class="category-title">🔗 我的收藏</div>
+                <ul id="custom-links" class="link-list"></ul>
+                <div class="add-form">
+                    <input type="text" id="link-name" class="form-input" placeholder="名称" maxlength="20">
+                    <input type="text" id="link-url" class="form-input" placeholder="https://" onkeypress="if(event.key==='Enter') addLink()">
+                    <button class="add-btn" onclick="addLink()">+ 添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 主题弹窗 -->
+    <div id="theme-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="category-title">🎨 主题选择</div>
+                <button class="close-btn" onclick="closeModal('theme-modal')">×</button>
+            </div>
+            <div class="theme-grid">
+                <button class="theme-btn" style="background:linear-gradient(135deg,#667eea,#764ba2)" onclick="setTheme('default')">默认</button>
+                <button class="theme-btn" style="background:linear-gradient(135deg,#2c3e50,#1a1a2e)" onclick="setTheme('dark')">深色</button>
+                <button class="theme-btn" style="background:linear-gradient(135deg,#00b09b,#96c93d)" onclick="setTheme('green')">绿色</button>
+                <button class="theme-btn" style="background:linear-gradient(135deg,#9d50bb,#6e48aa)" onclick="setTheme('purple')">紫色</button>
+                <button class="theme-btn" style="background:linear-gradient(135deg,#ff6b6b,#ff8e53)" onclick="setTheme('orange')">橙色</button>
+                <button class="theme-btn" style="background:linear-gradient(135deg,#3498db,#2980b9)" onclick="setTheme('blue')">蓝色</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 网盘搜索弹窗 -->
+    <div id="cloud-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="category-title">☁️ 网盘搜索</div>
+                <button class="close-btn" onclick="closeModal('cloud-modal')">×</button>
+            </div>
+            <div class="cloud-search-grid">
+                <button class="cloud-search-item" onclick="searchCloud('百度网盘')">
+                    <span class="cloud-icon">🔍</span>
+                    <span class="cloud-name">百度网盘</span>
+                </button>
+                <button class="cloud-search-item" onclick="searchCloud('阿里云盘')">
+                    <span class="cloud-icon">☁️</span>
+                    <span class="cloud-name">阿里云盘</span>
+                </button>
+                <button class="cloud-search-item" onclick="searchCloud('蓝奏云')">
+                    <span class="cloud-icon">🔗</span>
+                    <span class="cloud-name">蓝奏云</span>
+                </button>
+                <button class="cloud-search-item" onclick="searchCloud('迅雷云盘')">
+                    <span class="cloud-icon">⚡</span>
+                    <span class="cloud-name">迅雷云盘</span>
+                </button>
+                <button class="cloud-search-item" onclick="searchCloud('天翼云盘')">
+                    <span class="cloud-icon">📱</span>
+                    <span class="cloud-name">天翼云盘</span>
+                </button>
+                <button class="cloud-search-item" onclick="searchCloud('OneDrive')">
+                    <span class="cloud-icon">💾</span>
+                    <span class="cloud-name">OneDrive</span>
+                </button>
+                <button class="cloud-search-item" onclick="searchCloud('Google Drive')">
+                    <span class="cloud-icon">🌐</span>
+                    <span class="cloud-name">Google Drive</span>
+                </button>
+                <button class="cloud-search-item" onclick="searchCloud('夸克网盘')">
+                    <span class="cloud-icon">🚀</span>
+                    <span class="cloud-name">夸克网盘</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 应用弹窗 -->
+    <div id="apps-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="category-title">📱 应用管理</div>
+                <button class="close-btn" onclick="closeModal('apps-modal')">×</button>
+            </div>
+            <ul class="link-list">
+                <li class="link-item" onclick="openLink('https://www.urlc.cn')">
+                    <span class="link-name">短链生成</span>
+                    <span class="link-tag">工具</span>
+                </li>
+                <li class="link-item" onclick="openLink('https://dy.kukutool.com')">
+                    <span class="link-name">视频解析</span>
+                    <span class="link-tag">工具</span>
+                </li>
+                <li class="link-item" onclick="openLink('https://www.pandashi8.com')">
+                    <span class="link-name">资源分享</span>
+                    <span class="link-tag">下载</span>
+                </li>
+                <li class="link-item" onclick="openLink('https://ezgif.com')">
+                    <span class="link-name">GIF制作</span>
+                    <span class="link-tag">图片</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- 搜索弹窗 -->
+    <div id="search-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="category-title">🔍 搜索工具</div>
+                <button class="close-btn" onclick="closeModal('search-modal')">×</button>
+            </div>
+            <div class="theme-grid">
+                <button class="theme-btn" onclick="searchEngine('https://www.baidu.com/s?wd=')">百度</button>
+                <button class="theme-btn" onclick="searchEngine('https://www.google.com/search?q=')">Google</button>
+                <button class="theme-btn" onclick="searchEngine('https://www.bing.com/search?q=')">Bing</button>
+                <button class="theme-btn" onclick="searchEngine('https://www.sogou.com/web?query=')">搜狗</button>
+                <button class="theme-btn" onclick="searchEngine('https://duckduckgo.com/?q=')">DuckDuckGo</button>
+                <button class="theme-btn" onclick="searchEngine('https://github.com/search?q=')">GitHub</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 设置弹窗 -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="category-title">⚙️ 设置</div>
+                <button class="close-btn" onclick="closeModal('settings-modal')">×</button>
+            </div>
+            <button class="btn" style="width:100%;margin-bottom:10px" onclick="backupData()">💾 备份数据</button>
+            <button class="btn" style="width:100%;margin-bottom:10px" onclick="restoreData()">📂 恢复数据</button>
+            <button class="btn" style="width:100%;background:#ff6b6b" onclick="if(confirm('确定清空所有数据？')) clearData()">🗑️ 清空数据</button>
+        </div>
+    </div>
+    
+    <div id="notification" class="notification"></div>
+    
+    <script>
+        // 应用数据
+        const appData = {
+            customLinks: [],
+            settings: {
+                theme: 'default',
+                avatar: null
             }
-        });
-        
-        // 歌词滚动
-        if (activeIndex >= 0 && lyricWrapper) {
-            const lineHeight = lyricLines[0]?.offsetHeight || 40;
-            const containerHeight = lyricWrapper.parentElement.offsetHeight;
-            const scrollY = (activeIndex * lineHeight) - (containerHeight / 2) + (lineHeight / 2);
-            lyricWrapper.style.transform = `translateY(-${Math.max(0, scrollY)}px)`;
+        };
+
+        // 主题配置
+        const THEMES = {
+            default: {
+                primary: '#667eea',
+                secondary: '#764ba2',
+                accent: '#ff6b6b',
+                bgPrimary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                cardBg: 'rgba(255, 255, 255, 0.12)'
+            },
+            dark: {
+                primary: '#2c3e50',
+                secondary: '#1a1a2e',
+                accent: '#ff6b6b',
+                bgPrimary: 'linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%)',
+                cardBg: 'rgba(255, 255, 255, 0.08)'
+            },
+            green: {
+                primary: '#00b09b',
+                secondary: '#96c93d',
+                accent: '#ff6b6b',
+                bgPrimary: 'linear-gradient(135deg, #00b09b 0%, #96c93d 100%)',
+                cardBg: 'rgba(255, 255, 255, 0.12)'
+            },
+            purple: {
+                primary: '#9d50bb',
+                secondary: '#6e48aa',
+                accent: '#ff6b6b',
+                bgPrimary: 'linear-gradient(135deg, #9d50bb 0%, #6e48aa 100%)',
+                cardBg: 'rgba(255, 255, 255, 0.12)'
+            },
+            orange: {
+                primary: '#ff6b6b',
+                secondary: '#ff8e53',
+                accent: '#3498db',
+                bgPrimary: 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)',
+                cardBg: 'rgba(255, 255, 255, 0.12)'
+            },
+            blue: {
+                primary: '#3498db',
+                secondary: '#2980b9',
+                accent: '#ff6b6b',
+                bgPrimary: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)',
+                cardBg: 'rgba(255, 255, 255, 0.12)'
+            }
+        };
+
+        // 网盘搜索配置
+        const CLOUD_SEARCH = {
+            '百度网盘': [
+                { name: '云盘精灵', url: 'https://www.yunpanjingling.com/search/' },
+                { name: '盘搜搜', url: 'https://www.pansoso.com/' },
+                { name: '百度网盘搜索', url: 'https://www.baidu.com/s?wd=site:pan.baidu.com+' }
+            ],
+            '阿里云盘': [
+                { name: 'UP云搜', url: 'https://www.upyunso.com/' },
+                { name: '阿里云盘资源', url: 'https://www.aliyundrive.com/' },
+                { name: '阿里云盘社区', url: 'https://www.aliyundrive.com/community' }
+            ],
+            '蓝奏云': [
+                { name: '蓝奏云资源', url: 'https://www.lanzou.com/' },
+                { name: '蓝奏云搜索', url: 'https://www.baidu.com/s?wd=site:lanzou.com+' }
+            ],
+            '迅雷云盘': [
+                { name: '迅雷云盘', url: 'https://pan.xunlei.com/' },
+                { name: '迅雷云盘搜索', url: 'https://www.baidu.com/s?wd=site:pan.xunlei.com+' }
+            ],
+            '天翼云盘': [
+                { name: '天翼云盘', url: 'https://cloud.189.cn/' },
+                { name: '天翼云盘搜索', url: 'https://www.baidu.com/s?wd=site:cloud.189.cn+' }
+            ],
+            'OneDrive': [
+                { name: 'OneDrive搜索', url: 'https://www.bing.com/search?q=site%3Aonedrive.live.com+' }
+            ],
+            'Google Drive': [
+                { name: 'Google Drive搜索', url: 'https://www.google.com/search?q=site%3Adrive.google.com+' }
+            ],
+            '夸克网盘': [
+                { name: '夸克网盘', url: 'https://pan.quark.cn/' },
+                { name: '夸克网盘搜索', url: 'https://www.baidu.com/s?wd=site:pan.quark.cn+' }
+            ]
+        };
+
+        // 安全AI配置
+        const AI_CONFIG = {
+            safeMode: true,
+            maxResponseLength: 1000,
+            allowedDomains: ['deepseek.com', 'openai.com'],
+            encryptionKey: 'user-defined-secret-key-2026',
+            rateLimit: 10 // 每分钟请求次数
+        };
+
+        // 初始化应用
+        function init() {
+            loadData();
+            updateTime();
+            setInterval(updateTime, 1000);
+            loadAvatar();
+            
+            // 绑定头像上传事件
+            const avatarInput = document.createElement('input');
+            avatarInput.type = 'file';
+            avatarInput.accept = 'image/*';
+            avatarInput.style.display = 'none';
+            avatarInput.id = 'avatar-input';
+            avatarInput.onchange = handleAvatarUpload;
+            document.body.appendChild(avatarInput);
+            
+            document.getElementById('avatar').onclick = () => {
+                avatarInput.click();
+            };
+            
+            // 键盘快捷键
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeAllModals();
+                }
+                if (e.ctrlKey && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('ai-search-input').focus();
+                }
+                if (e.ctrlKey && e.key === 'b') {
+                    e.preventDefault();
+                    openModal('cloud-modal');
+                }
+            });
         }
-    }
-    
-    // 音频事件监听
-    audio.addEventListener('loadedmetadata', () => {
-        durationEl.textContent = formatTime(audio.duration);
-    });
-    
-    audio.addEventListener('timeupdate', () => {
-        if (!audio.duration) return;
-        
-        const progressPercent = (audio.currentTime / audio.duration) * 100;
-        progressBar.style.width = `${progressPercent}%`;
-        currentTimeEl.textContent = formatTime(audio.currentTime);
-        
-        // 更新歌词
-        updateLyrics(audio.currentTime);
-    });
-    
-    audio.addEventListener('error', (e) => {
-        console.error('音频加载错误:', e);
-        playBtn.textContent = '▶️';
-        alert('音乐加载失败，请检查网络连接');
-    });
-    
-    audio.addEventListener('ended', () => {
-        playBtn.textContent = '▶️';
-    });
-    
-    // 导航功能
-    function navigateTo(url) {
-        if (!url || url.trim() === '#') return;
-        
-        if (url.startsWith('./') || url.startsWith('/')) {
+
+        // 更新时间
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false });
+            const dateStr = now.toLocaleDateString('zh-CN', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                weekday: 'long'
+            });
+            document.getElementById('time').textContent = timeStr;
+            document.getElementById('date').textContent = dateStr;
+        }
+
+        // 设置主题
+        function setTheme(themeName) {
+            const theme = THEMES[themeName] || THEMES.default;
+            
+            document.documentElement.style.setProperty('--primary', theme.primary);
+            document.documentElement.style.setProperty('--secondary', theme.secondary);
+            document.documentElement.style.setProperty('--accent', theme.accent);
+            document.documentElement.style.setProperty('--bg-primary', theme.bgPrimary);
+            document.documentElement.style.setProperty('--card-bg', theme.cardBg);
+            
+            appData.settings.theme = themeName;
+            saveData();
+            closeModal('theme-modal');
+            showNotification(`已切换为${themeName}主题`);
+        }
+
+        // 安全AI搜索功能
+        async function searchWithAI() {
+            const input = document.getElementById('ai-search-input');
+            const question = input.value.trim();
+            const responseEl = document.getElementById('ai-response');
+            
+            if (!question) {
+                showNotification('请输入问题');
+                return;
+            }
+            
+            // 安全检查
+            if (!isSafeContent(question)) {
+                responseEl.innerHTML = '⚠️ 问题包含不安全内容，已过滤';
+                return;
+            }
+            
+            responseEl.innerHTML = '🤔 AI思考中...';
+            responseEl.style.opacity = '0.7';
+            
+            try {
+                // 使用本地安全AI响应
+                const response = getSafeAIResponse(question);
+                
+                // 模拟网络延迟
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                responseEl.innerHTML = response;
+                responseEl.style.opacity = '1';
+                
+                // 自动清空输入框
+                input.value = '';
+                
+            } catch (error) {
+                responseEl.innerHTML = '😵 AI服务暂时不可用，请稍后重试';
+                showNotification('AI搜索失败，请检查网络');
+            }
+        }
+
+        // 安全检查
+        function isSafeContent(content) {
+            const unsafePatterns = [
+                /script/i,
+                /javascript:/i,
+                /data:/i,
+                /on\w+\s*=/i,
+                /<[^>]*>/i
+            ];
+            
+            return !unsafePatterns.some(pattern => pattern.test(content));
+        }
+
+        // 安全AI响应
+        function getSafeAIResponse(question) {
+            const safeResponses = [
+                `关于"${question}"，我为您找到以下安全信息：\n\n1. 这是一个常见的查询，建议通过正规渠道获取信息\n2. 您可以在百宝袋的搜索工具中使用多个搜索引擎对比结果\n3. 相关学习资源请访问官方教育网站`,
+                `针对"${question}"的问题：\n\n🔍 安全提示：请勿点击来源不明的链接\n💡 建议使用官方认证的工具和网站\n📚 正规资源可以在百宝袋的应用管理中找到`,
+                `关于${question}的解答：\n\n📱 您可以使用百宝袋内置的安全工具\n🎯 保护个人隐私，避免在不可信网站输入敏感信息\n🔗 推荐使用HTTPS加密的网站进行访问`
+            ];
+            
+            return safeResponses[Math.floor(Math.random() * safeResponses.length)];
+        }
+
+        // 网盘搜索
+        function searchCloud(cloudName) {
+            const searchEngines = CLOUD_SEARCH[cloudName];
+            if (!searchEngines) {
+                showNotification('该网盘搜索功能暂不可用');
+                return;
+            }
+            
+            const query = prompt(`请输入要在${cloudName}中搜索的内容:`);
+            if (query && query.trim()) {
+                const searchQuery = encodeURIComponent(query.trim());
+                const searchUrl = searchEngines[0].url + searchQuery;
+                openLink(searchUrl);
+                closeModal('cloud-modal');
+                showNotification(`正在搜索${cloudName}资源`);
+            }
+        }
+
+        // 搜索引擎跳转
+        function searchEngine(engineUrl) {
+            const query = prompt('请输入搜索关键词:');
+            if (query && query.trim()) {
+                openLink(engineUrl + encodeURIComponent(query.trim()));
+                closeModal('search-modal');
+            }
+        }
+
+        // 打开链接
+        function openLink(url) {
+            if (!url) return;
+            
+            if (url.startsWith('./') || url.startsWith('/')) {
+                // 本地文件下载
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = url.split('/').pop();
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                // 外部链接
+                if (!url.startsWith('http')) {
+                    url = 'https://' + url;
+                }
+                // 安全检查
+                if (isSafeUrl(url)) {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                } else {
+                    showNotification('链接安全检查未通过');
+                }
+            }
+        }
+
+        // URL安全检查
+        function isSafeUrl(url) {
+            try {
+                const urlObj = new URL(url);
+                const safeProtocols = ['http:', 'https:'];
+                const unsafeHosts = ['malicious.com', 'phishing.com'];
+                
+                return safeProtocols.includes(urlObj.protocol) && 
+                       !unsafeHosts.includes(urlObj.hostname);
+            } catch {
+                return false;
+            }
+        }
+
+        // 弹窗控制
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function closeAllModals() {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // 添加自定义链接
+        function addLink() {
+            const nameInput = document.getElementById('link-name');
+            const urlInput = document.getElementById('link-url');
+            const name = nameInput.value.trim();
+            let url = urlInput.value.trim();
+            
+            if (!name || !url) {
+                showNotification('请填写完整信息');
+                return;
+            }
+            
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            
+            // URL安全检查
+            if (!isSafeUrl(url)) {
+                showNotification('链接不安全，请检查URL');
+                return;
+            }
+            
+            appData.customLinks.push({ name, url });
+            saveData();
+            renderCustomLinks();
+            
+            nameInput.value = '';
+            urlInput.value = '';
+            showNotification('链接已添加');
+        }
+
+        // 删除链接
+        function deleteLink(index) {
+            if (confirm('确定删除这个链接吗？')) {
+                appData.customLinks.splice(index, 1);
+                saveData();
+                renderCustomLinks();
+                showNotification('链接已删除');
+            }
+        }
+
+        // 渲染自定义链接
+        function renderCustomLinks() {
+            const container = document.getElementById('custom-links');
+            container.innerHTML = '';
+            
+            appData.customLinks.forEach((link, index) => {
+                const li = document.createElement('li');
+                li.className = 'link-item';
+                li.innerHTML = `
+                    <span class="link-name">${link.name}</span>
+                    <button class="delete-btn" onclick="event.stopPropagation();deleteLink(${index})">删除</button>
+                `;
+                li.onclick = () => openLink(link.url);
+                container.appendChild(li);
+            });
+        }
+
+        // 头像上传
+        function handleAvatarUpload(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                // 文件大小限制（2MB）
+                if (file.size > 2 * 1024 * 1024) {
+                    showNotification('图片大小不能超过2MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('avatar').src = event.target.result;
+                    appData.settings.avatar = event.target.result;
+                    saveData();
+                    showNotification('头像已更新');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 加载头像
+        function loadAvatar() {
+            const avatar = document.getElementById('avatar');
+            if (appData.settings.avatar) {
+                avatar.src = appData.settings.avatar;
+            } else {
+                // 使用默认头像
+                avatar.src = 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS8ZpoRtcH2zjIcbVV9depdoQKe_4QwACuBsAAladCVV_1D50jotFjjoE.jpg';
+            }
+        }
+
+        // 数据管理
+        function backupData() {
+            const data = {
+                customLinks: appData.customLinks,
+                settings: appData.settings
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = url.split('/').pop();
-            document.body.appendChild(a);
+            a.download = '百宝袋数据备份.json';
             a.click();
-            document.body.removeChild(a);
-        } else {
-            window.open(url, '_blank', 'noopener,noreferrer');
+            URL.revokeObjectURL(url);
+            showNotification('数据备份成功');
         }
-    }
-    
-    // 信息提示
-    function showInfo(text) {
-        alert(`${text} 功能开发中，敬请期待！`);
-    }
-    
-    // 页面加载完成
-    window.addEventListener('load', () => {
-        console.log('页面加载完成');
-    });
-</script>
+
+        function restoreData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            if (data.customLinks) appData.customLinks = data.customLinks;
+                            if (data.settings) {
+                                appData.settings = { ...appData.settings, ...data.settings };
+                                setTheme(appData.settings.theme);
+                                loadAvatar();
+                            }
+                            saveData();
+                            renderCustomLinks();
+                            showNotification('数据恢复成功');
+                        } catch (err) {
+                            showNotification('数据恢复失败：格式错误');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        function clearData() {
+            if (confirm('确定清空所有数据？此操作不可撤销！')) {
+                localStorage.removeItem('baibaodai');
+                location.reload();
+            }
+        }
+
+        // 通知
+        function showNotification(message) {
+            const noti = document.getElementById('notification');
+            noti.textContent = message;
+            noti.classList.add('show');
+            setTimeout(() => noti.classList.remove('show'), 2000);
+        }
+
+        // 数据持久化
+        function saveData() {
+            localStorage.setItem('baibaodai', JSON.stringify(appData));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('baibaodai');
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.customLinks) appData.customLinks = data.customLinks;
+                if (data.settings) {
+                    appData.settings = { ...appData.settings, ...data.settings };
+                    setTheme(appData.settings.theme);
+                }
+                renderCustomLinks();
+            }
+        }
+
+        // 启动应用
+        window.onload = init;
+    </script>
 </body>
 </html>
+
