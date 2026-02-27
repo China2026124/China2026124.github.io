@@ -1,300 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>模块库</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: #f5f5f5;
-    color: #333;
-  }
-  #main {
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    background: #fff;
-    min-height: 100vh;
-  }
-
-  .search-bar {
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    background: #fff;
-    border-bottom: 1px solid #eee;
-  }
-  .search-input {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    background: #f2f2f2;
-    border: 2px solid #333;
-    border-radius: 20px;
-    padding: 6px 12px;
-    margin-right: 10px;
-  }
-  .search-input i {
-    margin-right: 8px;
-    color: #999;
-  }
-  .search-input input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 15px;
-  }
-  .search-star {
-    font-size: 20px;
-    color: #999;
-  }
-  .toolbox {
-    font-size: 20px;
-    color: #999;
-    margin-left: 10px;
-  }
-
-  .banner {
-    width: 100%;
-    height: 120px;
-    position: relative;
-    overflow: hidden;
-  }
-  .banner-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .banner-tip {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 500;
-    text-shadow: 0 0 4px rgba(0,0,0,0.5);
-  }
-
-  .tabs {
-    display: flex;
-    padding: 10px 16px;
-    gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar {
-    display: none;
-  }
-  .tab-btn {
-    padding: 6px 12px;
-    background: #f2f2f2;
-    border-radius: 18px;
-    font-size: 13px;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .tab-btn:hover {
-    background: #e0e0e0;
-  }
-  .tab-btn i {
-    font-size: 14px;
-  }
-  .tab-btn.active {
-    background: #007AFF;
-    color: #fff;
-  }
-
-  .user-bar {
-    display: flex;
-    align-items: center;
-    padding: 10px 16px;
-    border-bottom: 1px solid #eee;
-  }
-  .user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-    background: url("https://imgtu.com/i/9gBvHn") no-repeat center/cover;
-  }
-  .user-name {
-    flex: 1;
-    font-size: 15px;
-    font-weight: 500;
-  }
-  .report-btn {
-    color: #999;
-    font-size: 13px;
-    cursor: pointer;
-  }
-
-  .file-list {
-    padding: 0 16px;
-  }
-  .file-item {
-    display: flex;
-    align-items: center;
-    padding: 14px 0;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-  }
-  .file-icon {
-    width: 36px;
-    height: 36px;
-    margin-right: 10px;
-    background: url("https://img.icons8.com/fluency/48/e84393/folder.png") no-repeat center/cover;
-  }
-  .file-name {
-    flex: 1;
-    font-size: 15px;
-  }
-  .file-arrow {
-    color: #999;
-    font-size: 16px;
-  }
-
-  .footer-bar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px 0;
-    border-top: 1px solid #eee;
-    margin-top: 10px;
-  }
-  .footer-icon {
-    font-size: 20px;
-    color: #999;
-  }
-  .footer-icon.badge {
-    position: relative;
-  }
-  .footer-icon.badge::after {
-    content: "11";
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: #ff3b30;
-    color: #fff;
-    font-size: 10px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+body{background:#f5f5f7;-webkit-tap-highlight-color:transparent}
+#app{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:70px}
+.header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:99}
+.search-bar{flex:1;background:#fff;border:1px solid #d1d1d6;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.search-bar input{background:transparent;border:none;outline:none;width:100%;font-size:16px;color:#333}
+.search-bar input::placeholder{color:#999}
+.icon-btn{font-size:22px;color:#555;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.icon-btn span{font-size:12px}
+.banner-box{position:relative;width:100%;height:180px;overflow:hidden}
+.banner{width:100%;height:100%;object-fit:cover}
+.tabs{display:flex;background:#fff;padding:12px 16px;gap:10px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid #f0f0f0}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:#f2f2f7;padding:9px 16px;border-radius:20px;white-space:nowrap;display:flex;align-items:center;gap:6px;font-size:14px;color:#333;cursor:pointer}
+.tab.active{background:#007AFF;color:#fff}
+.user-bar{display:flex;align-items:center;padding:14px 16px;background:#fff;border-bottom:1px solid #f0f0f0}
+.avatar{width:50px;height:50px;border-radius:50%;background:#000 center/cover;margin-right:12px}
+.user-info{flex:1}
+.user-name{font-size:16px;font-weight:500;color:#222}
+.report-btn{color:#999;font-size:14px;cursor:pointer}
+.welcome{padding:12px 16px;background:#f9f9f9;color:#666;font-size:15px;border-bottom:1px solid #f0f0f0}
+.file-list{padding:0 16px;background:#fff}
+.file-item{display:flex;align-items:center;padding:16px 0;border-bottom:1px solid #f0f0f0;cursor:pointer}
+.file-icon{width:40px;height:40px;background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0OCA0OCI+PHBhdGggZmlsbD0iI2ZmY2MwMCIgZD0iTTQgMTBoMTZsMiA0aDI0VjhIMThsLTItNEg0VjB6bTAgMTR2MjRoNDBWMTRINHoiLz48L3N2Zz4=") no-repeat center/cover;margin-right:12px}
+.file-name{flex:1;font-size:16px;color:#222}
+.file-arrow{font-size:18px;color:#999}
+.footer{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;height:60px;background:#fff;border-top:1px solid #e5e5ea;display:flex;justify-content:space-around;align-items:center;z-index:99}
+.footer-icon{font-size:24px;color:#555;position:relative;cursor:pointer}
 </style>
 </head>
 <body>
-
-<div id="main">
-  <div class="search-bar">
-    <div class="search-input">
-      <i>🔍</i>
-      <input type="text" placeholder="模块库">
-      <i>⚠️</i>
-    </div>
-    <div class="search-star">⭐</div>
-    <div class="toolbox">🧰</div>
-  </div>
-
-  <div class="banner">
-    <img class="banner-img" src="https://picsum.photos/1920/1080?random" alt="Banner">
-    <div class="banner-tip">欢迎使用模块库</div>
-  </div>
-
-  <div class="tabs">
-    <div class="tab-btn">
-      <i>🔵</i> 官方群聊
-    </div>
-    <div class="tab-btn">
-      <i>🔗</i> 官方频道
-    </div>
-    <div class="tab-btn active" onclick="safeOpen('https://m.wandoujia.com/apps/566489/history')">
-      <i>🐧</i> QQ历史
-    </div>
-    <div class="tab-btn" onclick="safeOpen('https://m.wandoujia.com/apps/596157/history')">
-      <i>💚</i> 微信历史
-    </div>
-  </div>
-
-  <div class="user-bar">
-    <div class="user-avatar"></div>
-    <div class="user-name">满山猴子我腚最红</div>
-    <div class="report-btn">举报</div>
-  </div>
-
-  <div class="file-list">
-    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/566489/history')">
-      <div class="file-icon"></div>
-      <div class="file-name">实用软件</div>
-      <span class="file-arrow">→</span>
-    </div>
-    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/596157/history')">
-      <div class="file-icon"></div>
-      <div class="file-name">应用框架</div>
-      <span class="file-arrow">→</span>
-    </div>
-    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/566489/history')">
-      <div class="file-icon"></div>
-      <div class="file-name">QQ_模块</div>
-      <span class="file-arrow">→</span>
-    </div>
-    <div class="file-item" onclick="safeOpen('https://m.wandoujia.com/apps/596157/history')">
-      <div class="file-icon"></div>
-      <div class="file-name">微信模块</div>
-      <span class="file-arrow">→</span>
-    </div>
-  </div>
-
-  <div class="footer-bar">
-    <span class="footer-icon">←</span>
-    <span class="footer-icon">🔍</span>
-    <span class="footer-icon">☰</span>
-    <span class="footer-icon badge">🔔</span>
-    <span class="footer-icon">🔄</span>
-  </div>
+<div id="app">
+<div class="header">
+<div class="search-bar"><span>🔍</span><span>🛡️</span><input id="search" placeholder="模块库"><span>⭐</span></div>
+<div class="icon-btn"><span>🧰</span><span style="font-size:12px">工具箱</span></div>
 </div>
 
+<div class="banner-box"><img class="banner" id="bannerImg" src=""></div>
+
+<div class="tabs">
+<div class="tab" onclick="setTab(this)">官方群聊</div>
+<div class="tab" onclick="setTab(this)">官方频道</div>
+<div class="tab" onclick="setTab(this);go('https://m.wandoujia.com/apps/566489/history')">🐧 QQ历史</div>
+<div class="tab" onclick="setTab(this);go('https://m.wandoujia.com/apps/596157/history')">💚 微信历史</div>
+<div class="tab active" onclick="setTab(this);go('https://www.pandashi8.com/')">🔢 资源分享</div>
+<div class="tab" onclick="setTab(this);go('https://www.urlc.cn/')">🔗 短链生成</div>
+<div class="tab" onclick="setTab(this);go('https://i8os.github.io/')">🎬 视频解析</div>
+<div class="tab" onclick="setTab(this)">👤 待添加</div>
+</div>
+
+<div class="user-bar">
+<div class="avatar" id="avatar"></div>
+<div class="user-info"><div class="user-name">满山猴子我腚最红</div></div>
+<div class="report-btn">举报</div>
+</div>
+
+<div class="welcome">本盘实时更新各类增加模块，欢迎访问</div>
+
+<div class="file-list" id="fileList">
+<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">实用软件</div><span class="file-arrow">→</span></div>
+<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">应用框架</div><span class="file-arrow">→</span></div>
+<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">QQ_模块</div><span class="file-arrow">→</span></div>
+<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">微信模块</div><span class="file-arrow">→</span></div>
+<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">Java脚本</div><span class="file-arrow">→</span></div>
+</div>
+
+<div class="footer">
+<div class="footer-icon">←</div>
+<div class="footer-icon">→</div>
+<div class="footer-icon">☰</div>
+<div class="footer-icon"><span style="font-size:16px;border:1px solid #555;padding:2px 6px;border-radius:4px">10</span></div>
+<div class="footer-icon">🔄</div>
+</div>
+</div>
+
+<audio autoplay loop muted>
+<source src="https://music.163.com/song/media/outer/url?id=1868255106.mp3" type="audio/mpeg">
+
 <script>
-  window.onload = function() {
-    const imgList = [
-      { src: 'https://imgtu.com/i/9gBvHn', selector: '.user-avatar' },
-      { src: 'https://picsum.photos/1920/1080?random', selector: '.banner-img' }
-    ];
+const avatarList = [
+'https://picsum.photos/100/100?random=1',
+'https://picsum.photos/100/100?random=2',
+'https://picsum.photos/100/100?random=3',
+'https://picsum.photos/100/100?random=4',
+'https://picsum.photos/100/100?random=5'
+];
 
-    imgList.forEach(img => {
-      const imgElement = new Image();
-      imgElement.src = img.src;
-      imgElement.onload = function() {
-        const target = document.querySelector(img.selector);
-        if (img.selector.includes('img')) {
-          target.src = this.src;
-        } else {
-          target.style.backgroundImage = `url(${this.src})`;
-        }
-      };
-      imgElement.onerror = function() {
-        console.error(`图片加载失败: ${img.src}`);
-      };
-    });
-  };
+const bannerList = [
+'https://picsum.photos/800/400?random=1',
+'https://picsum.photos/800/400?random=2',
+'https://picsum.photos/800/400?random=3',
+'https://picsum.photos/800/400?random=4',
+'https://picsum.photos/800/400?random=5'
+];
 
-  function safeOpen(url) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    a.click();
-  }
+function rand(list){return list[Math.floor(Math.random()*list.length)]}
+window.onload=()=>{
+document.getElementById('avatar').style.backgroundImage='url('+rand(avatarList)+')'
+document.getElementById('bannerImg').src=rand(bannerList)
+}
+
+function setTab(el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+function go(u){u!='#'&&window.open(u,'_blank')}
+
+document.getElementById('search').oninput=function(){
+const k=this.value.toLowerCase()
+document.querySelectorAll('.file-item').forEach(i=>{
+i.style.display=i.querySelector('.file-name').innerText.toLowerCase().includes(k)?'flex':'none'
+})}
+
+document.addEventListener('click',()=>{document.querySelector('audio').muted=false},{once:true})
 </script>
 </body>
 </html>
