@@ -51,7 +51,7 @@ body{background:#f5f5f7;-webkit-tap-highlight-color:transparent}
 <div class="tab" onclick="setTab(this);go('https://m.wandoujia.com/apps/596157/history')">💚 微信历史</div>
 <div class="tab active" onclick="setTab(this);go('https://www.pandashi8.com/')">🔢 资源分享</div>
 <div class="tab" onclick="setTab(this);go('https://www.urlc.cn/')">🔗 短链生成</div>
-<div class="tab" onclick="setTab(this);go('https://i8os.github.io/')">🎬 视频解析</div>
+<div class="tab" onclick="setTab(this);go('https://dy.kukutool.com/')">🎬 视频解析</div>
 <div class="tab" onclick="setTab(this)">👤 待添加</div>
 </div>
 
@@ -80,30 +80,27 @@ body{background:#f5f5f7;-webkit-tap-highlight-color:transparent}
 </div>
 </div>
 
-<audio autoplay loop muted>
-<source src="https://music.163.com/song/media/outer/url?id=1868255106.mp3" type="audio/mpeg">
+<audio id="bgm" autoplay loop controls>
+<source src="https://music.163.com/song/media/outer/url?id=1330348068.mp3" type="audio/mpeg">
 
 <script>
 const avatarList = [
-'https://picsum.photos/100/100?random=1',
-'https://picsum.photos/100/100?random=2',
-'https://picsum.photos/100/100?random=3',
-'https://picsum.photos/100/100?random=4',
-'https://picsum.photos/100/100?random=5'
+'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSihpoO1-rYqzOIAhnXV5Bsya-kU_lAACfhkAAladCVWaA7h-mrOZfzoE.jpeg'
 ];
-
 const bannerList = [
-'https://picsum.photos/800/400?random=1',
-'https://picsum.photos/800/400?random=2',
-'https://picsum.photos/800/400?random=3',
-'https://picsum.photos/800/400?random=4',
-'https://picsum.photos/800/400?random=5'
+'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSidpoOzt4lQf-yXHAAGyNFaPMmLTQ6sAAngZAAJWnQlVB5CMUwbJfTw6BA.jpeg'
 ];
 
 function rand(list){return list[Math.floor(Math.random()*list.length)]}
 window.onload=()=>{
 document.getElementById('avatar').style.backgroundImage='url('+rand(avatarList)+')'
 document.getElementById('bannerImg').src=rand(bannerList)
+
+const audio = document.getElementById('bgm');
+audio.muted = true;
+audio.play().then(() => {
+audio.muted = false;
+}).catch(()=>{});
 }
 
 function setTab(el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
@@ -115,7 +112,10 @@ document.querySelectorAll('.file-item').forEach(i=>{
 i.style.display=i.querySelector('.file-name').innerText.toLowerCase().includes(k)?'flex':'none'
 })}
 
-document.addEventListener('click',()=>{document.querySelector('audio').muted=false},{once:true})
+document.addEventListener('click',()=>{
+const audio=document.getElementById('bgm');
+if(audio.paused)audio.play();
+},{once:true})
 </script>
 </body>
 </html>
