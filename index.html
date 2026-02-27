@@ -3,38 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>网盘</title>
+    <title>网盘音乐播放器</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; line-height: 1.6; overscroll-behavior: contain; }
-        .container { max-width: 100%; padding: 15px; }
-        .banner { width: 100%; height: 120px; border-radius: 12px; overflow: hidden; margin-bottom: 15px; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .banner img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
-        .search-box { width: 100%; padding: 10px 15px; background: #fff; border-radius: 25px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; align-items: center; }
-        .search-box input { flex: 1; border: none; outline: none; font-size: 14px; background: transparent; }
-        .lyrics-box { height: 180px; overflow: hidden; position: relative; background: rgba(255,255,255,0.9); border-radius: 10px; margin-bottom: 15px; padding: 10px; backdrop-filter: blur(10px); }
-        .lyrics-wrapper { transition: transform 0.5s ease; }
-        .lyric-line { text-align: center; padding: 5px 0; font-size: 14px; color: #999; transition: all 0.3s; }
-        .lyric-line.active { color: #007AFF; font-weight: 600; font-size: 16px; }
-        .tabs { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; }
-        .tab { flex: 1; min-width: 80px; text-align: center; padding: 8px 5px; background: #fff; border-radius: 8px; font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .tab.active { background: #007AFF; color: #fff; }
-        .user-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; padding: 10px; background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        #avatar { width: 40px; height: 40px; border-radius: 50%; background: #ddd center/cover; }
-        .file-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 80px; }
-        .file-item { background: #fff; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 14px; }
-        .player-controls { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; padding: 10px 15px; display: flex; align-items: center; gap: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 1000; }
-        .play-btn { width: 40px; height: 40px; border-radius: 50%; background: #007AFF; color: #fff; border: none; font-size: 16px; }
-        .progress-container { flex: 1; height: 4px; background: #e0e0e0; border-radius: 2px; position: relative; }
-        .progress-bar { height: 100%; background: #007AFF; border-radius: 2px; width: 0%; transition: width 0.1s; }
-        .time { font-size: 12px; color: #666; min-width: 35px; }
-        .volume-slider { width: 60px; }
+        /* 基础样式 */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333; 
+            line-height: 1.6; 
+            min-height: 100vh;
+        }
+        
+        /* 主容器 */
+        .container { 
+            max-width: 480px; 
+            margin: 0 auto; 
+            padding: 20px 15px 100px; 
+        }
+        
+        /* 横幅区域 */
+        .banner { 
+            width: 100%; 
+            height: 180px; 
+            border-radius: 20px; 
+            overflow: hidden; 
+            margin-bottom: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .banner img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            filter: brightness(0.8);
+        }
+        .banner-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 20px 15px 10px;
+            color: white;
+        }
+        
+        /* 搜索框 */
+        .search-box { 
+            background: rgba(255,255,255,0.9); 
+            border-radius: 25px; 
+            padding: 12px 20px; 
+            margin-bottom: 20px; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .search-box input { 
+            width: 100%; 
+            border: none; 
+            outline: none; 
+            font-size: 16px; 
+            background: transparent; 
+            color: #333;
+        }
+        
+        /* 歌词区域 */
+        .lyrics-box { 
+            height: 200px; 
+            overflow: hidden; 
+            background: rgba(255,255,255,0.85); 
+            border-radius: 15px; 
+            margin-bottom: 20px; 
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .lyrics-wrapper { 
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .lyric-line { 
+            text-align: center; 
+            padding: 8px 0; 
+            font-size: 16px; 
+            color: #666; 
+            transition: all 0.3s ease; 
+            opacity: 0.7;
+        }
+        .lyric-line.active { 
+            color: #667eea; 
+            font-weight: bold; 
+            font-size: 18px; 
+            text-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+            opacity: 1;
+        }
+        
+        /* 标签栏 */
+        .tabs { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap;
+        }
+        .tab { 
+            flex: 1; 
+            min-width: 80px; 
+            text-align: center; 
+            padding: 12px 8px; 
+            background: rgba(255,255,255,0.9); 
+            border-radius: 12px; 
+            font-size: 13px; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .tab:hover { transform: translateY(-2px); }
+        .tab.active { 
+            background: linear-gradient(135deg, #667eea, #764ba2); 
+            color: white; 
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* 用户信息 */
+        .user-bar { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            background: rgba(255,255,255,0.9); 
+            border-radius: 15px; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        #avatar { 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #667eea, #764ba2) center/cover; 
+            border: 3px solid white; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .user-bar > div:last-child { 
+            font-weight: 600; 
+            font-size: 16px; 
+            color: #333;
+        }
+        
+        /* 文件列表 */
+        .file-list { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            margin-bottom: 80px;
+        }
+        .file-item { 
+            background: rgba(255,255,255,0.9); 
+            padding: 20px 15px; 
+            border-radius: 15px; 
+            text-align: center; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-size: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .file-item:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="banner"><img id="bannerImg" src="" alt="Banner"></div>
-        <div class="search-box"><input type="text" id="searchInput" placeholder="搜索资源..."></div>
+        <div class="banner">
+            <img id="bannerImg" src="" alt="Banner">
+            <div class="banner-overlay">
+                <h2 style="margin: 0; font-size: 20px;">🎵 起风了</h2>
+                <p style="margin: 5px 0 0; opacity: 0.8; font-size: 14px;">买辣椒也用券</p>
+            </div>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 搜索歌曲、资源...">
+        </div>
         <div class="lyrics-box">
             <div class="lyrics-wrapper" id="lyricWrapper">
                 <div class="lyric-line" data-time="0">这一路上走走停停</div>
@@ -72,51 +227,191 @@
         </div>
         <div class="user-bar">
             <div id="avatar"></div>
-            <div>满山猴子我腚最红</div>
+            <div>音乐爱好者</div>
         </div>
-        <div style="padding: 10px; background: #f9f9f9; color: #666; font-size: 14px;">本盘实时更新各类模块</div>
+        <div style="padding: 15px; background: rgba(255,255,255,0.9); border-radius: 15px; color: #666; font-size: 14px; margin-bottom: 20px; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            欢迎使用！这里实时更新各类音乐和资源模块
+        </div>
         <div class="file-list">
             <div class="file-item" onclick="navigateTo('./TCQT_3.6.1.r386.APK')">实用软件</div>
             <div class="file-item" onclick="showInfo('应用框架')">应用框架</div>
-            <div class="file-item" onclick="showInfo('QQ模块')">QQ_模块</div>
+            <div class="file-item" onclick="showInfo('QQ模块')">QQ模块</div>
             <div class="file-item" onclick="showInfo('微信模块')">微信模块</div>
             <div class="file-item" onclick="showInfo('Java脚本')">Java脚本</div>
         </div>
     </div>
-    <div class="player-controls">
-        <button class="play-btn" id="playBtn" onclick="togglePlay()">▶️</button>
-        <div class="time" id="currentTime">0:00</div>
-        <div class="progress-container" id="progressContainer" onclick="seekTo(event)">
-            <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- 播放器控制栏 -->
+    <div class="player-controls" style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); padding: 15px 20px; display: flex; align-items: center; gap: 15px; backdrop-filter: blur(20px); border-top: 1px solid rgba(0,0,0,0.1); z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.1);">
+        <button class="play-btn" id="playBtn" onclick="togglePlay()" style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; font-size: 20px; cursor: pointer; box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);">▶️</button>
+        <div id="currentTime" style="font-size: 12px; color: #666; min-width: 40px;">0:00</div>
+        <div id="progressContainer" onclick="seekTo(event)" style="flex: 1; height: 6px; background: #e0e0e0; border-radius: 3px; position: relative; cursor: pointer; overflow: hidden;">
+            <div id="progressBar" style="height: 100%; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 3px; width: 0%; transition: width 0.1s linear;"></div>
         </div>
-        <div class="time" id="duration">0:00</div>
-        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.7" oninput="setVolume(this.value)">
+        <div id="duration" style="font-size: 12px; color: #666; min-width: 40px;">0:00</div>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.7" oninput="setVolume(this.value)" style="width: 80px;">
     </div>
+    
+    <!-- 音频标签 -->
     <audio id="audio" preload="metadata" loop crossorigin="anonymous">
         <source src="https://raw.githubusercontent.com/China2026124/China2026124.github.io/refs/heads/main/bgm.mp3" type="audio/mpeg">
         您的浏览器不支持音频播放
     </audio>
 <script>
-    function debounce(func, wait) { let timeout; return function executedFunction(...args) { const later = () => { clearTimeout(timeout); func(...args); }; clearTimeout(timeout); timeout = setTimeout(later, wait); }; }
-    const elements = { avatar: document.getElementById('avatar'), bannerImg: document.getElementById('bannerImg'), audio: document.getElementById('audio'), playBtn: document.getElementById('playBtn'), progressBar: document.getElementById('progressBar'), currentTimeEl: document.getElementById('currentTime'), durationEl: document.getElementById('duration'), volumeSlider: document.getElementById('volumeSlider'), lyricLines: document.querySelectorAll('.lyric-line'), lyricWrapper: document.getElementById('lyricWrapper'), searchInput: document.getElementById('searchInput') };
-    function loadImage(imgElement, src) { return new Promise((resolve, reject) => { const img = new Image(); img.onload = () => { imgElement.src = src; imgElement.classList.add('loaded'); resolve(); }; img.onerror = reject; img.src = src; }); }
-    Promise.all([ loadImage(elements.bannerImg, 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS89poRxjX_mfw9ehbcydVIeti6E1egACxRsAAladCVWqLjx-6LXcszoE.jpeg'), new Promise(resolve => { elements.avatar.style.backgroundImage = 'url(https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS8ZpoRtcH2zjIcbVV9depdoQKe_4QwACuBsAAladCVV_1D50jotFjjoE.jpg)'; resolve(); }) ]).catch(err => { console.warn('图片加载失败:', err); });
-    let isAudioReady = false, isPlaying = false;
-    function initAudio() { if (isAudioReady) return; elements.audio.load(); elements.audio.volume = elements.volumeSlider.value; isAudioReady = true; document.addEventListener('click', function unlockAudio() { if (!isAudioReady) return; elements.audio.play().then(() => { elements.audio.pause(); elements.audio.currentTime = 0; }).catch(() => {}); document.removeEventListener('click', unlockAudio); }, { once: true }); }
-    function togglePlay() { if (!isAudioReady) { initAudio(); setTimeout(togglePlay, 100); return; } if (elements.audio.paused) { elements.audio.play().then(() => { elements.playBtn.textContent = '⏸️'; isPlaying = true; }).catch(err => { console.error('播放失败:', err); elements.playBtn.textContent = '▶️'; isPlaying = false; alert('播放失败，请确保已授予音频播放权限'); }); } else { elements.audio.pause(); elements.playBtn.textContent = '▶️'; isPlaying = false; } }
-    function seekTo(event) { if (!isAudioReady || !elements.audio.duration) return; const rect = event.currentTarget.getBoundingClientRect(); const x = event.clientX - rect.left; const width = rect.width; const seekTime = (x / width) * elements.audio.duration; elements.audio.currentTime = Math.max(0, Math.min(seekTime, elements.audio.duration)); }
-    function setVolume(value) { elements.audio.volume = parseFloat(value); }
-    function formatTime(seconds) { if (isNaN(seconds) || !isFinite(seconds)) return '0:00'; const mins = Math.floor(seconds / 60); const secs = Math.floor(seconds % 60); return `${mins}:${secs < 10 ? '0' : ''}${secs}`; }
-    function updateLyrics(currentTime) { let activeIndex = -1; elements.lyricLines.forEach((line, index) => { const startTime = parseFloat(line.dataset.time) || 0; const nextStartTime = elements.lyricLines[index + 1] ? parseFloat(elements.lyricLines[index + 1].dataset.time) : Infinity; if (currentTime >= startTime && currentTime < nextStartTime) { line.classList.add('active'); activeIndex = index; } else { line.classList.remove('active'); } }); if (activeIndex >= 0 && elements.lyricWrapper) { const lineHeight = elements.lyricLines[0]?.offsetHeight || 30; const containerHeight = elements.lyricWrapper.parentElement.offsetHeight; const scrollY = (activeIndex * lineHeight) - (containerHeight / 2) + (lineHeight / 2); elements.lyricWrapper.style.transform = `translateY(-${Math.max(0, scrollY)}px)`; } }
-    elements.audio.addEventListener('loadedmetadata', () => { elements.durationEl.textContent = formatTime(elements.audio.duration); });
-    elements.audio.addEventListener('timeupdate', debounce(() => { if (!elements.audio.duration) return; const currentTime = elements.audio.currentTime; const duration = elements.audio.duration; const progressPercent = (currentTime / duration) * 100; elements.progressBar.style.width = `${progressPercent}%`; elements.currentTimeEl.textContent = formatTime(currentTime); updateLyrics(currentTime); }, 50));
-    elements.audio.addEventListener('ended', () => { elements.playBtn.textContent = '▶️'; isPlaying = false; });
-    elements.audio.addEventListener('error', (e) => { console.error('音频错误:', e); elements.playBtn.textContent = '▶️'; isPlaying = false; alert('音频加载失败，请检查网络或音频链接'); });
-    function navigateTo(url) { if (!url || url.trim() === '#') return; if (url.startsWith('./') || url.startsWith('/')) { const a = document.createElement('a'); a.href = url; a.download = url.split('/').pop(); document.body.appendChild(a); a.click(); document.body.removeChild(a); } else { window.open(url, '_blank', 'noopener,noreferrer'); } }
-    function showInfo(text) { alert(`${text} 功能开发中，敬请期待！`); }
-    elements.searchInput.addEventListener('input', debounce((e) => { const keyword = e.target.value.trim(); if (keyword) { console.log('搜索关键词:', keyword); } }, 300));
-    window.addEventListener('load', () => { initAudio(); console.log('页面加载完成，音频已初始化'); });
-    document.addEventListener('visibilitychange', () => { if (document.hidden && isPlaying) { elements.audio.pause(); isPlaying = false; elements.playBtn.textContent = '▶️'; } });
+    // 解决自动播放被阻止的问题
+    let audioUnlocked = false;
+    
+    // 页面点击解锁音频
+    document.addEventListener('click', function unlockAudio() {
+        if (!audioUnlocked) {
+            const audio = document.getElementById('audio');
+            audio.volume = 0;
+            audio.play().then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = document.getElementById('volumeSlider').value;
+                audioUnlocked = true;
+                console.log('✅ 音频已解锁');
+            }).catch(e => {
+                console.log('音频解锁失败，需要用户手动点击播放');
+            });
+        }
+    }, { once: true });
+    
+    // 加载图片
+    const avatar = document.getElementById('avatar');
+    const bannerImg = document.getElementById('bannerImg');
+    avatar.style.backgroundImage = 'url(https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS8ZpoRtcH2zjIcbVV9depdoQKe_4QwACuBsAAladCVV_1D50jotFjjoE.jpg)';
+    bannerImg.src = 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS89poRxjX_mfw9ehbcydVIeti6E1egACxRsAAladCVWqLjx-6LXcszoE.jpeg';
+    
+    // 获取元素
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('playBtn');
+    const progressBar = document.getElementById('progressBar');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const lyricLines = document.querySelectorAll('.lyric-line');
+    const lyricWrapper = document.getElementById('lyricWrapper');
+    
+    // 播放/暂停控制
+    function togglePlay() {
+        if (!audioUnlocked) {
+            alert('请先点击页面任意位置（如搜索框或空白处），解锁音频播放权限');
+            return;
+        }
+        
+        if (audio.paused) {
+            audio.play().then(() => {
+                playBtn.textContent = '⏸️';
+            }).catch(err => {
+                console.error('播放失败:', err);
+                playBtn.textContent = '▶️';
+                alert('播放失败，请刷新页面后重试');
+            });
+        } else {
+            audio.pause();
+            playBtn.textContent = '▶️';
+        }
+    }
+    
+    // 进度条控制
+    function seekTo(event) {
+        if (!audioUnlocked || !audio.duration) return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        const width = rect.width;
+        const clickX = event.clientX - rect.left;
+        audio.currentTime = (clickX / width) * audio.duration;
+    }
+    
+    // 音量控制
+    function setVolume(value) {
+        audio.volume = parseFloat(value);
+    }
+    
+    // 时间格式化
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+    
+    // 歌词同步
+    function updateLyrics(currentTime) {
+        let activeIndex = -1;
+        
+        lyricLines.forEach((line, index) => {
+            const startTime = parseFloat(line.dataset.time) || 0;
+            const nextStartTime = lyricLines[index + 1] ? parseFloat(lyricLines[index + 1].dataset.time) : Infinity;
+            
+            if (currentTime >= startTime && currentTime < nextStartTime) {
+                line.classList.add('active');
+                activeIndex = index;
+            } else {
+                line.classList.remove('active');
+            }
+        });
+        
+        // 歌词滚动
+        if (activeIndex >= 0 && lyricWrapper) {
+            const lineHeight = lyricLines[0]?.offsetHeight || 40;
+            const containerHeight = lyricWrapper.parentElement.offsetHeight;
+            const scrollY = (activeIndex * lineHeight) - (containerHeight / 2) + (lineHeight / 2);
+            lyricWrapper.style.transform = `translateY(-${Math.max(0, scrollY)}px)`;
+        }
+    }
+    
+    // 音频事件监听
+    audio.addEventListener('loadedmetadata', () => {
+        durationEl.textContent = formatTime(audio.duration);
+    });
+    
+    audio.addEventListener('timeupdate', () => {
+        if (!audio.duration) return;
+        
+        const progressPercent = (audio.currentTime / audio.duration) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+        currentTimeEl.textContent = formatTime(audio.currentTime);
+        
+        // 更新歌词
+        updateLyrics(audio.currentTime);
+    });
+    
+    audio.addEventListener('error', (e) => {
+        console.error('音频加载错误:', e);
+        playBtn.textContent = '▶️';
+        alert('音乐加载失败，请检查网络连接');
+    });
+    
+    audio.addEventListener('ended', () => {
+        playBtn.textContent = '▶️';
+    });
+    
+    // 导航功能
+    function navigateTo(url) {
+        if (!url || url.trim() === '#') return;
+        
+        if (url.startsWith('./') || url.startsWith('/')) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = url.split('/').pop();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } else {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+    }
+    
+    // 信息提示
+    function showInfo(text) {
+        alert(`${text} 功能开发中，敬请期待！`);
+    }
+    
+    // 页面加载完成
+    window.addEventListener('load', () => {
+        console.log('页面加载完成');
+    });
 </script>
 </body>
 </html>
