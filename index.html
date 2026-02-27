@@ -10,38 +10,38 @@ body{background:#f5f5f7}
 #app{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:120px}
 
 .lyric-container {
-  position: fixed;
-  bottom: 60px;
-  left: 0;
-  right: 0;
-  max-width: 600px;
-  margin: 0 auto;
-  background: linear-gradient(180deg, rgba(20,20,35,0.85), rgba(0,0,0,0.9));
-  color: #ccc;
-  padding: 12px 16px;
-  font-size:14px;
-  text-align:center;
-  z-index:100;
-  height:70px;
-  overflow:hidden;
-  box-shadow:0 -2px 15px rgba(0,0,0,0.4);
-  border-top:1px solid rgba(255,255,255,0.1);
+position: fixed;
+bottom: 60px;
+left: 0;
+right: 0;
+max-width: 600px;
+margin: 0 auto;
+background: linear-gradient(180deg, rgba(20,20,35,0.85), rgba(0,0,0,0.9));
+color: #ccc;
+padding: 12px 16px;
+font-size:14px;
+text-align:center;
+z-index:100;
+height:70px;
+overflow:hidden;
+box-shadow:0 -2px 15px rgba(0,0,0,0.4);
+border-top:1px solid rgba(255,255,255,0.1);
 }
 .lyric-line {
-  margin:5px 0;
-  transition:all 0.4s ease;
-  opacity:0.7;
+margin:5px 0;
+transition:all 0.4s ease;
+opacity:0.7;
 }
 .lyric-line.active {
-  color:#fff;
-  font-size:16px;
-  font-weight:500;
-  opacity:1;
-  text-shadow:0 1px 4px rgba(0,0,0,0.6);
+color:#fff;
+font-size:16px;
+font-weight:500;
+opacity:1;
+text-shadow:0 1px 4px rgba(0,0,0,0.6);
 }
 
 .header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:99}
-.search-bar{flex:1;background:#fff;border:1px solid #d1d6;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px}
+.search-bar{flex:1;background:#fff;border:1px solid #d1d1d6;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px}
 .search-bar input{background:transparent;border:none;outline:none;width:100%;font-size:16px;color:#333}
 .search-bar input::placeholder{color:#999}
 .icon-btn{font-size:22px;color:#555}
@@ -70,7 +70,7 @@ body{background:#f5f5f7}
 .footer{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;height:60px;background:#fff;border-top:1px solid #e5e5ea;display:flex;justify-content:space-around;align-items:center;z-index:99}
 .footer-icon{font-size:24px;color:#555}
 
-#bgm {display:none}
+#bgm {display:none;}
 </style>
 </head>
 <body>
@@ -105,11 +105,11 @@ body{background:#f5f5f7}
 <div class="welcome">本盘实时更新各类增加模块，欢迎访问</div>
 
 <div class="file-list">
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">实用软件</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">应用框架</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">QQ_模块</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">微信模块</div><span class="file-arrow">→</span></div>
-<div class="file-item" onclick="go('#')"><div class="file-icon"></div><div class="file-name">Java脚本</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">实用软件</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">应用框架</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">QQ_模块</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">微信模块</div><span class="file-arrow">→</span></div>
+<div class="file-item"><div class="file-icon"></div><div class="file-name">Java脚本</div><span class="file-arrow">→</span></div>
 </div>
 
 <div class="footer">
@@ -155,41 +155,52 @@ body{background:#f5f5f7}
 <div class="lyric-line" data-time="150">微凉晨光里</div>
 <div class="lyric-line" data-time="153">笑得很甜蜜</div>
 <div class="lyric-line" data-time="228">晚风吹起你鬓间的白发</div>
-<div class="lyri<script>
-const avatar = "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSihpoO1-rYqzOIAhnXV5Bsya-kU_lAACfhkAAladCVWaA7h-mrOZfzoE.jpeg";
-const banner = "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSidpoOzt4lQf-yXHAAGyNFaPMmLTQ6sAAngZAAJWnQlVB5CMUwbJfTw6BA.jpeg";
+<div class="lyric-line" data-time="233">抚平回忆留下的疤</div>
+<div class="lyric-line" data-time="237">你的眼中 明暗交杂 一笑生花</div>
+<div class="lyric-line" data-time="<script>
+// 你指定的头像和背景图链接
+const avatarUrl = "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSihpoO1-rYqzOIAhnXV5Bsya-kU_lAACfhkAAladCVWaA7h-mrOZfzoE.jpeg";
+const bannerUrl = "https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERSidpoOzt4lQf-yXHAAGyNFaPMmLTQ6sAAngZAAJWnQlVB5CMUwbJfTw6BA.jpeg";
 
 window.onload = () => {
-  document.getElementById("avatar").style.backgroundImage = `url(${avatar})`;
-  document.getElementById("bannerImg").src = banner;
+  // 加载头像和背景图
+  document.getElementById('avatar').style.backgroundImage = `url(${avatarUrl})`;
+  document.getElementById('bannerImg').src = bannerUrl;
 
-  const a = document.getElementById("bgm");
-  const lines = document.querySelectorAll(".lyric-line");
+  const audio = document.getElementById('bgm');
+  const lyricLines = document.querySelectorAll('.lyric-line');
 
-  a.play().catch(() => {
-    document.body.addEventListener("click", () => a.play(), { once: true });
-  });
+  // 强兼容自动播放：打开即播，拦截则点击页面任意位置播放
+  function initAutoPlay() {
+    audio.play().catch(() => {
+      document.body.addEventListener('click', () => audio.play(), { once: true });
+    });
+  }
+  initAutoPlay();
 
-  a.addEventListener("timeupdate", () => {
-    const t = a.currentTime;
-    lines.forEach(line => {
-      const lt = +line.dataset.time;
-      if (t >= lt) {
-        lines.forEach(l => l.classList.remove("active"));
-        line.classList.add("active");
-        line.scrollIntoView({ behavior: "smooth", block: "center" });
+  // 歌词精准同步逻辑
+  audio.addEventListener('timeupdate', () => {
+    const currentTime = audio.currentTime;
+    lyricLines.forEach(line => {
+      const lineTime = Number(line.dataset.time);
+      if (currentTime >= lineTime) {
+        lyricLines.forEach(l => l.classList.remove('active'));
+        line.classList.add('active');
+        line.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
   });
 };
 
+// 标签切换方法
 function setTab(el) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  el.classList.add("active");
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  el.classList.add('active');
 }
 
-function go(u) {
-  u && window.open(u, "_blank");
+// 链接跳转方法
+function go(url) {
+  if (url) window.open(url, '_blank');
 }
 </script>
 </body>
