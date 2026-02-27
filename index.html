@@ -2,122 +2,110 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>模块库</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,Roboto,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
 body{background:#f5f5f7}
-#app{max-width:600px;margin:0 auto;background:#fff;min-height:100vh;padding-bottom:120px}
+#app{max-width:600px;margin:auto;background:#fff;padding-bottom:20px}
 
-.lyric-container {
-position: fixed;bottom: 60px;left:0;right:0;max-width:600px;margin:0 auto;
-background: linear-gradient(180deg, rgba(20,20,35,0.85), rgba(0,0,0,0.9));
-color:#ccc;padding:12px 16px;font-size:14px;text-align:center;
-z-index:100;height:70px;overflow:hidden;
-box-shadow:0 -2px 15px rgba(0,0,0,0.4);
-border-top:1px solid rgba(255,255,255,0.1);
-}
-.lyric-line {margin:5px 0;transition:all 0.4s ease;opacity:0.7;}
-.lyric-line.active {color:#fff;font-size:16px;font-weight:500;opacity:1;}
-
-.header{background:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:99}
-.search-bar{flex:1;background:#fff;border:1px solid #d1d1d6;border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:8px}
-.search-bar input{background:transparent;border:none;outline:none;width:100%;font-size:16px;color:#333}
 .banner-box{position:relative;width:100%;height:180px;overflow:hidden}
 .banner{width:100%;height:100%;object-fit:cover}
-.tabs{display:flex;background:#fff;padding:12px 16px;gap:10px;overflow-x:auto}
-.tab{background:#f2f2f7;padding:9px 16px;border-radius:20px;white-space:nowrap;font-size:14px;cursor:pointer}
+.lyric-overlay{position:absolute;bottom:0;left:0;right:0;height:90px;background:linear-gradient(transparent,rgba(0,0,0,0.8));color:#fff;padding:12px;text-align:center;overflow:hidden}
+.lyric-wrapper{transition:transform 0.6s ease}
+.lyric-line{margin:8px 0;opacity:0.4;font-size:15px}
+.lyric-line.active{opacity:1;font-size:18px;font-weight:bold}
+
+.header{padding:12px;background:#fff;display:flex;position:sticky;top:0;z-index:99}
+.search-bar{flex:1;border:1px solid #ddd;border-radius:12px;padding:10px}
+.tabs{display:flex;gap:10px;padding:12px;overflow-x:auto}
+.tab{background:#f2f2f7;padding:8px 14px;border-radius:20px}
 .tab.active{background:#007AFF;color:#fff}
-.user-bar{display:flex;align-items:center;padding:14px 16px;background:#fff;border-bottom:1px solid #f0f0f0}
-.avatar{width:50px;height:50px;border-radius:50%;background:#000 center/cover no-repeat;margin-right:12px}
-.welcome{padding:12px 16px;background:#f9f9f9;color:#666}
-.file-item{display:flex;align-items:center;padding:16px;border-bottom:1px solid #f0f0f0;cursor:pointer}
-.file-name{flex:1}
-.footer{position:fixed;bottom:0;left:0;right:0;max-width:600px;margin:0 auto;height:60px;background:#fff;display:flex;justify-content:space-around;align-items:center;z-index:99}
+.user-bar{display:flex;align-items:center;padding:14px}
+.avatar{width:50px;height:50px;border-radius:50%;background-size:cover;margin-right:12px}
+.file-item{padding:16px;border-bottom:1px solid #eee}
+
+.play-btn{position:fixed;bottom:20px;right:20px;width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;background:transparent;cursor:pointer;z-index:100}
 </style>
 </head>
 <body>
 
 <div id="app">
 <div class="header">
-<div class="search-bar">
-<span>🔍</span><input placeholder="模块库"><span>⭐</span>
-</div>
+  <div class="search-bar"><input placeholder="模块库" style="border:none;outline:none;width:100%"></div>
 </div>
 
 <div class="banner-box">
-<img class="banner" id="bannerImg">
+  <img class="banner" id="bannerImg">
+  <div class="lyric-overlay">
+    <div class="lyric-wrapper" id="lyricWrapper">
+      <div class="lyric-line" data-time="0">起风了 - 买辣椒也用券</div>
+      <div class="lyric-line" data-time="14">这一路上走走停停</div>
+      <div class="lyric-line" data-time="19">顺着少年漂流的痕迹</div>
+      <div class="lyric-line" data-time="24">迈出车站的前一刻</div>
+      <div class="lyric-line" data-time="29">竟有些犹豫</div>
+      <div class="lyric-line" data-time="35">不禁笑这近乡情怯</div>
+      <div class="lyric-line" data-time="40">仍无可避免</div>
+      <div class="lyric-line" data-time="45">而长野的天</div>
+      <div class="lyric-line" data-time="50">依旧那么暖</div>
+      <div class="lyric-line" data-time="55">风吹起了从前</div>
+    </div>
+  </div>
 </div>
 
 <div class="tabs">
-<div class="tab">官方群聊</div>
-<div class="tab">官方频道</div>
-<div class="tab" onclick="go('https://m.wandoujia.com/apps/566489/history')">🐧 QQ历史</div>
-<div class="tab" onclick="go('https://m.wandoujia.com/apps/596157/history')">💚 微信历史</div>
-<div class="tab active" onclick="go('https://www.pandashi8.com/')">🔢 资源分享</div>
-<div class="tab" onclick="go('https://www.urlc.cn/')">🔗 短链生成</div>
-<div class="tab" onclick="go('https://dy.kukutool.com/')">🎬 视频解析</div>
-<div class="tab">👤 待添加</div>
+  <div class="tab">官方群聊</div>
+  <div class="tab">官方频道</div>
+  <div class="tab" onclick="go('https://m.wandoujia.com/apps/566489/history')">🐧 QQ历史</div>
+  <div class="tab" onclick="go('https://m.wandoujia.com/apps/596157/history')">💚 微信历史</div>
+  <div class="tab active" onclick="go('https://www.pandashi8.com/')">🔢 资源分享</div>
+  <div class="tab" onclick="go('https://www.urlc.cn/')">🔗 短链生成</div>
+  <div class="tab" onclick="go('https://dy.kukutool.com/')">🎬 视频解析</div>
 </div>
 
 <div class="user-bar">
-<div class="avatar" id="avatar"></div>
-<div class="user-name">满山猴子我腚最红</div>
+  <div class="avatar" id="avatar"></div>
+  <div>满山猴子我腚最红</div>
 </div>
 
-<div class="welcome">本盘实时更新各类增加模块，欢迎访问</div>
+<div style="padding:10px;background:#f9f9f9">本盘实时更新各类模块</div>
 
 <div class="file-list">
-<div class="file-item" onclick="go('./TCQT_3.6.1.r386.APK')"><div class="file-name">实用软件</div></div>
-<div class="file-item"><div class="file-name">应用框架</div></div>
-<div class="file-item"><div class="file-name">QQ_模块</div></div>
-<div class="file-item"><div class="file-name">微信模块</div></div>
-<div class="file-item"><div class="file-name">Java脚本</div></div>
-</div>
-
-<div class="footer">
-<div>←</div><div>→</div><div>☰</div><div>10</div><div>🔄</div>
+  <div class="file-item" onclick="go('./TCQT_3.6.1.r386.APK')">实用软件</div>
+  <div class="file-item">应用框架</div>
+  <div class="file-item">QQ_模块</div>
+  <div class="file-item">微信模块</div>
+  <div class="file-item">Java脚本</div>
 </div>
 </div>
 
-<div class="lyric-container" id="lyricContainer">
-<div class="lyric-line" data-time="0">起风了 - 买辣椒也用券</div>
-<div class="lyric-line" data-time="14">这一路上走走停停</div>
-<div class="lyric-line" data-time="19">顺着少年漂流的痕迹</div>
-<div class="lyric-line" data-time="24">迈出车站的前一刻</div>
-<div class="lyric-line" data-time="29">竟有些犹豫</div>
-<div class="lyric-line" data-time="35">不禁笑这近乡情怯</div>
-<div class="lyric-line" data-time="40">仍无可避免</div>
-<div class="lyric-line" data-time="45">而长野的天</div>
-<div class="lyric-line" data-time="50">依旧那么暖</div>
-<div class="lyric-line" data-time="55">风吹起了从前</div>
-</div>
-
+<div class="play-btn" id="playBtn" onclick="togglePlay()">▶️</div>
 <audio id="audio" loop>
 
 <script>
-// 头像 + 背景图（你指定的，正常）
 avatar.style.backgroundImage = 'url(https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS8ZpoRtcH2zjIcbVV9depdoQKe_4QwACuBsAAladCVV_1D50jotFjjoE.jpg)';
 bannerImg.src = 'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAERS89poRxjX_mfw9ehbcydVIeti6E1egACxRsAAladCVWqLjx-6LXcszoE.jpeg';
 
-// 跳转功能
-function go(url) { window.open(url, '_blank'); }
-
-// 音乐 + 歌词同步
 const audio = document.getElementById('audio');
 audio.src = 'https://music.163.com/song/media/outer/url?id=1330348546.mp3';
+let isPlaying = false;
 
-document.addEventListener('click', () => {
-  audio.play();
-}, { once: true });
+function togglePlay(){
+  if(isPlaying){audio.pause();playBtn.textContent='▶️'}
+  else{audio.play();playBtn.textContent='⏸️'}
+  isPlaying=!isPlaying;
+}
 
-audio.addEventListener('timeupdate', () => {
-  const t = audio.currentTime;
-  document.querySelectorAll('.lyric-line').forEach(line => {
-    const lt = +line.dataset.time;
-    line.classList.toggle('active', t >= lt && t < lt + 6);
+audio.addEventListener('timeupdate',()=>{
+  const t=audio.currentTime;
+  document.querySelectorAll('.lyric-line').forEach((line,i)=>{
+    const lt=+line.dataset.time;
+    const next=document.querySelectorAll('.lyric-line')[i+1]?.dataset.time||999;
+    line.classList.toggle('active',t>=lt&&t<next);
   });
 });
+
+function go(u){window.open(u,'_blank')}
 </script>
 </body>
 </html>
