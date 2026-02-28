@@ -1,1112 +1,702 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#667eea">
-    <title>百宝袋AI - 全能工具箱</title>
-    <style>
-        :root {
-            --primary: #667eea;
-            --secondary: #764ba2;
-            --accent: #ff6b6b;
-            --bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --card-bg: rgba(255, 255, 255, 0.12);
-            --text: #ffffff;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
-            background: var(--bg-primary);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 20px;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-            transition: all 0.3s ease;
-        }
-        .app {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            object-fit: cover;
-            background: rgba(255, 255, 255, 0.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='30' fill='rgba(255,255,255,0.1)'/%3E%3C/svg%3E");
-            cursor: pointer;
-        }
-        .time-section {
-            flex: 1;
-        }
-        .time {
-            font-size: 2.2em;
-            font-weight: 300;
-            margin-bottom: 2px;
-        }
-        .date {
-            opacity: 0.9;
-            font-size: 0.95em;
-        }
-        .ai-search-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .ai-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .ai-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text);
-            font-size: 1em;
-        }
-        .ai-input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
-        }
-        .ai-response {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 0.9em;
-            line-height: 1.6;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .category {
-            margin-bottom: 20px;
-        }
-        .category-title {
-            font-size: 1.1em;
-            margin-bottom: 12px;
-            padding-left: 10px;
-            border-left: 4px solid var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .link-list {
-            list-style: none;
-        }
-        .link-item {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .link-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-        .link-name {
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-right: 10px;
-        }
-        .link-tag {
-            background: var(--accent);
-            font-size: 0.7em;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 8px;
-            flex-shrink: 0;
-        }
-        .delete-btn {
-            background: none;
-            border: none;
-            color: var(--accent);
-            cursor: pointer;
-            font-size: 0.8em;
-            opacity: 0.6;
-            padding: 5px;
-            transition: opacity 0.2s;
-        }
-        .delete-btn:hover {
-            opacity: 1;
-        }
-        .save-to-app-btn {
-            background: #10b981;
-            border: none;
-            color: var(--text);
-            padding: 5px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.75em;
-            margin-left: 5px;
-            transition: transform 0.2s;
-        }
-        .save-to-app-btn:hover {
-            transform: scale(1.05);
-        }
-        .add-form {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .form-input {
-            flex: 1;
-            min-width: 120px;
-            padding: 10px 12px;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text);
-        }
-        .add-btn {
-            background: var(--accent);
-            border: none;
-            color: var(--text);
-            padding: 0 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .admin-badge {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            font-size: 0.65em;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 10px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 20px;
-            width: 100%;
-            max-width: 450px;
-            max-height: 85vh;
-            overflow-y: auto;
-            animation: modalIn 0.3s ease;
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 1.8em;
-            cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-            line-height: 1;
-        }
-        .close-btn:hover {
-            opacity: 1;
-        }
-        .theme-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        .theme-btn {
-            padding: 15px 10px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.85em;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        .theme-btn:hover {
-            transform: scale(1.05);
-        }
-        .cloud-search-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        .cloud-search-item {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: var(--text);
-            padding: 12px 8px;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            transition: background 0.2s;
-        }
-        .cloud-search-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        .cloud-icon {
-            font-size: 1.5em;
-        }
-        .cloud-name {
-            font-size: 0.9em;
-        }
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(0, 0, 0, 0.9);
-            color: var(--text);
-            padding: 12px 24px;
-            border-radius: 25px;
-            z-index: 1001;
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            white-space: nowrap;
-        }
-        .notification.show {
-            transform: translateX(-50%) translateY(0);
-        }
-        .app-directory-item {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .app-directory-item:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-        .app-directory-item .link-name {
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        .theme-upload-btn {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
-            cursor: pointer;
-            text-align: center;
-            transition: border-color 0.2s;
-        }
-        .theme-upload-btn:hover {
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        .admin-panel {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        .admin-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 26px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            inset: 0;
-            background-color: rgba(255,255,255,0.2);
-            transition: .4s;
-            border-radius: 26px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #10b981;
-        }
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-        .admin-input-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .admin-input-group .form-input {
-            flex: 1;
-        }
-        .admin-input-group .btn {
-            padding: 10px 15px;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 30px 20px;
-            opacity: 0.6;
-        }
-        .empty-state-icon {
-            font-size: 3em;
-            margin-bottom: 10px;
-        }
-        .quick-links {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-        .quick-links .btn {
-            flex: 1;
-            min-width: 100px;
-        }
-        @media (max-width: 480px) {
-            .card { padding: 15px; }
-            .time { font-size: 1.9em; }
-            .btn { padding: 8px 12px; font-size: 0.85em; }
-            .cloud-search-grid { grid-template-columns: repeat(2, 1fr); }
-            .theme-grid { grid-template-columns: repeat(2, 1fr); }
-            .modal-content { padding: 15px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>百宝袋AI工具箱 - 全功能可折叠版</title>
+  <style>
+    :root {
+      --primary: #667eea;
+      --secondary: #764ba2;
+      --accent: #ff6b6b;
+      --success: #10b981;
+      --text: #1a1a1a;
+      --bg-card: rgba(255, 255, 255, 0.97);
+      --border: rgba(0, 0, 0, 0.15);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+      --radius: 20px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.65;
+      padding: 24px;
+      background: #f5f7fa;
+      background-image: url('https://img1.qunarzz.com/imgs/201808/31/F.5e5b5b5b5b5b5b5b5b5b5b5.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .app { max-width: 600px; margin: 0 auto; }
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      margin-bottom: 38px;
+      padding-bottom: 28px;
+      border-bottom: 2px solid var(--border);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .avatar {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      border: 4px solid rgba(0, 0, 0, 0.35);
+      object-fit: cover;
+      background: url('https://api.dicebear.com/7.x/notionists/svg?seed=1') no-repeat center;
+      background-size: cover;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.25);
+    }
+    .avatar:hover { transform: scale(1.1); }
+    .time-section { flex: 1; min-width: 200px; text-align: center; }
+    .time { font-size: 2.8rem; font-weight: 200; margin-bottom: 10px; }
+    .date { font-size: 1.15rem; opacity: 0.9; }
+    .quick-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    .quick-links .btn { padding: 18px 14px; font-size: 0.97em; border: none; background: rgba(0,0,0,0.1); border-radius: 16px; font-weight: 500; cursor: pointer; }
+    .quick-links .btn:hover { transform: translateY(-4px); background: rgba(0, 0, 0, 0.18); }
+    .btn-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 32px; }
+    .btn { background: rgba(0, 0, 0, 0.1); border: none; color: var(--text); padding: 16px 20px; border-radius: 16px; font-size: 0.97em; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn:hover { transform: translateY(-4px); background: rgba(0, 0, 0, 0.18); }
+    .category { margin-bottom: 38px; }
+    .category-title { font-size: 1.35em; margin-bottom: 20px; padding-left: 20px; border-left: 5px solid var(--accent); font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+    .category-title::after { content: '▼'; font-size: 0.8em; transition: transform 0.3s; }
+    .category.collapsed .category-title::after { transform: rotate(-90deg); }
+    .category-content { overflow: hidden; transition: max-height 0.4s ease; }
+    .category.collapsed .category-content { max-height: 0 !important; }
+    .link-list { list-style: none; }
+    .link-item {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      transition: all 0.35s ease;
+    }
+    .link-item:hover { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transform: translateX(8px); }
+    .link-name { flex: 1; margin-right: 20px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .link-tag { background: var(--accent); font-size: 0.77em; padding: 7px 16px; border-radius: 25px; color: #fff; }
+    .link-tag.new { background: var(--success); }
+    .link-tag.hot { background: #f59e0b; }
+    .link-tag.tool { background: #3498db; }
+    .link-tag.pdf { background: #e74c3c; }
+    .link-tag.image { background: #9b59b6; }
+    .link-tag.media { background: #e67e22; }
+    .link-tag.office { background: #1abc9c; }
+    .link-tag.developer { background: #34495e; }
+    .link-tag.book { background: #d35400; }
+    .link-tag.ai { background: #8e44ad; }
+    .add-form { display: flex; gap: 14px; margin-top: 20px; flex-wrap: wrap; }
+    .form-input { flex: 1; min-width: 150px; padding: 16px 20px; border: none; border-radius: 14px; background: rgba(0,0,0,0.08); font-size: 1em; }
+    .add-btn { background: var(--accent); border: none; color: #fff; padding: 0 34px; border-radius: 14px; cursor: pointer; font-weight: 600; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal.active { display: flex; }
+    .modal-content { background: var(--bg-card); border-radius: var(--radius); padding: 34px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 34px; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+    .modal-title { font-size: 1.55em; font-weight: 600; }
+    .close-btn { background: none; border: none; color: var(--text); font-size: 2.4em; cursor: pointer; line-height: 1; }
+    .notification { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(130px); background: rgba(0,0,0,0.97); color: #fff; padding: 20px 38px; border-radius: 50px; z-index: 3000; transition: transform 0.65s; }
+    .notification.show { transform: translateX(-50%) translateY(0); }
+    @media (max-width: 480px) {
+      .card { padding: 26px; }
+      .time { font-size: 2.2rem; }
+      .avatar { width: 80px; height: 80px; }
+      .btn { padding: 14px 16px; font-size: 0.93em; }
+      .quick-links { grid-template-columns: 1fr; }
+      .btn-group { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
-    <div id="access-screen" style="position:fixed;inset:0;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;z-index:9999;">
-        <input id="access-password" type="password" placeholder="" style="padding:12px 20px;border:none;border-radius:12px;font-size:1.2em;text-align:center;background:rgba(255,255,255,0.1);color:var(--text);outline:none;">
-    </div>
-    
-    <div id="main-app" class="app" style="display:none;">
-        <div class="card">
-            <div class="header">
-                <img id="avatar" class="avatar" alt="头像" title="点击更换头像">
-                <div class="time-section">
-                    <div id="time" class="time">00:00:00</div>
-                    <div id="date" class="date">2026年2月27日 星期四</div>
-                </div>
-            </div>
-            
-            <div class="quick-links">
-                <button class="btn" onclick="openLink('https://www.pandashi8.com/')">📦 资源分享</button>
-                <button class="btn" onclick="openLink('https://www.urlc.cn/')">🔗 短链生成</button>
-                <button class="btn" onclick="openLink('https://dy.kukutool.com/')">🎬 视频解析</button>
-            </div>
-            
-            <div class="ai-search-container">
-                <div class="ai-input-group">
-                    <input type="text" id="ai-search-input" class="ai-input" placeholder="输入问题，让AI帮您搜索..." onkeypress="if(event.key==='Enter') searchWithAI()">
-                    <button class="btn btn-primary" onclick="searchWithAI()">🤖 AI搜索</button>
-                </div>
-                <div id="ai-response" class="ai-response"></div>
-            </div>
-            
-            <div class="btn-group">
-                <button class="btn" onclick="openModal('theme-modal')">🎨 主题</button>
-                <button class="btn" onclick="openModal('cloud-modal')">☁️ 网盘搜索</button>
-                <button class="btn" onclick="openModal('music-novel-modal')">🎵 音乐小说</button>
-                <button class="btn" onclick="openModal('app-directory-modal')">📱 应用专区</button>
-                <button class="btn" onclick="openModal('settings-modal')">⚙️ 设置</button>
-            </div>
-            
-            <div class="category">
-                <div class="category-title">🐧 QQ/微信专区</div>
-                <ul class="link-list">
-                    <li class="link-item" onclick="openLink('https://m.wandoujia.com/apps/566489/history')">
-                        <span class="link-name">QQ历史版本</span>
-                        <span class="link-tag">豌豆荚</span>
-                    </li>
-                    <li class="link-item" onclick="openLink('https://m.wandoujia.com/apps/596157/history')">
-                        <span class="link-name">微信历史版本</span>
-                        <span class="link-tag">豌豆荚</span>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="category">
-                <div class="category-title">🎬 影视资源</div>
-                <ul class="link-list">
-                    <li class="link-item" onclick="openLink('https://cupfox.app')">
-                        <span class="link-name">茶杯狐 (聚合搜索)</span>
-                        <span class="link-tag">新</span>
-                    </li>
-                    <li class="link-item" onclick="openLink('https://www.libvio.me')">
-                        <span class="link-name">LIBVIO 低端影视</span>
-                        <span class="link-tag">蓝光</span>
-                    </li>
-                    <li class="link-item" onclick="openLink('https://www.555dy1.com')">
-                        <span class="link-name">555电影</span>
-                        <span class="link-tag">快</span>
-                    </li>
-                    <li class="link-item" onclick="openLink('https://www.nfmovies.com')">
-                        <span class="link-name">奈菲影视</span>
-                        <span class="link-tag">美剧</span>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="category">
-                <div class="category-title">
-                    🔗 我的收藏
-                    <span style="font-size: 0.75em; opacity: 0.7;">(点击⭐永久保存)</span>
-                </div>
-                <ul id="custom-links" class="link-list"></ul>
-                <div class="add-form">
-                    <input type="text" id="link-name" class="form-input" placeholder="链接名称" maxlength="20">
-                    <input type="text" id="link-url" class="form-input" placeholder="https://" onkeypress="if(event.key==='Enter') addLink()">
-                    <button class="add-btn" onclick="addLink()">+ 添加</button>
-                </div>
-            </div>
-            
-            <div class="category">
-                <div class="category-title">🛠️ 实用软件下载</div>
-                <ul class="link-list">
-                    <li class="link-item" onclick="downloadApk()">
-                        <span class="link-name">TCQT 工具箱 v3.6.1</span>
-                        <span class="link-tag">APK</span>
-                    </li>
-                </ul>
-            </div>
+  <div id="main-app" class="app">
+    <div class="card">
+      <div class="header">
+        <div class="avatar" id="avatar" title="点击更换头像"></div>
+        <div class="time-section">
+          <div id="time" class="time">00:00:00</div>
+          <div id="date" class="date">2026年2月28日 星期六</div>
         </div>
-    </div>
-    
-    <div id="theme-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="category-title">🎨 主题选择</div>
-                <button class="close-btn" onclick="closeModal('theme-modal')">&times;</button>
-            </div>
-            <div class="theme-grid">
-                <button class="theme-btn" style="background:linear-gradient(135deg,#667eea,#764ba2)" onclick="setTheme('default')">默认</button>
-                <button class="theme-btn" style="background:linear-gradient(135deg,#2c3e50,#1a1a2e)" onclick="setTheme('dark')">深色</button>
-                <button class="theme-btn" style="background:linear-gradient(135deg,#00b09b,#96c93d)" onclick="setTheme('green')">绿色</button>
-                <button class="theme-btn" style="background:linear-gradient(135deg,#9d50bb,#6e48aa)" onclick="setTheme('purple')">紫色</button>
-                <button class="theme-btn" style="background:linear-gradient(135deg,#ff6b6b,#ff8e53)" onclick="setTheme('orange')">橙色</button>
-                <button class="theme-btn" style="background:linear-gradient(135deg,#3498db,#2980b9)" onclick="setTheme('blue')">蓝色</button>
-            </div>
-            <div class="theme-upload-btn" onclick="document.getElementById('theme-upload-input').click()">
-                📁 上传自定义主题 (.json)
-            </div>
-            <input type="file" id="theme-upload-input" accept=".json" style="display: none;">
+      </div>
+      
+      <div class="quick-links">
+        <button class="btn" onclick="openLink('https://www.pandashi8.com/')">📦 资源分享</button>
+        <button class="btn" onclick="openLink('https://www.urlc.cn/')">🔗 短链生成</button>
+        <button class="btn" onclick="openLink('https://dy.kukutool.com/')">🎬 视频解析</button>
+      </div>
+      
+      <div class="btn-group">
+        <button class="btn" onclick="openModal('theme-modal')">🎨 主题</button>
+        <button class="btn" onclick="openModal('cloud-modal')">☁️ 网盘搜索</button>
+        <button class="btn" onclick="openModal('qqwx-modal')">💬 QQ/微信历史版</button>
+        <button class="btn" onclick="changeBackground()">🖼️ 换背景</button>
+        <button class="btn" onclick="changeAvatar()">🙆 换头像</button>
+        <button class="btn" onclick="showNotification('欢迎使用百宝袋AI工具箱！')">👋 关于</button>
+      </div>
+      
+      <!-- 万能工具合集 -->
+      <div class="category" id="cat-tools">
+        <div class="category-title" onclick="toggleCategory('cat-tools')">🔧 万能工具合集</div>
+        <div class="category-content">
+          <ul class="link-list" id="tools-list"></ul>
         </div>
-    </div>
-    
-    <div id="cloud-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="category-title">☁️ 网盘搜索</div>
-                <button class="close-btn" onclick="closeModal('cloud-modal')">&times;</button>
-            </div>
-            <div class="cloud-search-grid">
-                <button class="cloud-search-item" onclick="searchCloud('百度网盘')">
-                    <span class="cloud-icon">🔍</span>
-                    <span class="cloud-name">百度网盘</span>
-                </button>
-                <button class="cloud-search-item" onclick="searchCloud('阿里云盘')">
-                    <span class="cloud-icon">☁️</span>
-                    <span class="cloud-name">阿里云盘</span>
-                </button>
-                <button class="cloud-search-item" onclick="searchCloud('蓝奏云')">
-                    <span class="cloud-icon">🔗</span>
-                    <span class="cloud-name">蓝奏云</span>
-                </button>
-                <button class="cloud-search-item" onclick="searchCloud('迅雷云盘')">
-                    <span class="cloud-icon">⚡</span>
-                    <span class="cloud-name">迅雷云盘</span>
-                </button>
-                <button class="cloud-search-item" onclick="searchCloud('天翼云盘')">
-                    <span class="cloud-icon">📱</span>
-                    <span class="cloud-name">天翼云盘</span>
-                </button>
-                <button class="cloud-search-item" onclick="searchCloud('OneDrive')">
-                    <span class="cloud-icon">💾</span>
-                    <span class="cloud-name">OneDrive</span>
-                </button>
-            </div>
+      </div>
+      
+      <!-- 影视资源 -->
+      <div class="category" id="cat-movie">
+        <div class="category-title" onclick="toggleCategory('cat-movie')">🎬 影视资源</div>
+        <div class="category-content">
+          <ul class="link-list" id="movie-list"></ul>
         </div>
-    </div>
-    
-    <div id="music-novel-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="category-title">🎵 音乐 & 📖 小说</div>
-                <button class="close-btn" onclick="closeModal('music-novel-modal')">&times;</button>
-            </div>
-            <ul class="link-list">
-                <li class="link-item" onclick="openLink('https://music.haom.ren')">
-                    <span class="link-name">音乐搜索器 (HaoM)</span>
-                    <span class="link-tag">在线</span>
-                </li>
-                <li class="link-item" onclick="openLink('https://flac.life')">
-                    <span class="link-name">无损生活 (FLAC)</span>
-                    <span class="link-tag">高音质</span>
-                </li>
-                <li class="link-item" onclick="openLink('https://www.kugou.com')">
-                    <span class="link-name">酷狗音乐</span>
-                    <span class="link-tag">官方</span>
-                </li>
-                <li class="link-item" onclick="openLink('https://www.kuwo.cn')">
-                    <span class="link-name">酷我音乐</span>
-                    <span class="link-tag">官方</span>
-                </li>
-                <li class="link-item" onclick="openLink('https://www.biquge.tv')">
-                    <span class="link-name">笔趣阁 (官方)</span>
-                    <span class="link-tag">无广</span>
-                </li>
-                <li class="link-item" onclick="openLink('https://www.69shuba.com')">
-                    <span class="link-name">69书吧</span>
-                    <span class="link-tag">快</span>
-                </li>
-                <li class="link-item" onclick="openLink('https://www.qidian.com')">
-                    <span class="link-name">起点中文网</span>
-                    <span class="link-tag">正版</span>
-                </li>
-                <li class="link-item" onclick="openLink('https://www.zongheng.com')">
-                    <span class="link-name">纵横中文网</span>
-                    <span class="link-tag">正版</span>
-                </li>
-            </ul>
+      </div>
+      
+      <!-- 网盘资源共享 -->
+      <div class="category" id="cat-cloud">
+        <div class="category-title" onclick="toggleCategory('cat-cloud')">📁 网盘资源共享</div>
+        <div class="category-content">
+          <ul class="link-list" id="cloud-list"></ul>
+          <div class="add-form">
+            <input type="text" id="cloud-name" class="form-input" placeholder="资源名称">
+            <input type="text" id="cloud-url" class="form-input" placeholder="云盘链接" onkeypress="if(event.key==='Enter') addCloud()">
+            <select id="cloud-type" class="form-input">
+              <option value="阿里云盘">阿里云盘</option>
+              <option value="百度网盘">百度网盘</option>
+              <option value="蓝奏云">蓝奏云</option>
+              <option value="迅雷云盘">迅雷云盘</option>
+            </select>
+            <button class="add-btn" onclick="addCloud()">+ 添加</button>
+          </div>
         </div>
-    </div>
-    
-    <div id="app-directory-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="category-title">
-                    📱 应用专区
-                    <span id="admin-badge" class="admin-badge" style="display: none;">管理员模式</span>
-                </div>
-                <button class="close-btn" onclick="closeModal('app-directory-modal')">&times;</button>
-            </div>
-            <div id="app-directory-list"></div>
-            <div id="admin-panel" class="admin-panel" style="display: block;">
-                <div class="admin-toggle">
-                    <span>启用管理员创建模式</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="admin-mode-toggle" onchange="toggleAdminMode()">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div id="admin-create-form" class="admin-input-group" style="display: none;">
-                    <input type="text" id="admin-link-name" class="form-input" placeholder="链接名称">
-                    <input type="text" id="admin-link-url" class="form-input" placeholder="https://">
-                    <input type="password" id="admin-password" class="form-input" placeholder="管理员密码" style="max-width:100px;">
-                    <button class="btn btn-primary" onclick="addAppDirectoryLink()">添加</button>
-                </div>
-            </div>
+      </div>
+      
+      <!-- 音乐与小说 -->
+      <div class="category" id="cat-music-novel">
+        <div class="category-title" onclick="toggleCategory('cat-music-novel')">🎵 音乐与小说</div>
+        <div class="category-content">
+          <ul class="link-list" id="music-novel-list"></ul>
         </div>
-    </div>
-    
-    <div id="settings-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="category-title">⚙️ 设置</div>
-                <button class="close-btn" onclick="closeModal('settings-modal')">&times;</button>
-            </div>
-            <button class="btn" style="width:100%;margin-bottom:10px" onclick="backupData()">💾 备份数据</button>
-            <button class="btn" style="width:100%;margin-bottom:10px" onclick="restoreData()">📂 恢复数据</button>
-            <button class="btn" style="width:100%;margin-bottom:10px" onclick="openModal('about-modal')">ℹ️ 关于</button>
-            <button class="btn" style="width:100%;background:#ff6b6b" onclick="clearData()">🗑️ 清空数据</button>
+      </div>
+      
+      <!-- 我的收藏 -->
+      <div class="category" id="cat-custom">
+        <div class="category-title" onclick="toggleCategory('cat-custom')">📌 我的收藏</div>
+        <div class="category-content">
+          <ul id="custom-links" class="link-list"></ul>
+          <div class="add-form">
+            <input type="text" id="link-name" class="form-input" placeholder="链接名称" maxlength="20">
+            <input type="text" id="link-url" class="form-input" placeholder="https://" onkeypress="if(event.key==='Enter') addLink()">
+            <button class="add-btn" onclick="addLink()">+ 添加</button>
+          </div>
         </div>
+      </div>
     </div>
-    
-    <div id="about-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="category-title">ℹ️ 关于百宝袋AI</div>
-                <button class="close-btn" onclick="closeModal('about-modal')">&times;</button>
-            </div>
-            <div style="line-height: 1.6; padding: 10px 0;">
-                <p><strong>版本:</strong> 2.1 访问密码+管理员密码版</p>
-                <p><strong>功能亮点:</strong></p>
-                <ul style="margin-left: 20px; margin-bottom: 15px;">
-                    <li>🔒 进入网站需访问密码 2025（无提示）</li>
-                    <li>🎨 6种预设主题 + 自定义主题上传</li>
-                    <li>🎵 全网音乐资源</li>
-                    <li>📖 全网小说资源</li>
-                    <li>☁️ 网盘搜索</li>
-                    <li>📱 应用专区 (仅管理员可创建/删除，访客可查看下载)</li>
-                    <li>🔗 我的收藏 (临时保存，可转存至专区)</li>
-                    <li>🤖 AI智能搜索</li>
-                    <li>📦 快捷入口：资源分享 / 短链生成 / 视频解析</li>
-                    <li>🛠️ 实用软件下载</li>
-                </ul>
-                <p><strong>使用说明:</strong></p>
-                <ol style="margin-left: 20px; margin-bottom: 15px;">
-                    <li>首次打开输入访问密码 2025 进入主界面。</li>
-                    <li>在"我的收藏"添加链接，点击"⭐"永久保存至应用专区。</li>
-                    <li>进入"应用专区"后，开启管理员创建模式并输入管理员密码(2026)即可添加或删除链接。</li>
-                </ol>
-                <p style="text-align: center; margin-top: 20px; opacity: 0.8;">© 2026 百宝袋AI - 全能工具箱</p>
-            </div>
-        </div>
+  </div>
+
+  <!-- 模态框 -->
+  <div id="theme-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">🎨 主题设置</h3>
+        <button class="close-btn" onclick="closeModal('theme-modal')">&times;</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 20px;">
+        <button class="btn" style="background:linear-gradient(135deg,#667eea,#764ba2); color:#fff;" onclick="setTheme('default')">默认</button>
+        <button class="btn" style="background:linear-gradient(135deg,#2c3e50,#1a1a2e); color:#fff;" onclick="setTheme('dark')">深色</button>
+        <button class="btn" style="background:linear-gradient(135deg,#00b09b,#96c93d); color:#fff;" onclick="setTheme('green')">绿色</button>
+        <button class="btn" style="background:linear-gradient(135deg,#9d50bb,#6e48aa); color:#fff;" onclick="setTheme('purple')">紫色</button>
+        <button class="btn" style="background:linear-gradient(135deg,#ff6b6b,#ff8e53); color:#fff;" onclick="setTheme('orange')">橙色</button>
+        <button class="btn" style="background:linear-gradient(135deg,#3498db,#2980b9); color:#fff;" onclick="setTheme('blue')">蓝色</button>
+      </div>
     </div>
-    
-    <div id="notification" class="notification"></div>
-    <input type="file" id="avatar-input" accept="image/*" style="display: none;">
-    
-    <script>
-        const ACCESS_PASSWORD = '2025';
-        const ADMIN_PASSWORD = '2026';
-        
-        const STORAGE_KEY = 'baibaodai';
-        
-        const THEMES = {
-            default: {
-                primary: '#667eea',
-                secondary: '#764ba2',
-                accent: '#ff6b6b',
-                bgPrimary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)',
-                name: '默认主题'
-            },
-            dark: {
-                primary: '#2c3e50',
-                secondary: '#1a1a2e',
-                accent: '#ff6b6b',
-                bgPrimary: 'linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.08)',
-                name: '深色主题'
-            },
-            green: {
-                primary: '#00b09b',
-                secondary: '#96c93d',
-                accent: '#ff6b6b',
-                bgPrimary: 'linear-gradient(135deg, #00b09b 0%, #96c93d 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)',
-                name: '绿色主题'
-            },
-            purple: {
-                primary: '#9d50bb',
-                secondary: '#6e48aa',
-                accent: '#ff6b6b',
-                bgPrimary: 'linear-gradient(135deg, #9d50bb 0%, #6e48aa 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)',
-                name: '紫色主题'
-            },
-            orange: {
-                primary: '#ff6b6b',
-                secondary: '#ff8e53',
-                accent: '#3498db',
-                bgPrimary: 'linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)',
-                name: '橙色主题'
-            },
-            blue: {
-                primary: '#3498db',
-                secondary: '#2980b9',
-                accent: '#ff6b6b',
-                bgPrimary: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)',
-                cardBg: 'rgba(255, 255, 255, 0.12)',
-                name: '蓝色主题'
-            }
-        };
+  </div>
 
-        const CLOUD_SEARCH = {
-            '百度网盘': [
-                { name: '云盘精灵', url: 'https://www.yunpanjingling.com/search/' },
-                { name: '盘搜搜', url: 'https://www.pansoso.com/' },
-                { name: '百度网盘搜索', url: 'https://www.baidu.com/s?wd=site:pan.baidu.com+' }
-            ],
-            '阿里云盘': [
-                { name: 'UP云搜', url: 'https://www.upyunso.com/' },
-                { name: '阿里云盘资源', url: 'https://www.aliyundrive.com/' }
-            ],
-            '蓝奏云': [
-                { name: '蓝奏云资源', url: 'https://www.lanzou.com/' }
-            ],
-            '迅雷云盘': [
-                { name: '迅雷云盘', url: 'https://pan.xunlei.com/' }
-            ],
-            '天翼云盘': [
-                { name: '天翼云盘', url: 'https://cloud.189.cn/' }
-            ],
-            'OneDrive': [
-                { name: 'OneDrive搜索', url: 'https://www.bing.com/search?q=site%3Aonedrive.live.com+' }
-            ]
-        };
+  <div id="cloud-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">☁️ 网盘搜索</h3>
+        <button class="close-btn" onclick="closeModal('cloud-modal')">&times;</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px;">
+        <button class="btn" onclick="openLink('https://pan.baidu.com')">百度网盘</button>
+        <button class="btn" onclick="openLink('https://www.aliyundrive.com')">阿里云盘</button>
+        <button class="btn" onclick="openLink('https://www.lanzou.com')">蓝奏云</button>
+        <button class="btn" onclick="openLink('https://pan.xunlei.com')">迅雷云盘</button>
+      </div>
+    </div>
+  </div>
 
-        let appData = {
-            customLinks: [],
-            appDirectory: [],
-            settings: { theme: 'default', avatar: null, customThemes: [] }
-        };
-        let isAdminMode = false;
-        const dom = {};
+  <div id="qqwx-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">💬 QQ/微信历史版本</h3>
+        <button class="close-btn" onclick="closeModal('qqwx-modal')">&times;</button>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px;">
+        <button class="btn" onclick="openLink('https://pc.qq.com/detail/1/detail_2661.html')">PC QQ历史版</button>
+        <button class="btn" onclick="openLink('https://pc.qq.com/detail/1/detail_2662.html')">手机QQ历史版</button>
+        <button class="btn" onclick="openLink('https://weixin.qq.com/cgi-bin/readtemplate?t=win_weixin_download_list')">PC 微信历史版</button>
+        <button class="btn" onclick="openLink('https://dldir1.qq.com/weixin/android/weixinXXX.apk')">安卓微信旧版</button>
+        <button class="btn" onclick="openLink('https://www.oldversion.com/windows/tencent-qq/')">OldVersion QQ</button>
+        <button class="btn" onclick="openLink('https://www.oldversion.com/windows/wechat/')">OldVersion 微信</button>
+      </div>
+    </div>
+  </div>
 
-        function cacheDom() {
-            ['main-app','time','date','avatar','ai-search-input','ai-response','custom-links','app-directory-list','admin-badge','admin-panel','admin-mode-toggle','admin-create-form','admin-link-name','admin-link-url','admin-password','theme-upload-input','avatar-input','notification','access-screen','access-password'].forEach(id => dom[id] = document.getElementById(id));
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ 设置</h3>
+        <button class="close-btn" onclick="closeModal('settings-modal')">&times;</button>
+      </div>
+      <div style="margin-top: 20px;">
+        <button class="btn btn-danger" style="width:100%; margin:10px 0;" onclick="clearData()">🗑️ 清空数据</button>
+        <button class="btn" style="width:100%; margin:10px 0;" onclick="exportData()">💾 导出数据</button>
+        <button class="btn" style="width:100%; margin:10px 0;" onclick="document.getElementById('import-file').click()">📥 导入数据</button>
+        <input type="file" id="import-file" style="display:none" accept=".json" onchange="importData(event)">
+      </div>
+    </div>
+  </div>
+
+  <div id="notification" class="notification"></div>
+
+  <script>
+    // 万能工具数据（一到十五类）
+    const TOOLS_DATA = [
+      { category: "一、万能工具合集", items: [
+        { name: "在线工具大全，图片/PDF/格式转换一站式", url: "https://tools.miku.ac", tag: "tool" },
+        { name: "程序员+日常工具，JSON/时间戳/加密解密", url: "https://tool.lu", tag: "tool" },
+        { name: "干净无广告，办公+设计+开发工具", url: "https://www.geektoolkit.com", tag: "tool" },
+        { name: "实用工具大全，日常高频功能", url: "https://www.niutool.com", tag: "tool" },
+        { name: "开源中国工具，面向开发者/设计师", url: "http://tool.oschina.net", tag: "tool" },
+        { name: "NiceTool 实用工具导航", url: "https://www.egouz.com", tag: "tool" }
+      ]},
+      { category: "二、办公/文档/PDF", items: [
+        { name: "Office 在线版（微云）", url: "https://doc.weiyun.com/", tag: "office" },
+        { name: "PDF合并、拆分、转Word、压缩", url: "https://www.ilovepdf.com", tag: "pdf" },
+        { name: "PDF全能处理", url: "https://smallpdf.com", tag: "pdf" },
+        { name: "PDF编辑、加水印", url: "https://www.sejda.com", tag: "pdf" },
+        { name: "德国免费PDF工具箱，无大小限制", url: "https://tools.pdf24.org/zh/", tag: "pdf" },
+        { name: "PDF转Word/Excel/PPT/图片", url: "https://www.hipdf.com", tag: "pdf" },
+        { name: "Adobe官方PDF工具", url: "https://www.adobe.com/hk_zh/acrobat/online.html", tag: "pdf" },
+        { name: "本地OCR文字识别，保护隐私", url: "https://pearocr.com/", tag: "office" }
+      ]},
+      { category: "三、图片/设计/抠图/素材", items: [
+        { name: "图片无损压缩", url: "https://tinypng.com", tag: "image" },
+        { name: "AI一键抠图", url: "https://remove.bg", tag: "image" },
+        { name: "智能扩图、背景替换", url: "https://remove.photos/zh", tag: "image" },
+        { name: "网页版PS，功能完整", url: "https://www.photopea.com", tag: "image" },
+        { name: "稿定在线PS", url: "https://s.gd-share.cn/4qf7", tag: "image" },
+        { name: "图片无损放大", url: "https://www.bigjpg.com", tag: "image" },
+        { name: "智图，腾讯图片压缩优化", url: "https://zhitu.isux.us", tag: "image" }
+      ]},
+      { category: "四、动态头像/GIF/APNG", items: [
+        { name: "GIF/APNG/视频处理、动态头像神器", url: "https://ezgif.com", tag: "media" },
+        { name: "APNG专业制作", url: "https://apng.online", tag: "media" },
+        { name: "动态头像、多图合成GIF", url: "https://www.soogif.com", tag: "media" },
+        { name: "图片/视频转GIF、头像调整", url: "https://www.gif.cn", tag: "media" }
+      ]},
+      { category: "五、音视频/人声分离/转换", items: [
+        { name: "剪映网页版", url: "https://www.capcut.com/online", tag: "media" },
+        { name: "人声分离，提取伴奏", url: "https://vocalremover.org", tag: "media" },
+        { name: "AI音轨分离", url: "https://www.lalal.ai", tag: "media" },
+        { name: "在线音视频工具箱", url: "https://123apps.com/cn/", tag: "media" },
+        { name: "万能格式转换", url: "https://cloudconvert.com", tag: "media" }
+      ]},
+      { category: "六、文本/效率/翻译", items: [
+        { name: "临时记事本，无需登录", url: "https://note.ms", tag: "office" },
+        { name: "文本对比找差异", url: "https://www.diffchecker.com", tag: "office" },
+        { name: "超强翻译", url: "https://www.deepl.com/translator", tag: "office" },
+        { name: "打字练习", url: "https://monkeytype.com", tag: "office" },
+        { name: "打字背单词", url: "https://qwerty.kaiyi.cool/", tag: "office" }
+      ]},
+      { category: "七、文件传输", items: [
+        { name: "大文件临时传输", url: "https://cowtransfer.com", tag: "office" },
+        { name: "安全文件分享", url: "https://www.wenshushu.cn", tag: "office" },
+        { name: "国外大文件传输", url: "https://sendgb.com", tag: "office" }
+      ]},
+      { category: "八、隐私/临时工具", items: [
+        { name: "临时邮箱，防骚扰", url: "https://temp-mail.org", tag: "tool" },
+        { name: "私密文本，阅后即焚", url: "https://privatebin.net", tag: "tool" },
+        { name: "一次性信息传递", url: "https://www.onetimesecret.com", tag: "tool" }
+      ]},
+      { category: "九、开发/技术/站长", items: [
+        { name: "JSON格式化", url: "https://json.cn", tag: "developer" },
+        { name: "正则表达式测试", url: "https://regex101.com", tag: "developer" },
+        { name: "时间戳转换", url: "https://tool.lu/timestamp", tag: "developer" },
+        { name: "免费CDN加速", url: "https://www.jsdelivr.com", tag: "developer" },
+        { name: "草料二维码生成", url: "https://cli.im", tag: "developer" }
+      ]},
+      { category: "十、学习/资讯/数据", items: [
+        { name: "编程教程", url: "https://www.runoob.com", tag: "tool" },
+        { name: "名校免费课程", url: "https://www.icourse163.org", tag: "tool" },
+        { name: "网速测试", url: "https://www.speedtest.net", tag: "tool" },
+        { name: "全历史时间轴", url: "https://www.allhistory.com", tag: "tool" },
+        { name: "今日热榜，全网热点聚合", url: "https://tophub.today", tag: "tool" }
+      ]},
+      { category: "十一、壁纸", items: [
+        { name: "高清4K壁纸", url: "https://wallhaven.cc", tag: "image" },
+        { name: "高清壁纸图库", url: "https://www.4kbizhi.com", tag: "image" }
+      ]},
+      { category: "十二、电子书/小说阅读（无广告）", items: [
+        { name: "鸠摩搜书，电子书神器", url: "https://www.jiumodiary.com", tag: "book" },
+        { name: "高质量电子书", url: "https://www.sobooks.net", tag: "book" },
+        { name: "苦瓜书盘，精校TXT", url: "https://www.kgbook.com", tag: "book" },
+        { name: "大力盘，资源搜索", url: "https://www.dalipan.com", tag: "book" },
+        { name: "无广告小说阅读", url: "https://www.51shucheng.net", tag: "book" }
+      ]},
+      { category: "十三、AI工具导航", items: [
+        { name: "AIGC导航，写作/绘画/视频生成", url: "https://www.aigc.cn/", tag: "ai" }
+      ]},
+      { category: "十四、娱乐/互动", items: [
+        { name: "我画你猜，在线多人游戏", url: "https://enazo.cn/", tag: "tool" }
+      ]},
+      { category: "十五、接码平台（国际+国内+正规虚拟号）", items: [
+        { name: "老牌稳定，多国号码", url: "https://receive-sms-online.com", tag: "tool" },
+        { name: "美/英/加，短信秒显", url: "https://receive-smss.com", tag: "tool" },
+        { name: "美/加，接收快", url: "https://smsreceivefree.com", tag: "tool" },
+        { name: "8国含香港，无广告", url: "https://receivefreesms.com", tag: "tool" },
+        { name: "200+国，界面干净", url: "https://www.freeonlinephone.org", tag: "tool" },
+        { name: "俄/法/西，无广告", url: "https://sms-receive.net", tag: "tool" },
+        { name: "多国匿名接码，无广告", url: "https://quackr.io", tag: "tool" },
+        { name: "爱沙尼亚小众号，通过率高", url: "http://sellaite.com/smsreceiver/", tag: "tool" },
+        { name: "中/美，无需注册", url: "https://mianfeijiema.com", tag: "tool" },
+        { name: "30+国，2000+号码", url: "https://yunduanxin.net", tag: "tool" },
+        { name: "国内为主，界面友好", url: "https://xnsms.com", tag: "tool" },
+        { name: "多国，秒级更新", url: "https://jiemahao.com", tag: "tool" },
+        { name: "中/美，30秒内接收", url: "https://yunjisms.xyz", tag: "tool" },
+        { name: "国内老牌，稳定", url: "https://www.smszk.com", tag: "tool" },
+        { name: "香港号，跨境电商友好", url: "https://www.becmd.com", tag: "tool" },
+        { name: "免费美国/加拿大虚拟号码", url: "https://www.textnow.com/", tag: "tool" },
+        { name: "免费美国虚拟号，稳定", url: "https://voice.google.com/", tag: "tool" },
+        { name: "广告支持，免费美国号码", url: "https://www.textfreeapp.com/", tag: "tool" },
+        { name: "短期试用3-7天美/加虚拟号", url: "https://hushed.com/", tag: "tool" },
+        { name: "短期试用美/加虚拟号，临时生成", url: "https://www.burnerapp.com/", tag: "tool" }
+      ]}
+    ];
+
+    // 影视资源数据
+    const MOVIE_DATA = [
+      { name: "茶杯狐 (聚合搜索)", url: "https://cupfox.app", tag: "hot" },
+      { name: "LIBVIO 低端影视", url: "https://www.libvio.me", tag: "" },
+      { name: "555电影", url: "https://www.555dy1.com", tag: "hot" },
+      { name: "奈菲影视", url: "https://www.nfmovies.com", tag: "" }
+    ];
+
+    // 初始网盘资源
+    const INIT_CLOUD_DATA = [
+      { name: "常用软件合集", url: "https://www.aliyundrive.com/s/", type: "阿里云盘" },
+      { name: "办公模板大全", url: "https://pan.baidu.com/s/", type: "百度网盘" },
+      { name: "高清壁纸资源", url: "https://www.aliyundrive.com/s/", type: "阿里云盘" }
+    ];
+
+    // 音乐与小说数据
+    const MUSIC_NOVEL_DATA = [
+      { name: "网易云音乐", url: "https://music.163.com/", tag: "music" },
+      { name: "酷狗音乐", url: "https://www.kugou.com/", tag: "music" },
+      { name: "QQ音乐", url: "https://www.qqmusic.com/", tag: "music" },
+      { name: "酷我音乐", url: "https://www.kuwo.cn/", tag: "music" },
+      { name: "起点中文网", url: "https://www.qidian.com/", tag: "novel" },
+      { name: "纵横中文网", url: "https://www.zongheng.com/", tag: "novel" },
+      { name: "17K小说网", url: "https://www.17k.com/", tag: "novel" },
+      { name: "晋江文学城", url: "https://www.jjwxc.net/", tag: "novel" }
+    ];
+
+    function init() {
+      updateTime();
+      setInterval(updateTime, 1000);
+      renderTools();
+      renderMovies();
+      renderMusicNovel();
+      renderCloud();
+      renderCustomLinks();
+      loadCloudFromStorage();
+      // 默认折叠
+      ['cat-tools', 'cat-movie', 'cat-cloud', 'cat-music-novel', 'cat-custom'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('collapsed');
+      });
+    }
+
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('time').textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
+      document.getElementById('date').textContent = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+    }
+
+    function openLink(url) {
+      if (!url.startsWith('http')) url = 'https://' + url;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
+    function toggleCategory(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('collapsed');
+    }
+
+    function renderTools() {
+      const container = document.getElementById('tools-list');
+      container.innerHTML = '';
+      TOOLS_DATA.forEach(cat => {
+        const title = document.createElement('div');
+        title.className = 'category-title';
+        title.style.fontSize = '1.1em';
+        title.style.margin = '20px 0 10px';
+        title.style.paddingLeft = '15px';
+        title.style.borderLeft = '3px solid var(--accent)';
+        title.textContent = cat.category;
+        container.appendChild(title);
+        cat.items.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'link-item';
+          li.innerHTML = `<span class="link-name">${item.name}</span><span class="link-tag ${item.tag}">${getTagLabel(item.tag)}</span>`;
+          li.onclick = () => openLink(item.url);
+          container.appendChild(li);
+        });
+      });
+    }
+
+    function getTagLabel(tag) {
+      const map = { tool: '工具', pdf: 'PDF', image: '图片', media: '媒体', office: '办公', developer: '开发', book: '电子书', ai: 'AI' };
+      return map[tag] || '工具';
+    }
+
+    function renderMovies() {
+      const container = document.getElementById('movie-list');
+      container.innerHTML = '';
+      MOVIE_DATA.forEach(movie => {
+        const li = document.createElement('li');
+        li.className = 'link-item';
+        li.innerHTML = `<span class="link-name">${movie.name}</span><span class="link-tag ${movie.tag}">${movie.tag === 'hot' ? '热' : ''}</span>`;
+        li.onclick = () => openLink(movie.url);
+        container.appendChild(li);
+      });
+    }
+
+    function renderMusicNovel() {
+      const container = document.getElementById('music-novel-list');
+      container.innerHTML = '';
+      MUSIC_NOVEL_DATA.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'link-item';
+        li.innerHTML = `<span class="link-name">${item.name}</span><span class="link-tag ${item.tag}">${item.tag === 'music' ? '音乐' : '小说'}</span>`;
+        li.onclick = () => openLink(item.url);
+        container.appendChild(li);
+      });
+    }
+
+    function renderCloud() {
+      const container = document.getElementById('cloud-list');
+      container.innerHTML = '';
+      const cloudData = JSON.parse(localStorage.getItem('baibaodai_cloud') || '[]');
+      const data = cloudData.length ? cloudData : INIT_CLOUD_DATA;
+      data.forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.className = 'link-item';
+        li.innerHTML = `<span class="link-name">${item.name} (${item.type})</span><span class="link-tag">网盘</span>`;
+        li.onclick = () => openLink(item.url);
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-btn';
+        delBtn.innerHTML = '✕';
+        delBtn.onclick = (e) => { e.stopPropagation(); deleteCloud(idx); };
+        li.appendChild(delBtn);
+        container.appendChild(li);
+      });
+    }
+
+    function addCloud() {
+      const name = document.getElementById('cloud-name').value.trim();
+      let url = document.getElementById('cloud-url').value.trim();
+      const type = document.getElementById('cloud-type').value;
+      if (!name || !url) { showNotification('请填写完整信息'); return; }
+      if (!url.startsWith('http')) url = 'https://' + url;
+      const cloudData = JSON.parse(localStorage.getItem('baibaodai_cloud') || '[]');
+      cloudData.push({ name, url, type });
+      localStorage.setItem('baibaodai_cloud', JSON.stringify(cloudData));
+      renderCloud();
+      document.getElementById('cloud-name').value = '';
+      document.getElementById('cloud-url').value = '';
+      showNotification('✅ 网盘资源已添加');
+    }
+
+    function deleteCloud(idx) {
+      const cloudData = JSON.parse(localStorage.getItem('baibaodai_cloud') || '[]');
+      cloudData.splice(idx, 1);
+      localStorage.setItem('baibaodai_cloud', JSON.stringify(cloudData));
+      renderCloud();
+      showNotification('🗑️ 网盘资源已删除');
+    }
+
+    function loadCloudFromStorage() {
+      if (!localStorage.getItem('baibaodai_cloud')) {
+        localStorage.setItem('baibaodai_cloud', JSON.stringify(INIT_CLOUD_DATA));
+      }
+    }
+
+    function renderCustomLinks() {
+      const container = document.getElementById('custom-links');
+      container.innerHTML = '';
+      const links = JSON.parse(localStorage.getItem('baibaodai_links') || '[]');
+      links.forEach((link, idx) => {
+        const li = document.createElement('li');
+        li.className = 'link-item';
+        li.innerHTML = `<span class="link-name">${link.name}</span><span class="link-tag">收藏</span>`;
+        li.onclick = () => openLink(link.url);
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-btn';
+        delBtn.innerHTML = '✕';
+        delBtn.onclick = (e) => { e.stopPropagation(); deleteLink(idx); };
+        li.appendChild(delBtn);
+        container.appendChild(li);
+      });
+    }
+
+    function addLink() {
+      const name = document.getElementById('link-name').value.trim();
+      let url = document.getElementById('link-url').value.trim();
+      if (!name || !url) { showNotification('请填写完整信息'); return; }
+      if (!url.startsWith('http')) url = 'https://' + url;
+      const links = JSON.parse(localStorage.getItem('baibaodai_links') || '[]');
+      links.push({ name, url });
+      localStorage.setItem('baibaodai_links', JSON.stringify(links));
+      renderCustomLinks();
+      document.getElementById('link-name').value = '';
+      document.getElementById('link-url').value = '';
+      showNotification('✅ 链接已添加');
+    }
+
+    function deleteLink(idx) {
+      const links = JSON.parse(localStorage.getItem('baibaodai_links') || '[]');
+      links.splice(idx, 1);
+      localStorage.setItem('baibaodai_links', JSON.stringify(links));
+      renderCustomLinks();
+      showNotification('🗑️ 链接已删除');
+    }
+
+    function changeBackground() {
+      const images = [
+        'https://img1.qunarzz.com/imgs/201808/31/F.5e5b5b5b5b5b5b5b5b5b5b5.jpg',
+        'https://img.zcool.cn/community/01b72057a7e0790000018c1bf4fce0.jpg',
+        'https://img2.baidu.com/it/u=1234567890,987654321&fm=253&fmt=auto&app=138&f=JPEG?w=1920&h=1080',
+        'https://img3.baidu.com/it/u=1122334455,5544332211&fm=253&fmt=auto&app=120&f=JPEG?w=1920&h=1080',
+        'https://img4.baidu.com/it/u=9988776655,4433221100&fm=253&fmt=auto&app=138&f=JPEG?w=1920&h=1080'
+      ];
+      const current = document.body.style.backgroundImage;
+      const next = images[(images.indexOf(current) + 1) % images.length];
+      document.body.style.backgroundImage = `url('${next}')`;
+      showNotification('🖼️ 背景已切换');
+    }
+
+    function changeAvatar() {
+      const avatars = [
+        'https://api.dicebear.com/7.x/notionists/svg?seed=1',
+        'https://api.dicebear.com/7.x/notionists/svg?seed=2',
+        'https://api.dicebear.com/7.x/notionists/svg?seed=3',
+        'https://api.dicebear.com/7.x/notionists/svg?seed=4',
+        'https://api.dicebear.com/7.x/notionists/svg?seed=5'
+      ];
+      const current = document.getElementById('avatar').style.backgroundImage;
+      const next = avatars[(avatars.findIndex(a => current.includes(a)) + 1) % avatars.length];
+      document.getElementById('avatar').style.backgroundImage = `url('${next}')`;
+      showNotification('🙆 头像已更换');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    function showNotification(msg) {
+      const n = document.getElementById('notification');
+      n.textContent = msg;
+      n.classList.add('show');
+      setTimeout(() => n.classList.remove('show'), 2500);
+    }
+
+    function setTheme(theme) {
+      showNotification('主题已切换: ' + theme);
+      closeModal('theme-modal');
+    }
+
+    function clearData() {
+      if (confirm('确定清空所有数据吗？')) {
+        localStorage.removeItem('baibaodai_links');
+        localStorage.removeItem('baibaodai_cloud');
+        renderCustomLinks();
+        renderCloud();
+        showNotification('🗑️ 数据已清空');
+      }
+    }
+
+    function exportData() {
+      const data = {
+        links: JSON.parse(localStorage.getItem('baibaodai_links') || '[]'),
+        cloud: JSON.parse(localStorage.getItem('baibaodai_cloud') || '[]')
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'baibaodai_backup.json';
+      a.click();
+      showNotification('💾 数据已导出');
+    }
+
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (data.links && Array.isArray(data.links)) {
+            localStorage.setItem('baibaodai_links', JSON.stringify(data.links));
+          }
+          if (data.cloud && Array.isArray(data.cloud)) {
+            localStorage.setItem('baibaodai_cloud', JSON.stringify(data.cloud));
+          }
+          renderCustomLinks();
+          renderCloud();
+          showNotification('📥 数据已导入');
+        } catch {
+          showNotification('❌ 解析失败');
         }
+      };
+      reader.readAsText(file);
+    }
 
-        function checkAccessPassword() {
-            const input = dom['access-password'];
-            input.focus();
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    if (this.value === ACCESS_PASSWORD) {
-                        dom['access-screen'].style.display = 'none';
-                        dom['main-app'].style.display = 'block';
-                        initMainApp();
-                    } else {
-                        this.value = '';
-                    }
-                }
-            });
-        }
-
-        function initMainApp() {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved) {
-                try { appData = JSON.parse(saved); } catch {}
-            }
-            if (appData.settings.theme) setTheme(appData.settings.theme);
-            loadAvatar();
-            updateTime();
-            setInterval(updateTime, 1000);
-            renderAppDirectory();
-            renderCustomLinks();
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') closeAllModals();
-                if (e.ctrlKey && e.key === 'k') { e.preventDefault(); dom['ai-search-input'].focus(); }
-                if (e.ctrlKey && e.key === 'b') { e.preventDefault(); openModal('cloud-modal'); }
-            });
-        }
-
-        function updateTime() {
-            const n = new Date();
-            dom.time.textContent = n.toLocaleTimeString('zh-CN', { hour12: false });
-            dom.date.textContent = n.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
-        }
-
-        function setTheme(name) {
-            const t = THEMES[name] || THEMES.default;
-            applyTheme(t);
-            appData.settings.theme = name;
-            saveData();
-            closeModal('theme-modal');
-            showNotification(`已切换为${t.name || name}主题`);
-        }
-
-        function applyTheme(t) {
-            const root = document.documentElement;
-            root.style.setProperty('--primary', t.primary);
-            root.style.setProperty('--secondary', t.secondary);
-            root.style.setProperty('--accent', t.accent);
-            root.style.setProperty('--bg-primary', t.bgPrimary);
-            root.style.setProperty('--card-bg', t.cardBg);
-        }
-
-        function handleThemeUpload(e) {
-            const f = e.target.files[0];
-            if (!f) return;
-            const r = new FileReader();
-            r.onload = ev => {
-                try {
-                    const d = JSON.parse(ev.target.result);
-                    if (!d.name || !d.primary || !d.secondary) { showNotification('主题文件格式错误'); return; }
-                    appData.settings.customThemes = appData.settings.customThemes || [];
-                    appData.settings.customThemes.push(d);
-                    applyTheme(d);
-                    appData.settings.theme = 'custom';
-                    saveData();
-                    showNotification(`✅ 已应用自定义主题: ${d.name}`);
-                    closeModal('theme-modal');
-                } catch { showNotification('❌ 主题文件解析失败'); }
-            };
-            r.readAsText(f);
-        }
-
-        async function searchWithAI() {
-            const q = dom['ai-search-input'].value.trim();
-            const rEl = dom['ai-response'];
-            if (!q) { showNotification('请输入问题'); return; }
-            rEl.innerHTML = '🤔 AI思考中...';
-            rEl.style.opacity = '0.7';
-            try {
-                await new Promise(r => setTimeout(r, 800));
-                const msgs = [
-                    `关于"${q}"，我为您找到以下安全信息：\n\n1. 这是一个常见的查询，建议通过正规渠道获取信息\n2. 您可以在百宝袋的搜索工具中使用多个搜索引擎对比结果\n3. 相关学习资源请访问官方教育网站`,
-                    `针对"${q}"的问题：\n\n🔍 安全提示：请勿点击来源不明的链接\n💡 建议使用官方认证的工具和网站\n📚 正规资源可以在百宝袋的应用管理中找到`,
-                    `关于${q}的解答：\n\n📱 您可以使用百宝袋内置的安全工具\n🎯 保护个人隐私，避免在不可信网站输入敏感信息\n🔗 推荐使用HTTPS加密的网站进行访问`
-                ];
-                rEl.innerHTML = msgs[Math.floor(Math.random() * msgs.length)];
-                rEl.style.opacity = '1';
-                dom['ai-search-input'].value = '';
-            } catch { rEl.innerHTML = '😵 AI服务暂时不可用，请稍后重试'; showNotification('AI搜索失败，请检查网络'); }
-        }
-
-        function searchCloud(name) {
-            const engines = CLOUD_SEARCH[name];
-            if (!engines) { showNotification('该网盘搜索功能暂不可用'); return; }
-            const q = prompt(`请输入要在${name}中搜索的内容:`);
-            if (q && q.trim()) {
-                const u = engines[0].url + encodeURIComponent(q.trim());
-                openLink(u);
-                closeModal('cloud-modal');
-                showNotification(`正在搜索${name}资源`);
-            }
-        }
-
-        function openLink(url) {
-            if (!url) return;
-            if (!url.startsWith('http')) url = 'https://' + url;
-            window.open(url, '_blank', 'noopener,noreferrer');
-        }
-
-        function downloadApk() {
-            const a = document.createElement('a');
-            a.href = './TCQT_3.6.1.r386.APK';
-            a.download = 'TCQT_3.6.1.r386.APK';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            showNotification('已开始下载 TCQT 工具箱');
-        }
-
-        function openModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function closeAllModals() { document.querySelectorAll('.modal').forEach(m => m.classList.remove('active')); }
-
-        function addLink() {
-            const n = document.getElementById('link-name').value.trim();
-            let u = document.getElementById('link-url').value.trim();
-            if (!n || !u) { showNotification('请填写完整信息'); return; }
-            if (!u.startsWith('http')) u = 'https://' + u;
-            appData.customLinks.push({ name: n, url: u });
-            saveData();
-            renderCustomLinks();
-            document.getElementById('link-name').value = '';
-            document.getElementById('link-url').value = '';
-            showNotification('链接已添加到我的收藏');
-        }
-
-        function saveToAppDirectory(n, u) {
-            if (appData.appDirectory.some(i => i.url === u)) { showNotification('该链接已存在于应用专区'); return; }
-            appData.appDirectory.push({ name: n, url: u });
-            saveData();
-            renderAppDirectory();
-            showNotification('✅ 链接已永久保存到应用专区');
-        }
-
-        function deleteLink(idx) {
-            if (confirm('确定删除这个链接吗？')) {
-                appData.customLinks.splice(idx, 1);
-                saveData();
-                renderCustomLinks();
-                showNotification('链接已删除');
-            }
-        }
-
-        function deleteFromAppDirectory(idx) {
-            if (confirm('确定从应用专区删除这个链接吗？')) {
-                appData.appDirectory.splice(idx, 1);
-                saveData();
-                renderAppDirectory();
-                showNotification('链接已从应用专区删除');
-            }
-        }
-
-        function renderCustomLinks() {
-            const c = dom['custom-links'];
-            c.innerHTML = '';
-            if (!appData.customLinks.length) { c.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><div>暂无收藏，快去添加吧</div></div>'; return; }
-            appData.customLinks.forEach((l, i) => {
-                const li = document.createElement('li');
-                li.className = 'link-item';
-                li.innerHTML = `<span class="link-name">${l.name}</span><div><button class="save-to-app-btn" onclick="event.stopPropagation();saveToAppDirectory('${l.name.replace(/'/g, "\\'")}', '${l.url.replace(/'/g, "\\'")}')">⭐ 永久保存</button><button class="delete-btn" onclick="event.stopPropagation();deleteLink(${i})">删除</button></div>`;
-                li.onclick = () => openLink(l.url);
-                c.appendChild(li);
-            });
-        }
-
-        function renderAppDirectory() {
-            const c = dom['app-directory-list'];
-            c.innerHTML = '';
-            if (!appData.appDirectory.length) { c.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div>应用专区为空<br><small>您可以在"我的收藏"中保存链接到这里</small></div></div>'; return; }
-            appData.appDirectory.forEach((l, i) => {
-                const d = document.createElement('div');
-                d.className = 'app-directory-item';
-                d.innerHTML = `<span class="link-name">${l.name}</span>`;
-                if (isAdminMode) {
-                    d.innerHTML += `<button class="delete-btn" onclick="event.stopPropagation();deleteFromAppDirectory(${i})">删除</button>`;
-                }
-                d.onclick = () => openLink(l.url);
-                c.appendChild(d);
-            });
-        }
-
-        function toggleAdminMode() {
-            isAdminMode = dom['admin-mode-toggle'].checked;
-            dom['admin-badge'].style.display = isAdminMode ? 'inline-block' : 'none';
-            dom['admin-create-form'].style.display = isAdminMode ? 'flex' : 'none';
-        }
-
-        function addAppDirectoryLink() {
-            if (!isAdminMode) { showNotification('请先启用管理员创建模式'); return; }
-            const pwd = dom['admin-password'].value;
-            if (pwd !== ADMIN_PASSWORD) { showNotification('管理员密码错误'); dom['admin-password'].value = ''; return; }
-            const n = dom['admin-link-name'].value.trim();
-            let u = dom['admin-link-url'].value.trim();
-            if (!n || !u) { showNotification('请填写完整信息'); return; }
-            if (!u.startsWith('http')) u = 'https://' + u;
-            appData.appDirectory.push({ name: n, url: u });
-            saveData();
-            renderAppDirectory();
-            dom['admin-link-name'].value = '';
-            dom['admin-link-url'].value = '';
-            dom['admin-password'].value = '';
-            showNotification('✅ 链接已添加到应用专区');
-        }
-
-        function handleAvatarUpload(e) {
-            const f = e.target.files[0];
-            if (!f || !f.type.startsWith('image/')) return;
-            if (f.size > 2 * 1024 * 1024) { showNotification('图片大小不能超过2MB'); return; }
-            const r = new FileReader();
-            r.onload = ev => {
-                dom.avatar.src = ev.target.result;
-                appData.settings.avatar = ev.target.result;
-                saveData();
-                showNotification('头像已更新');
-            };
-            r.readAsDataURL(f);
-        }
-
-        function loadAvatar() {
-            if (appData.settings.avatar) dom.avatar.src = appData.settings.avatar;
-        }
-
-        function backupData() {
-            const data = { customLinks: appData.customLinks, appDirectory: appData.appDirectory, settings: appData.settings };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = '百宝袋数据备份.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showNotification('✅ 数据备份成功');
-        }
-
-        function restoreData() {
-            const inp = document.createElement('input');
-            inp.type = 'file';
-            inp.accept = '.json';
-            inp.onchange = e => {
-                const f = e.target.files[0];
-                if (!f) return;
-                const r = new FileReader();
-                r.onload = ev => {
-                    try {
-                        const d = JSON.parse(ev.target.result);
-                        if (d.customLinks) appData.customLinks = d.customLinks;
-                        if (d.appDirectory) appData.appDirectory = d.appDirectory;
-                        if (d.settings) {
-                            appData.settings = { ...appData.settings, ...d.settings };
-                            setTheme(appData.settings.theme);
-                            loadAvatar();
-                        }
-                        saveData();
-                        renderCustomLinks();
-                        renderAppDirectory();
-                        showNotification('✅ 数据恢复成功');
-                    } catch { showNotification('❌ 数据恢复失败：格式错误'); }
-                };
-                r.readAsText(f);
-            };
-            inp.click();
-        }
-
-        function clearData() {
-            if (confirm('确定清空所有数据吗？\n\n⚠️ 注意：应用专区的链接也会被清空！')) {
-                localStorage.removeItem(STORAGE_KEY);
-                location.reload();
-            }
-        }
-
-        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
-        
-        function showNotification(msg) {
-            const n = dom.notification;
-            n.textContent = msg;
-            n.classList.add('show');
-            setTimeout(() => n.classList.remove('show'), 2500);
-        }
-
-        window.onload = function() {
-            cacheDom();
-            checkAccessPassword();
-        };
-    </script>
+    init();
+  </script>
 </body>
 </html>
 
