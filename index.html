@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>百宝袋 · 最终融合版</title>
+  <style>
+    /* 合并所有版本的样式，并优化 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --primary: #667eea;
+      --secondary: #764ba2;
+      --accent: #ff6b6b;
+      --success: #10b981;
+      --text: #1a1a1a;
+      --bg-card: rgba(255, 255, 255, 0.97);
+      --border: rgba(0, 0, 0, 0.15);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+      --radius: 20px;
+      --bg-body: #f5f7fa;
+      --lock-bg: rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --text: #e0e0e0;
+      --bg-card: rgba(30, 30, 30, 0.97);
+      --border: rgba(255, 255, 255, 0.15);
+      --bg-body: #121212;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      --lock-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    /* 移动端优化 */
+    html {
+      scroll-behavior: smooth;
+    }
+    input, button {
+      -webkit-appearance: none;
+      outline: none;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.65;
+      padding: 24px;
+      background: var(--bg-body);
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    .app {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 38px;
+      padding-bottom: 28px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .time-section {
+      text-align: center;
+    }
+
+    .time {
+      font-size: 2.8rem;
+      font-weight: 200;
+      margin-bottom: 10px;
+    }
+
+    .date {
+      font-size: 1.15rem;
+      opacity: 0.9;
+    }
+
+    .sync-status {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 8px;
+      min-height: 1.2em;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .btn-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .btn {
+      background: rgba(0, 0, 0, 0.1);
+      border: none;
+      color: var(--text);
+      padding: 16px 20px;
+      border-radius: 16px;
+      font-size: 0.97em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px);
+      background: rgba(0, 0, 0, 0.18);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .category {
+      margin-bottom: 38px;
+    }
+
+    .category-title {
+      font-size: 1.35em;
+      margin-bottom: 20px;
+      padding-left: 20px;
+      border-left: 5px solid var(--accent);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .category-title::after {
+      content: "\25BC";
+      font-size: 0.8em;
+      transition: transform 0.3s;
+    }
+
+    .category.collapsed .category-title::after {
+      transform: rotate(-90deg);
+    }
+
+    .category-content {
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      max-height: 5000px;
+    }
+
+    .category.collapsed .category-content {
+      max-height: 0 !important;
+    }
+
+    .link-list {
+      list-style: none;
+    }
+
+    .link-item {
+      background: var(--bg-card);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      transition: all 0.35s ease;
+    }
+
+    .link-item:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transform: translateX(8px);
+    }
+
+    .link-name {
+      flex: 1;
+      margin-right: 20px;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .link-tag {
+      background: var(--accent);
+      font-size: 0.77em;
+      padding: 7px 16px;
+      border-radius: 25px;
+      color: #fff;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .link-tag:hover {
+      opacity: 0.8;
+    }
+
+    .add-form {
+      display: flex;
+      gap: 14px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-input {
+      flex: 1;
+      min-width: 150px;
+      padding: 16px 20px;
+      border: none;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.08);
+      font-size: 1em;
+      color: var(--text);
+    }
+
+    .add-btn {
+      background: var(--accent);
+      border: none;
+      color: #fff;
+      padding: 0 34px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .add-btn:active {
+      opacity: 0.7;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.92);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 34px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 34px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 1.55em;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 2.4em;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(130px);
+      background: rgba(0, 0, 0, 0.97);
+      color: #fff;
+      padding: 20px 38px;
+      border-radius: 50px;
+      z-index: 3000;
+      transition: transform 0.65s;
+      white-space: nowrap;
+      max-width: 90vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .notification.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .log-item {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .log-time {
+      color: #666;
+    }
+
+    .log-success {
+      color: #10b981;
+    }
+
+    .log-fail {
+      color: #ff6b6b;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: var(--text);
+      z-index: 100;
+    }
+
+    .search-bar {
+      margin-bottom: 28px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1;
+      min-width: 200px;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.08);
+      font-size: 1em;
+      color: var(--text);
+    }
+
+    .tag-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .tag-filter .btn {
+      padding: 8px 16px;
+      font-size: 0.85em;
+    }
+
+    .highlight {
+      background: yellow;
+      color: black;
+      padding: 0 2px;
+      border-radius: 3px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.6;
+    }
+
+    .lock-overlay {
+      background: var(--lock-bg);
+      border-radius: 14px;
+      padding: 30px;
+      text-align: center;
+      margin: 10px 0;
+      backdrop-filter: blur(4px);
+      border: 1px dashed var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .lock-overlay:hover {
+      background: rgba(0, 0, 0, 0.1);
+      transform: scale(1.02);
+    }
+
+    .lock-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .lock-text {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .unlocked-badge {
+      background: var(--success);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      margin-left: 12px;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+      z-index: 99;
+      border: none;
+    }
+
+    .back-to-top:hover {
+      opacity: 1;
+    }
+
+    .recommend-card {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 28px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .recommend-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    .recommend-link {
+      font-size: 1.4rem;
+      font-weight: 600;
+      cursor: pointer;
+      word-break: break-word;
+    }
+
+    .recommend-link:hover {
+      text-decoration: underline;
+    }
+
+    .share-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .share-buttons .btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 26px;
+      }
+
+      .time {
+        font-size: 2.2rem;
+      }
+
+      .btn {
+        padding: 14px 16px;
+        font-size: 0.93em;
+      }
+
+      .quick-links {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-group {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .theme-toggle {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-bottom: 16px;
+      }
+
+      .back-to-top {
+        bottom: 80px;
+        right: 15px;
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+  <button class="theme-toggle" id="themeToggle">🌓</button>
+  <button class="back-to-top" id="backToTop" title="返回顶部">↑</button>
+  <div class="app" id="app"></div>
+  <div id="notification" class="notification"></div>
+
+  <script>
+    (function() {
+      // ---------- 配置常量 ----------
+      const STORAGE_KEYS = {
+        TOKEN: 'baibaodai_github_token',
+        GIST_ID: 'baibaodai_gist_id',
+        LOG: 'baibaodai_sync_log',
+        LINKS: 'baibaodai_links',
+        PUBLIC_SHARES: 'baibaodai_public_shares',
+        LAST_SYNC: 'baibaodai_last_sync_time',
+        THEME: 'baibaodai_theme',
+        PUBLIC_GIST_ID: 'baibaodai_public_share_gist_id',
+        COLLAPSED_CATS: 'baibaodai_collapsed_categories'
+      };
+
+      // 公开分享的初始 Gist URL（占位，发布后会提示替换）
+      const PUBLIC_SHARE_GIST_RAW_URL = 'https://gist.githubusercontent.com/你的用户名/你的GistID/raw/public_shares.json';
+
+      // 收藏密码
+      const FAVORITE_PASSWORD = '2026';
+      const MAX_PASSWORD_ATTEMPTS = 3;
+      const LOCK_TIME = 10 * 60 * 1000; // 10分钟
+
+      // ---------- 合并后的工具数据（从三个版本整合，去重）----------
+      // 万能工具合集
+      const TOOLS_DATA = [
+        { name: "在线工具大全，图片/PDF/格式转换一站式", url: "https://tools.miku.ac", tag: "tool" },
+        { name: "程序员+日常工具，JSON/时间戳/加密解密", url: "https://tool.lu", tag: "tool" },
+        { name: "干净无广告，办公+设计+开发工具", url: "https://www.geektoolkit.com", tag: "tool" },
+        { name: "实用工具大全，日常高频功能", url: "https://www.niutool.com", tag: "tool" },
+        { name: "开源中国工具，面向开发者/设计师", url: "http://tool.oschina.net", tag: "tool" },
+        { name: "NiceTool实用工具导航", url: "https://www.egouz.com", tag: "tool" },
+        { name: "草料二维码生成器", url: "https://cli.im", tag: "tool" },
+        { name: "Regex101正则表达式测试", url: "https://regex101.com", tag: "tool" },
+        { name: "CodePen前端代码在线运行", url: "https://codepen.io", tag: "tool" },
+        { name: "TinyPNG图片压缩", url: "https://tinypng.com", tag: "tool" },
+        { name: "Office在线版(微云)", url: "https://doc.weiyun.com/", tag: "office" },
+        { name: "PDF合并、拆分、转Word、压缩", url: "https://www.ilovepdf.com", tag: "pdf" },
+        { name: "PDF全能处理", url: "https://smallpdf.com", tag: "pdf" },
+        { name: "PDF编辑、加水印", url: "https://www.sejda.com", tag: "pdf" },
+        { name: "德国免费PDF工具箱，无大小限制", url: "https://tools.pdf24.org/zh/", tag: "pdf" },
+        { name: "PDF转Word/Excel/PPT/图片", url: "https://www.hipdf.com", tag: "pdf" },
+        { name: "Adobe官方 PDF工具", url: "https://www.adobe.com/hk_zh/acrobat/online.html", tag: "pdf" },
+        { name: "本地OCR文字识别，保护隐私", url: "https://pearocr.com/", tag: "office" },
+        { name: "腾讯文档", url: "https://docs.qq.com", tag: "office" },
+        { name: "石墨文档", url: "https://shimo.im", tag: "office" },
+        { name: "图片无损压缩", url: "https://tinypng.com", tag: "image" },
+        { name: "AI一键抠图", url: "https://remove.bg", tag: "image" },
+        { name: "智能扩图、背景替换", url: "https://remove.photos/zh", tag: "image" },
+        { name: "网页版PS，功能完整", url: "https://www.photopea.com", tag: "image" },
+        { name: "稿定在线PS", url: "https://s.gd-share.cn/4qf7", tag: "image" },
+        { name: "图片无损放大", url: "https://www.bigjpg.com", tag: "image" },
+        { name: "智图，腾讯图片压缩优化", url: "https://zhitu.isux.us", tag: "image" },
+        { name: "Pixabay免版权图库", url: "https://pixabay.com", tag: "image" },
+        { name: "Unsplash高清摄影图", url: "https://unsplash.com", tag: "image" },
+        { name: "Iconfont阿里巴巴矢量图标库", url: "https://www.iconfont.cn", tag: "image" },
+        { name: "GIF/APNG/视频处理、动态头像神器", url: "https://ezgif.com", tag: "media" },
+        { name: "APNG专业制作", url: "https://apng.online", tag: "media" },
+        { name: "动态头像、多图合成GIF", url: "https://www.soogif.com", tag: "media" },
+        { name: "图片/视频转GIF、头像调整", url: "https://www.gif.cn", tag: "media" },
+        { name: "剪映网页版", url: "https://www.capcut.com/online", tag: "media" },
+        { name: "人声分离，提取伴奏", url: "https://vocalremover.org", tag: "media" },
+        { name: "AI音轨分离", url: "https://www.lalal.ai", tag: "media" },
+        { name: "在线音视频工具箱", url: "https://123apps.com/cn/", tag: "media" },
+        { name: "万能格式转换", url: "https://cloudconvert.com", tag: "media" },
+        { name: "AudioCutter音频剪切", url: "https://audiocutter.com", tag: "media" },
+        { name: "临时记事本，无需登录", url: "https://note.ms", tag: "office" },
+        { name: "文本对比找差异", url: "https://www.diffchecker.com", tag: "office" },
+        { name: "DeepL超强翻译", url: "https://www.deepl.com/translator", tag: "office" },
+        { name: "打字练习", url: "https://monkeytype.com", tag: "office" },
+        { name: "打字背单词", url: "https://qwerty.kaiyi.cool/", tag: "office" },
+        { name: "Notion笔记协作", url: "https://www.notion.so", tag: "office" },
+        { name: "奶牛快传大文件临时传输", url: "https://cowtransfer.com", tag: "transfer" },
+        { name: "文叔叔安全文件分享", url: "https://www.wenshushu.cn", tag: "transfer" },
+        { name: "SendGB国外大文件传输", url: "https://sendgb.com", tag: "transfer" },
+        { name: "Firefox Send临时文件", url: "https://send.firefox.com", tag: "transfer" },
+        { name: "Temp-Mail临时邮箱，防骚扰", url: "https://temp-mail.org", tag: "privacy" },
+        { name: "PrivateBin私密文本，阅后即焚", url: "https://privatebin.net", tag: "privacy" },
+        { name: "OneTimeSecret一次性信息传递", url: "https://www.onetimesecret.com", tag: "privacy" },
+        { name: "JSON格式化", url: "https://json.cn", tag: "dev" },
+        { name: "正则表达式测试", url: "https://regex101.com", tag: "dev" },
+        { name: "时间戳转换", url: "https://tool.lu/timestamp", tag: "dev" },
+        { name: "免费CDN加速", url: "https://www.jsdelivr.com", tag: "dev" },
+        { name: "草料二维码生成", url: "https://cli.im", tag: "dev" },
+        { name: "Can I use浏览器兼容性", url: "https://caniuse.com", tag: "dev" },
+        { name: "菜鸟教程编程入门", url: "https://www.runoob.com", tag: "edu" },
+        { name: "中国大学MOOC名校免费课程", url: "https://www.icourse163.org", tag: "edu" },
+        { name: "Speedtest网速测试", url: "https://www.speedtest.net", tag: "tool" },
+        { name: "全历史时间轴", url: "https://www.allhistory.com", tag: "tool" },
+        { name: "今日热榜，全网热点聚合", url: "https://tophub.today", tag: "tool" },
+        { name: "Wallhaven高清4K壁纸", url: "https://wallhaven.cc", tag: "image" },
+        { name: "4K壁纸图库", url: "https://www.4kbizhi.com", tag: "image" },
+        { name: "鸠摩搜书，电子书神器", url: "https://www.jiumodiary.com", tag: "book" },
+        { name: "SoBooks高质量电子书", url: "https://www.sobooks.net", tag: "book" },
+        { name: "苦瓜书盘，精校TXT", url: "https://www.kgbook.com", tag: "book" },
+        { name: "大力盘，资源搜索", url: "https://www.dalipan.com", tag: "book" },
+        { name: "无广告小说阅读", url: "https://www.51shucheng.net", tag: "book" },
+        { name: "AIGC导航，写作/绘画/视频生成", url: "https://www.aigc.cn/", tag: "ai" },
+        { name: "PromptBase优质AI提示词市场", url: "https://promptbase.com", tag: "ai" },
+        { name: "Hugging Face模型社区", url: "https://huggingface.co", tag: "ai" },
+        { name: "我画你猜，在线多人游戏", url: "https://enazo.cn/", tag: "game" },
+        { name: "Receive-SMS-Online老牌稳定，多国号码", url: "https://receive-sms-online.com", tag: "temp" },
+        { name: "Receive-SMSS美/英/加，短信秒显", url: "https://receive-smss.com", tag: "temp" },
+        { name: "SMS-Receive-Free美/加，接收快", url: "https://smsreceivefree.com", tag: "temp" },
+        { name: "Receive-Freesms8国含香港，无广告", url: "https://receivefreesms.com", tag: "temp" },
+        { name: "FreeOnlinePhone200+国，界面干净", url: "https://www.freeonlinephone.org", tag: "temp" },
+        { name: "SMS-Receive俄/法/西，无广告", url: "https://sms-receive.net", tag: "temp" },
+        { name: "Quackr多国匿名接码，无广告", url: "https://quackr.io", tag: "temp" },
+        { name: "Sellaite爱沙尼亚小众号，通过率高", url: "http://sellaite.com/", tag: "temp" }
+      ];
+
+      // 影视资源
+      const MOVIE_DATA = [
+        { name: "茶杯狐 (聚合搜索)", url: "https://cupfox.app", tag: "hot" },
+        { name: "LIBVIO 低端影视", url: "https://www.libvio.me", tag: "" },
+        { name: "555电影", url: "https://www.555dy1.com", tag: "hot" },
+        { name: "奈菲影视", url: "https://www.nfmovies.com", tag: "" }
+      ];
+
+      // 网盘资源共享
+      const CLOUD_DATA = [
+        { name: "常用软件合集 (123684)", url: "https://www.123684.com/s/5VtiVv-tGKH?提取码：ymt6", tag: "阿里" },
+        { name: "办公模板大全", url: "https://pan.baidu.com/s/", tag: "百度" },
+        { name: "高清壁纸资源", url: "https://www.aliyundrive.com/s/", tag: "阿里" }
+      ];
+
+      // 音乐与小说
+      const MUSIC_NOVEL_DATA = [
+        { name: "网易云音乐", url: "https://music.163.com/", tag: "music" },
+        { name: "酷狗音乐", url: "https://www.kugou.com/", tag: "music" },
+        { name: "QQ音乐", url: "https://y.qq.com/", tag: "music" },
+        { name: "酷我音乐", url: "https://www.kuwo.cn/", tag: "music" },
+        { name: "起点中文网", url: "https://www.qidian.com/", tag: "novel" },
+        { name: "纵横中文网", url: "https://www.zongheng.com/", tag: "novel" },
+        { name: "17K小说网", url: "https://www.17k.com/", tag: "novel" },
+        { name: "晋江文学城", url: "https://www.jjwxc.net/", tag: "novel" }
+      ];
+
+      // 网盘搜索站点 (去重)
+      const CLOUD_SEARCH_SITES = [
+        { name: "盘搜搜", url: "https://www.pansoso.com" },
+        { name: "云盘精灵", url: "https://www.yunpanjingling.com" },
+        { name: "盘么么", url: "https://www.panmeme.com" },
+        { name: "千帆搜索", url: "https://www.qianfanso.com" },
+        { name: "飞猪盘", url: "https://www.feizhupan.com" },
+        { name: "易搜", url: "https://www.esou.me" },
+        { name: "小不点", url: "https://www.xiaoso.net" },
+        { name: "学霸盘", url: "https://www.xuebapan.com" },
+        { name: "盘友圈", url: "https://www.panyq.com" },
+        { name: "猫狸盘搜", url: "https://www.alipansou.com" },
+        { name: "毕方铺", url: "https://www.iizhi.cn" },
+        { name: "盘搜Pro", url: "https://www.pansou.pro" },
+        { name: "小马盘", url: "https://www.xiaomapan.com" },
+        { name: "聚合盘", url: "https://www.juhepan.com" },
+        { name: "特百度", url: "https://www.tebaidu.com" },
+        { name: "度盘搜", url: "https://www.dupanso.com" },
+        { name: "网盘之家", url: "https://www.wangpanzhijia.net" },
+        { name: "去转盘", url: "https://www.quzhuanpan.com" },
+        { name: "微友搜索", url: "https://www.weiyooso.com" },
+        { name: "云盘资源", url: "https://www.yunpanziyuan.com" },
+        { name: "好盘搜", url: "https://www.haopanso.com" },
+        { name: "坑搜网", url: "https://www.kengso.com" },
+        { name: "云盘恶魔", url: "https://www.yunpanem.com" },
+        { name: "云盘酷", url: "https://www.yunkanku.com" },
+        { name: "百度盘搜索", url: "https://www.baidupansou.com" },
+        { name: "百度云搜索", url: "https://www.baiduyunsou.com" },
+        { name: "百度网盘搜索", url: "https://www.baiduwpso.com" },
+        { name: "百度网盘资源", url: "https://www.baiduwpzs.com" },
+        { name: "百度网盘搜索神器", url: "https://www.baiduwpzssq.com" },
+        { name: "百度网盘搜索引擎", url: "https://www.baiduwpys.com" },
+        { name: "百度网盘资源搜索", url: "https://www.baiduwpzys.com" },
+        { name: "百度网盘资源站", url: "https://www.baiduwpzz.com" },
+        { name: "百度网盘资源库", url: "https://www.baiduwpzk.com" },
+        { name: "百度网盘资源网", url: "https://www.baiduwpzw.com" },
+        { name: "百度网盘资源大全", url: "https://www.baiduwpzdq.com" },
+        { name: "百度网盘资源合集", url: "https://www.baiduwpzhj.com" },
+        { name: "百度网盘资源导航", url: "https://www.baiduwpzdh.com" },
+        { name: "百度网盘资源社区", url: "https://www.baiduwpzsq.com" },
+        { name: "百度网盘资源论坛", url: "https://www.baiduwpzlt.com" },
+        { name: "百度网盘资源博客", url: "https://www.baiduwpzbk.com" },
+        { name: "百度网盘资源贴吧", url: "https://www.baiduwpztb.com" },
+        { name: "百度网盘资源群", url: "https://www.baiduwpzq.com" },
+        { name: "百度网盘资源网盘", url: "https://www.baiduwpzwp.com" },
+        { name: "百度网盘资源分享", url: "https://www.baiduwpzfx.com" },
+        { name: "百度网盘资源下载", url: "https://www.baiduwpzxz.com" },
+        { name: "百度网盘资源免费", url: "https://www.baiduwpzmf.com" },
+        { name: "夸夸盘搜", url: "https://www.kuakuaso.com" },
+        { name: "千帆搜索", url: "https://pan.qianfan.app" },
+        { name: "盘搜搜", url: "https://pansou.cc" },
+        { name: "UP云搜", url: "https://upyunsou.com" },
+        { name: "小鹿盘搜", url: "https://www.xiaoluso.com" },
+        { name: "兄弟盘", url: "https://xiongdipan.com" },
+        { name: "大力盘", url: "https://www.dalipan.com" },
+        { name: "奈斯搜索", url: "https://www.niceso.net" },
+        { name: "阿里盘搜", url: "https://www.alipanx.com" },
+        { name: "虫部落快搜", url: "https://search.chongbuluo.com" },
+        { name: "盘了个盘", url: "https://www.panlegepan.com" }
+      ];
+
+      // 分类定义
+      const TOOL_CATEGORIES = [
+        { id: 'cat-tools', title: '🔧 万能工具合集', items: TOOLS_DATA },
+        { id: 'cat-movie', title: '🎬 影视资源', items: MOVIE_DATA },
+        { id: 'cat-cloud', title: '☁️ 网盘资源共享', items: CLOUD_DATA, allowAdd: true },
+        { id: 'cat-music-novel', title: '🎵 音乐与小说', items: MUSIC_NOVEL_DATA },
+        { id: 'cat-custom', title: '⭐ 我的收藏', items: [], allowAdd: true, custom: true, needPassword: true },
+        { id: 'cat-public-share', title: '📤 公开资源分享', items: [], allowAdd: true, publicShare: true }
+      ];
+
+      // ---------- 工具函数 ----------
+      const showNotification = (msg, timeout = 2500) => {
+        const el = document.getElementById('notification');
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(window.notifTimer);
+        window.notifTimer = setTimeout(() => el.classList.remove('show'), timeout);
+      };
+
+      const openLink = (url) => {
+        if (!url) return;
+        window.open(url, '_blank', 'noopener,noreferrer');
+      };
+
+      const getStorage = (key, defaultValue = null) => {
+        try {
+          const val = localStorage.getItem(key);
+          return val ? JSON.parse(val) : defaultValue;
+        } catch {
+          return defaultValue;
+        }
+      };
+
+      const setStorage = (key, value) => {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+          showNotification('存储失败，可能已满');
+        }
+      };
+
+      // ---------- 核心应用类 ----------
+      class BaibaoApp {
+        constructor() {
+          this.state = {
+            token: localStorage.getItem(STORAGE_KEYS.TOKEN) || '',
+            gistId: localStorage.getItem(STORAGE_KEYS.GIST_ID) || '',
+            publicGistId: localStorage.getItem(STORAGE_KEYS.PUBLIC_GIST_ID) || '',
+            links: getStorage(STORAGE_KEYS.LINKS, []),
+            publicShares: getStorage(STORAGE_KEYS.PUBLIC_SHARES, []),
+            logs: getStorage(STORAGE_KEYS.LOG, []),
+            lastSync: localStorage.getItem(STORAGE_KEYS.LAST_SYNC) || '',
+            syncInProgress: false,
+            favoritesUnlocked: sessionStorage.getItem('favoritesUnlocked') === 'true',
+            passwordAttempts: parseInt(sessionStorage.getItem('passwordAttempts') || '0'),
+            lockUntil: parseInt(sessionStorage.getItem('lockUntil') || '0'),
+            collapsedCategories: getStorage(STORAGE_KEYS.COLLAPSED_CATS, {}),
+            currentTagFilter: '',
+          };
+          this.searchKeyword = '';
+          this.init();
+        }
+
+        async init() {
+          await this.renderApp();
+          this.attachEvents();
+          this.startClock();
+          this.initTheme();
+          this.loadPublicSharesFromGist();
+          this.checkPasswordLock();
+        }
+
+        checkPasswordLock() {
+          if (this.state.lockUntil > Date.now()) {
+            this.state.favoritesUnlocked = false;
+            sessionStorage.setItem('favoritesUnlocked', 'false');
+          } else {
+            sessionStorage.removeItem('lockUntil');
+          }
+        }
+
+        renderApp() {
+          const appEl = document.getElementById('app');
+          appEl.innerHTML = this.getAppHTML();
+          this.renderCategories();
+          this.renderCloudSearchModal();
+          this.renderLogModal();
+          this.renderRecommendCard();
+          this.updateSyncStatus();
+          this.restoreCollapsedState();
+        }
+
+        getAppHTML() {
+          return `
+            <div class="card">
+              <div class="header">
+                <div class="time-section">
+                  <div id="time" class="time">00:00:00</div>
+                  <div id="date" class="date">2024年1月1日</div>
+                  <div id="sync-status" class="sync-status">未同步</div>
+                </div>
+              </div>
+
+              <div id="recommend-card" class="recommend-card"></div>
+
+              <div class="search-bar">
+                <input type="text" id="global-search" placeholder="搜索名称或URL..." autocomplete="off">
+                <button class="btn" id="clearSearchBtn" style="padding:0 16px;">✖</button>
+              </div>
+
+              <div class="tag-filter" id="tag-filter"></div>
+
+              <div class="quick-links">
+                <button class="btn" data-quick="resource">📦 资源</button>
+                <button class="btn" data-quick="short">短链生成</button>
+                <button class="btn" data-quick="video">视频解析</button>
+              </div>
+              <div class="btn-group">
+                <button class="btn" data-modal="cloud-modal">网盘搜索</button>
+                <button class="btn" data-modal="qqwx-modal">QQ/微信历史版</button>
+                <button class="btn" data-about>关于</button>
+              </div>
+
+              <div id="categories-container"></div>
+
+              <div class="share-buttons">
+                <button class="btn" id="shareSiteBtn">📤 分享网站</button>
+                <button class="btn" id="feedbackBtn">📝 反馈建议</button>
+              </div>
+            </div>
+
+            <!-- 模态框：网盘搜索 -->
+            <div id="cloud-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title">🔍 网盘搜索</div>
+                  <button class="close-btn" data-close="cloud-modal">&times;</button>
+                </div>
+                <div id="cloud-search-list" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px;"></div>
+              </div>
+            </div>
+
+            <!-- 模态框：QQ/微信历史版 -->
+            <div id="qqwx-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title">📱 QQ/微信历史版本</div>
+                  <button class="close-btn" data-close="qqwx-modal">&times;</button>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px;">
+                  <button class="btn" data-url="https://pc.qq.com/detail/1/detail_2662.html">手机QQ历史版</button>
+                  <button class="btn" data-url="https://dldir1.qq.com/weixin/android/weixinXXX.apk">安卓微信旧版</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 模态框：Token设置 -->
+            <div id="token-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title">🔐 GitHub Token 设置</div>
+                  <button class="close-btn" data-close="token-modal">&times;</button>
+                </div>
+                <p style="margin-bottom: 16px;">请输入 GitHub Personal Access Token (需 gist 权限):</p>
+                <input type="password" id="github-token" class="form-input" placeholder="ghp_..." style="width: 100%; margin-bottom: 16px;" value="${this.state.token}">
+                <p style="margin-bottom: 16px; font-size:0.9rem; color:var(--success);">⚠️ 建议使用最小权限（仅gist），并定期更换。</p>
+                <button class="add-btn" id="saveTokenBtn" style="width: 100%;">保存</button>
+                <p style="margin-top: 16px; font-size: 0.9em; color: #666;">Token 仅保存在本地浏览器，不会上传。</p>
+              </div>
+            </div>
+
+            <!-- 模态框：同步日志 -->
+            <div id="log-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title">📊 同步日志</div>
+                  <button class="close-btn" data-close="log-modal">&times;</button>
+                </div>
+                <div class="filter-row" style="margin-bottom: 16px; display: flex; gap: 12px; flex-wrap: wrap;">
+                  <label>开始日期:<input type="date" id="filter-start-date"></label>
+                  <label>结束日期:<input type="date" id="filter-end-date"></label>
+                  <button class="btn" id="applyLogFilter" style="padding: 8px 14px;">筛选</button>
+                  <button class="btn" id="resetLogFilter" style="padding: 8px 14px;">重置</button>
+                </div>
+                <div id="log-panel"></div>
+                <div style="margin-top: 20px; display: flex; gap: 12px;">
+                  <button class="btn" id="clearLogBtn" style="flex: 1;">清空日志</button>
+                  <button class="btn" id="exportLogBtn" style="flex: 1;">导出为CSV</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 模态框：反馈 -->
+            <div id="feedback-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title">📝 反馈建议</div>
+                  <button class="close-btn" data-close="feedback-modal">&times;</button>
+                </div>
+                <p>请将您的建议发送至邮箱：<br><strong>baibaodai@example.com</strong></p>
+                <p style="margin-top:20px;">感谢您的支持！</p>
+              </div>
+            </div>
+          `;
+        }
+
+        renderRecommendCard() {
+          const container = document.getElementById('recommend-card');
+          const allItems = [];
+          TOOL_CATEGORIES.forEach(cat => {
+            if (cat.items) allItems.push(...cat.items);
+          });
+          this.state.links.forEach(link => allItems.push(link));
+          if (allItems.length === 0) {
+            container.style.display = 'none';
+            return;
+          }
+          const random = allItems[Math.floor(Math.random() * allItems.length)];
+          container.innerHTML = `
+            <div class="recommend-title">🔥 每日推荐</div>
+            <div class="recommend-link" data-url="${random.url}">${random.name}</div>
+          `;
+          container.querySelector('.recommend-link').addEventListener('click', () => openLink(random.url));
+        }
+
+        renderCategories() {
+          const container = document.getElementById('categories-container');
+          container.innerHTML = '';
+          TOOL_CATEGORIES.forEach(cat => {
+            const catDiv = document.createElement('div');
+            catDiv.className = 'category';
+            catDiv.id = cat.id;
+            if (this.state.collapsedCategories[cat.id]) {
+              catDiv.classList.add('collapsed');
+            }
+            catDiv.innerHTML = `
+              <div class="category-title">
+                ${cat.title}
+                ${cat.needPassword && this.state.favoritesUnlocked ? '<span class="unlocked-badge">已解锁</span>' : ''}
+              </div>
+              <div class="category-content">
+                <ul class="link-list" id="list-${cat.id}"></ul>
+                ${cat.allowAdd ? this.getAddFormHTML(cat) : ''}
+              </div>
+            `;
+            container.appendChild(catDiv);
+          });
+
+          TOOL_CATEGORIES.forEach(cat => {
+            const listEl = document.getElementById(`list-${cat.id}`);
+            if (!listEl) return;
+            if (cat.custom) {
+              this.renderCustomLinks(listEl);
+            } else if (cat.publicShare) {
+              this.renderPublicShares(listEl);
+            } else {
+              cat.items.forEach(item => this.appendLinkItem(listEl, item));
+            }
+          });
+
+          this.renderTagFilter();
+        }
+
+        getAddFormHTML(cat) {
+          if (cat.id === 'cat-cloud') {
+            return `
+              <div class="add-form">
+                <input type="text" id="cloud-name" class="form-input" placeholder="资源名称">
+                <input type="text" id="cloud-url" class="form-input" placeholder="云盘链接">
+                <select id="cloud-type" class="form-input">
+                  <option value="阿里云盘">阿里云盘</option>
+                  <option value="百度网盘">百度网盘</option>
+                  <option value="蓝奏云">蓝奏云</option>
+                  <option value="迅雷云盘">迅雷云盘</option>
+                </select>
+                <button class="add-btn" data-add="cloud">+添加</button>
+              </div>
+            `;
+          } else if (cat.id === 'cat-custom') {
+            if (!this.state.favoritesUnlocked) return '';
+            return `
+              <div class="add-form">
+                <input type="text" id="link-name" class="form-input" placeholder="链接名称" maxlength="20">
+                <input type="text" id="link-url" class="form-input" placeholder="https://">
+                <select id="link-tag" class="form-input">
+                  <option value="工作">工作</option>
+                  <option value="学习">学习</option>
+                  <option value="娱乐">娱乐</option>
+                  <option value="其他">其他</option>
+                </select>
+                <button class="add-btn" data-add="custom">+添加</button>
+              </div>
+              <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="btn" data-export>导出收藏</button>
+                <button class="btn" data-import>导入收藏</button>
+                <input type="file" id="import-file" accept=".json" style="display:none">
+                <button class="btn" data-modal="token-modal">设置 Token</button>
+                <button class="btn" data-sync>同步到云端</button>
+                <button class="btn" data-restore>↓从云端恢复</button>
+                <button class="btn" data-modal="log-modal">查看同步日志</button>
+              </div>
+            `;
+          } else if (cat.id === 'cat-public-share') {
+            return `
+              <div class="add-form">
+                <input type="text" id="share-name" class="form-input" placeholder="资源名称">
+                <input type="text" id="share-url" class="form-input" placeholder="https://">
+                <button class="add-btn" data-add="public">+添加到公开分享</button>
+              </div>
+              <div style="display:flex; gap:10px; margin-top:14px;">
+                <button class="btn" data-publish style="flex:1;">🚀 发布到网站</button>
+                <button class="btn" data-refresh-public style="flex:1;">🔄 刷新公开资源</button>
+              </div>
+            `;
+          }
+          return '';
+        }
+
+        renderTagFilter() {
+          const filterDiv = document.getElementById('tag-filter');
+          if (!filterDiv) return;
+          const allTags = new Set();
+          TOOL_CATEGORIES.forEach(cat => {
+            if (cat.items) cat.items.forEach(item => item.tag && allTags.add(item.tag));
+          });
+          this.state.links.forEach(link => link.tag && allTags.add(link.tag));
+          const tags = Array.from(allTags).filter(t => t);
+          filterDiv.innerHTML = '<span style="opacity:0.7;">标签筛选:</span>';
+          tags.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.className = 'btn' + (this.state.currentTagFilter === tag ? ' active' : '');
+            btn.textContent = tag;
+            btn.style.padding = '6px 12px';
+            btn.style.fontSize = '0.85em';
+            btn.addEventListener('click', () => {
+              this.state.currentTagFilter = this.state.currentTagFilter === tag ? '' : tag;
+              this.renderTagFilter();
+              this.filterByTag();
+            });
+            filterDiv.appendChild(btn);
+          });
+          if (tags.length > 0) {
+            const clearBtn = document.createElement('button');
+            clearBtn.className = 'btn';
+            clearBtn.textContent = '清除';
+            clearBtn.style.padding = '6px 12px';
+            clearBtn.addEventListener('click', () => {
+              this.state.currentTagFilter = '';
+              this.renderTagFilter();
+              this.filterByTag();
+            });
+            filterDiv.appendChild(clearBtn);
+          }
+        }
+
+        filterByTag() {
+          const keyword = this.state.currentTagFilter;
+          const allItems = document.querySelectorAll('.link-item');
+          allItems.forEach(item => {
+            const tagSpan = item.querySelector('.link-tag');
+            const tag = tagSpan ? tagSpan.textContent.trim() : '';
+            if (!keyword || tag === keyword) {
+              item.style.display = 'flex';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        }
+
+        appendLinkItem(listEl, item, deletable = false, idx = null) {
+          const li = document.createElement('li');
+          li.className = 'link-item';
+          li.setAttribute('data-url', item.url);
+          li.setAttribute('data-name', item.name);
+          li.setAttribute('data-tag', item.tag || '');
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'link-name';
+          nameSpan.textContent = item.name;
+          const tagSpan = document.createElement('span');
+          tagSpan.className = 'link-tag';
+          tagSpan.textContent = item.tag || '链接';
+          tagSpan.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.state.currentTagFilter = item.tag || '';
+            this.renderTagFilter();
+            this.filterByTag();
+          });
+          li.appendChild(nameSpan);
+          li.appendChild(tagSpan);
+
+          if (deletable && idx !== null) {
+            li.addEventListener('dblclick', (e) => {
+              e.stopPropagation();
+              this.deleteCustomLink(idx);
+            });
+          }
+
+          li.addEventListener('click', () => openLink(item.url));
+          listEl.appendChild(li);
+        }
+
+        renderCustomLinks(listEl) {
+          listEl.innerHTML = '';
+          if (!this.state.favoritesUnlocked) {
+            if (this.state.lockUntil > Date.now()) {
+              const lockDiv = document.createElement('div');
+              lockDiv.className = 'lock-overlay';
+              lockDiv.innerHTML = `
+                <div class="lock-icon">🔒</div>
+                <div class="lock-text">密码错误次数过多，已锁定10分钟</div>
+              `;
+              listEl.appendChild(lockDiv);
+              return;
+            }
+            const lockDiv = document.createElement('div');
+            lockDiv.className = 'lock-overlay';
+            lockDiv.setAttribute('data-unlock', 'true');
+            lockDiv.innerHTML = `
+              <div class="lock-icon">🔒</div>
+              <div class="lock-text">点击输入密码解锁收藏</div>
+              <div style="font-size:0.8rem; margin-top:8px; opacity:0.5;">密码: ${FAVORITE_PASSWORD}</div>
+            `;
+            listEl.appendChild(lockDiv);
+            return;
+          }
+
+          const links = this.state.links;
+          if (!links.length) {
+            listEl.innerHTML = '<li class="link-item"><span class="link-name">暂无收藏，快去添加吧~</span></li>';
+            return;
+          }
+          links.forEach((item, idx) => {
+            this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: item.tag || '其他' }, true, idx);
+          });
+        }
+
+        async renderPublicShares(listEl) {
+          listEl.innerHTML = '<div class="loading">加载公开资源中...</div>';
+          const localShares = this.state.publicShares;
+          listEl.innerHTML = '';
+          localShares.forEach(item => this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: '本地' }));
+
+          try {
+            const res = await fetch(PUBLIC_SHARE_GIST_RAW_URL, { cache: 'no-cache' });
+            if (!res.ok) throw new Error('远程加载失败');
+            const remote = await res.json();
+            if (Array.isArray(remote)) {
+              remote.forEach(item => this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: '公开' }));
+            }
+          } catch (err) {
+            // 静默失败，不影响本地显示
+          }
+        }
+
+        // 解锁收藏
+        unlockFavorites() {
+          if (this.state.favoritesUnlocked) return true;
+          if (this.state.lockUntil > Date.now()) {
+            showNotification('⏳ 已锁定，请稍后再试');
+            return false;
+          }
+          const password = prompt('请输入密码以查看收藏：');
+          if (password === FAVORITE_PASSWORD) {
+            this.state.favoritesUnlocked = true;
+            this.state.passwordAttempts = 0;
+            sessionStorage.setItem('favoritesUnlocked', 'true');
+            sessionStorage.setItem('passwordAttempts', '0');
+            sessionStorage.removeItem('lockUntil');
+            this.renderCategories();
+            showNotification('🔓 收藏已解锁');
+            return true;
+          } else {
+            this.state.passwordAttempts++;
+            sessionStorage.setItem('passwordAttempts', this.state.passwordAttempts.toString());
+            if (this.state.passwordAttempts >= MAX_PASSWORD_ATTEMPTS) {
+              this.state.lockUntil = Date.now() + LOCK_TIME;
+              sessionStorage.setItem('lockUntil', this.state.lockUntil.toString());
+              this.state.favoritesUnlocked = false;
+              sessionStorage.setItem('favoritesUnlocked', 'false');
+              showNotification('❌ 错误次数过多，锁定10分钟');
+              this.renderCategories();
+            } else {
+              showNotification(`❌ 密码错误，还剩 ${MAX_PASSWORD_ATTEMPTS - this.state.passwordAttempts} 次机会`);
+            }
+            return false;
+          }
+        }
+
+        // 删除收藏
+        deleteCustomLink(idx) {
+          if (!confirm('确定删除该收藏？')) return;
+          this.state.links.splice(idx, 1);
+          setStorage(STORAGE_KEYS.LINKS, this.state.links);
+          const listEl = document.getElementById('list-cat-custom');
+          this.renderCustomLinks(listEl);
+          this.renderTagFilter();
+          showNotification('已删除');
+        }
+
+        // 添加自定义收藏
+        addCustomLink() {
+          const name = document.getElementById('link-name')?.value.trim();
+          let url = document.getElementById('link-url')?.value.trim();
+          const tag = document.getElementById('link-tag')?.value || '其他';
+          if (!name || !url) return showNotification('请填写完整');
+          if (!url.startsWith('http')) url = 'https://' + url;
+          const newLink = { name, url, tag };
+          this.state.links.push(newLink);
+          setStorage(STORAGE_KEYS.LINKS, this.state.links);
+          const listEl = document.getElementById('list-cat-custom');
+          this.renderCustomLinks(listEl);
+          document.getElementById('link-name').value = '';
+          document.getElementById('link-url').value = '';
+          this.renderTagFilter();
+          showNotification('✅ 已添加收藏');
+        }
+
+        // 添加网盘资源
+        addCloudResource() {
+          const name = document.getElementById('cloud-name')?.value.trim();
+          let url = document.getElementById('cloud-url')?.value.trim();
+          const type = document.getElementById('cloud-type')?.value || '云盘';
+          if (!name || !url) return showNotification('请填写完整');
+          if (!url.startsWith('http')) url = 'https://' + url;
+          // 临时添加到当前列表（不保存到localStorage，仅展示）
+          const listEl = document.getElementById('list-cat-cloud');
+          this.appendLinkItem(listEl, { name: `${name} (${type})`, url, tag: type });
+          document.getElementById('cloud-name').value = '';
+          document.getElementById('cloud-url').value = '';
+          showNotification('已添加到网盘列表（临时）');
+        }
+
+        // 添加公开分享
+        addPublicShare() {
+          const name = document.getElementById('share-name')?.value.trim();
+          let url = document.getElementById('share-url')?.value.trim();
+          if (!name || !url) return showNotification('请填写完整');
+          if (!url.startsWith('http')) url = 'https://' + url;
+          this.state.publicShares.push({ name, url });
+          setStorage(STORAGE_KEYS.PUBLIC_SHARES, this.state.publicShares);
+          const listEl = document.getElementById('list-cat-public-share');
+          this.renderPublicShares(listEl);
+          document.getElementById('share-name').value = '';
+          document.getElementById('share-url').value = '';
+          showNotification('已添加到本地公开分享');
+        }
+
+        // 刷新公开资源
+        async refreshPublicShares() {
+          const listEl = document.getElementById('list-cat-public-share');
+          await this.renderPublicShares(listEl);
+          showNotification('公开资源已刷新');
+        }
+
+        // 发布公开分享
+        async publishPublicShare() {
+          if (!confirm('此操作将公开您添加的所有本地公开分享，其他人可见。确定继续？')) return;
+          const token = this.state.token;
+          if (!token) {
+            showNotification('请先设置 Token');
+            this.openModal('token-modal');
+            return;
+          }
+          const shares = this.state.publicShares;
+          if (!shares.length) return showNotification('没有公开分享可发布');
+
+          const filename = 'public_shares.json';
+          const content = JSON.stringify(shares, null, 2);
+          const body = { description: '百宝袋AI工具箱 - 公开资源分享', public: true, files: { [filename]: { content } } };
+
+          try {
+            let res;
+            if (this.state.publicGistId) {
+              res = await this.fetchWithRetry(`https://api.github.com/gists/${this.state.publicGistId}`, {
+                method: 'PATCH',
+                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+                body: JSON.stringify(body)
+              });
+            } else {
+              res = await this.fetchWithRetry('https://api.github.com/gists', {
+                method: 'POST',
+                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+                body: JSON.stringify(body)
+              });
+            }
+            const data = await res.json();
+            if (!this.state.publicGistId) {
+              this.state.publicGistId = data.id;
+              localStorage.setItem(STORAGE_KEYS.PUBLIC_GIST_ID, data.id);
+            }
+            const newRawUrl = `https://gist.githubusercontent.com/${data.owner.login}/${data.id}/raw/${filename}`;
+            showNotification('🚀 已发布到公开 Gist');
+            this.writeLog('发布公开分享', true, `Gist ID: ${data.id}`);
+            alert('请将代码中的 PUBLIC_SHARE_GIST_RAW_URL 替换为：\n' + newRawUrl);
+          } catch (err) {
+            showNotification('❌ 发布失败：' + err.message);
+            this.writeLog('发布公开分享', false, err.message);
+          }
+        }
+
+        // 导出收藏
+        exportLinks() {
+          const data = this.state.links;
+          if (!data.length) return showNotification('暂无收藏');
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'baibaodai_links.json';
+          a.click();
+          URL.revokeObjectURL(url);
+          showNotification('📤 收藏已导出');
+        }
+
+        // 导入收藏
+        importLinks(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            try {
+              const links = JSON.parse(e.target.result);
+              if (!Array.isArray(links)) throw new Error('格式错误');
+              this.state.links = links;
+              setStorage(STORAGE_KEYS.LINKS, links);
+              showNotification(`✅ 导入成功，共 ${links.length} 条`);
+              const listEl = document.getElementById('list-cat-custom');
+              this.renderCustomLinks(listEl);
+            } catch (err) {
+              showNotification('❌ 导入失败：' + err.message);
+            }
+          };
+          reader.readAsText(file);
+          event.target.value = '';
+        }
+
+        // 同步到Gist
+        async syncToGist() {
+          if (this.state.syncInProgress) return showNotification('同步进行中...');
+          const token = this.state.token;
+          if (!token) {
+            showNotification('请先设置 Token');
+            this.openModal('token-modal');
+            return;
+          }
+          const links = this.state.links;
+          if (!links.length) return showNotification('没有收藏可同步');
+
+          this.state.syncInProgress = true;
+          showNotification('同步中...', 60000);
+
+          const filename = 'baibaodai_favorites.json';
+          const content = JSON.stringify(links, null, 2);
+          const body = { description: '百宝袋AI工具箱 - 我的收藏', public: false, files: { [filename]: { content } } };
+
+          try {
+            let res;
+            if (this.state.gistId) {
+              res = await this.fetchWithRetry(`https://api.github.com/gists/${this.state.gistId}`, {
+                method: 'PATCH',
+                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+                body: JSON.stringify(body)
+              });
+            } else {
+              res = await this.fetchWithRetry('https://api.github.com/gists', {
+                method: 'POST',
+                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+                body: JSON.stringify(body)
+              });
+            }
+            const data = await res.json();
+            if (!this.state.gistId) {
+              this.state.gistId = data.id;
+              localStorage.setItem(STORAGE_KEYS.GIST_ID, data.id);
+            }
+            const nowStr = new Date().toLocaleString('zh-CN');
+            this.state.lastSync = nowStr;
+            localStorage.setItem(STORAGE_KEYS.LAST_SYNC, nowStr);
+            this.updateSyncStatus();
+            showNotification('☁️ 已同步到 GitHub Gist');
+            this.writeLog('手动同步', true, '同步到云端成功');
+          } catch (err) {
+            showNotification('❌ 同步失败：' + err.message);
+            this.writeLog('手动同步', false, err.message);
+          } finally {
+            this.state.syncInProgress = false;
+          }
+        }
+
+        // 从Gist恢复
+        async restoreFromGist() {
+          if (this.state.syncInProgress) return showNotification('操作进行中...');
+          const token = this.state.token;
+          if (!token) {
+            showNotification('请先设置 Token');
+            this.openModal('token-modal');
+            return;
+          }
+          if (!this.state.gistId) {
+            showNotification('没有找到云端备份，请先同步一次');
+            return;
+          }
+          this.state.syncInProgress = true;
+          showNotification('恢复中...', 60000);
+          try {
+            const res = await this.fetchWithRetry(`https://api.github.com/gists/${this.state.gistId}`, {
+              headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+            });
+            const data = await res.json();
+            const filename = 'baibaodai_favorites.json';
+            if (!data.files || !data.files[filename]) throw new Error('云端没有收藏文件');
+            const content = data.files[filename].content;
+            const links = JSON.parse(content);
+            if (!Array.isArray(links)) throw new Error('数据格式错误');
+            this.state.links = links;
+            setStorage(STORAGE_KEYS.LINKS, links);
+            const listEl = document.getElementById('list-cat-custom');
+            this.renderCustomLinks(listEl);
+            showNotification('✅ 已从云端恢复');
+            this.writeLog('从云端恢复', true, `恢复 ${links.length} 条`);
+          } catch (err) {
+            showNotification('❌ 恢复失败：' + err.message);
+            this.writeLog('从云端恢复', false, err.message);
+          } finally {
+            this.state.syncInProgress = false;
+          }
+        }
+
+        // 带重试的fetch
+        async fetchWithRetry(url, options, retries = 2, delay = 1500) {
+          let lastErr;
+          for (let i = 0; i <= retries; i++) {
+            try {
+              const res = await fetch(url, options);
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              return res;
+            } catch (err) {
+              lastErr = err;
+              if (i < retries) await new Promise(r => setTimeout(r, delay));
+            }
+          }
+          throw lastErr;
+        }
+
+        // 写日志
+        writeLog(type, success, detail) {
+          const logs = this.state.logs;
+          const now = new Date();
+          const timeStr = now.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          logs.unshift({ time: timeStr, type, success, detail });
+          if (logs.length > 50) logs.pop();
+          this.state.logs = logs;
+          setStorage(STORAGE_KEYS.LOG, logs);
+          this.renderLogPanel();
+        }
+
+        // 保存Token
+        saveToken() {
+          const token = document.getElementById('github-token').value.trim();
+          if (!token) return showNotification('Token 不能为空');
+          localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+          this.state.token = token;
+          showNotification('Token 已保存');
+          this.closeModal('token-modal');
+        }
+
+        // 搜索
+        doSearch() {
+          const keyword = document.getElementById('global-search').value.trim().toLowerCase();
+          this.searchKeyword = keyword;
+          const allItems = document.querySelectorAll('.link-item');
+          allItems.forEach(item => {
+            const name = item.getAttribute('data-name') || item.querySelector('.link-name').textContent.toLowerCase();
+            const url = item.getAttribute('data-url') || '';
+            const match = name.includes(keyword) || url.toLowerCase().includes(keyword);
+            item.style.display = match ? 'flex' : 'none';
+            if (match && keyword) {
+              const nameEl = item.querySelector('.link-name');
+              const regex = new RegExp(`(${this.escapeRegExp(keyword)})`, 'gi');
+              nameEl.innerHTML = nameEl.textContent.replace(regex, '<span class="highlight">$1</span>');
+            } else {
+              const nameEl = item.querySelector('.link-name');
+              nameEl.innerHTML = nameEl.textContent;
+            }
+          });
+        }
+
+        clearSearch() {
+          document.getElementById('global-search').value = '';
+          this.doSearch();
+        }
+
+        escapeRegExp(str) {
+          return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // 分类折叠记忆
+        toggleCategory(catId) {
+          const cat = document.getElementById(catId);
+          if (!cat) return;
+          cat.classList.toggle('collapsed');
+          const isCollapsed = cat.classList.contains('collapsed');
+          this.state.collapsedCategories[catId] = isCollapsed;
+          setStorage(STORAGE_KEYS.COLLAPSED_CATS, this.state.collapsedCategories);
+        }
+
+        restoreCollapsedState() {
+          TOOL_CATEGORIES.forEach(cat => {
+            const catEl = document.getElementById(cat.id);
+            if (catEl && this.state.collapsedCategories[cat.id]) {
+              catEl.classList.add('collapsed');
+            }
+          });
+        }
+
+        // 模态框控制
+        openModal(id) {
+          document.getElementById(id)?.classList.add('active');
+        }
+
+        closeModal(id) {
+          document.getElementById(id)?.classList.remove('active');
+        }
+
+        // 渲染网盘搜索模态框
+        renderCloudSearchModal() {
+          const container = document.getElementById('cloud-search-list');
+          if (!container) return;
+          container.innerHTML = '';
+          CLOUD_SEARCH_SITES.forEach(site => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.textContent = site.name;
+            btn.addEventListener('click', () => openLink(site.url));
+            container.appendChild(btn);
+          });
+        }
+
+        // 渲染日志模态框
+        renderLogModal() {
+          this.renderLogPanel();
+        }
+
+        renderLogPanel(filtered) {
+          const panel = document.getElementById('log-panel');
+          const logs = filtered || this.state.logs;
+          if (!logs.length) {
+            panel.innerHTML = '<div class="log-empty">暂无同步日志</div>';
+            return;
+          }
+          panel.innerHTML = logs.map(log => `
+            <div class="log-item">
+              <div class="log-time">${log.time}</div>
+              <div><span class="log-type">${log.type}</span> <span class="${log.success ? 'log-success' : 'log-fail'}">${log.success ? '成功' : '失败'}</span></div>
+              <div class="log-detail">${log.detail}</div>
+            </div>
+          `).join('');
+        }
+
+        applyLogFilter() {
+          const start = document.getElementById('filter-start-date').value;
+          const end = document.getElementById('filter-end-date').value;
+          let filtered = this.state.logs;
+          if (start) {
+            const startDate = new Date(start);
+            filtered = filtered.filter(log => new Date(log.time.replace(/\//g, '-')) >= startDate);
+          }
+          if (end) {
+            const endDate = new Date(end);
+            endDate.setHours(23, 59, 59, 999);
+            filtered = filtered.filter(log => new Date(log.time.replace(/\//g, '-')) <= endDate);
+          }
+          this.renderLogPanel(filtered);
+        }
+
+        resetLogFilter() {
+          document.getElementById('filter-start-date').value = '';
+          document.getElementById('filter-end-date').value = '';
+          this.renderLogPanel(this.state.logs);
+        }
+
+        clearLog() {
+          this.state.logs = [];
+          setStorage(STORAGE_KEYS.LOG, []);
+          this.renderLogPanel();
+          showNotification('日志已清空');
+        }
+
+        exportLogCSV() {
+          const logs = this.state.logs;
+          if (!logs.length) return showNotification('暂无日志');
+          const header = ['时间', '类型', '结果', '详情'];
+          const rows = logs.map(l => [l.time, l.type, l.success ? '成功' : '失败', `"${(l.detail || '').replace(/"/g, '""')}"`]);
+          const csv = '\uFEFF' + [header.join(','), ...rows.map(r => r.join(','))].join('\n');
+          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'sync_log.csv';
+          a.click();
+          URL.revokeObjectURL(url);
+          showNotification('日志已导出');
+        }
+
+        // 更新同步状态显示
+        updateSyncStatus() {
+          const el = document.getElementById('sync-status');
+          if (this.state.lastSync) {
+            el.textContent = `上次同步: ${this.state.lastSync}`;
+          } else {
+            el.textContent = '未同步';
+          }
+        }
+
+        // 加载公开Gist（仅用于尝试加载，占位URL会失败但不影响）
+        async loadPublicSharesFromGist() {
+          try {
+            const res = await fetch(PUBLIC_SHARE_GIST_RAW_URL, { cache: 'no-cache' });
+            if (!res.ok) return;
+            const remote = await res.json();
+            if (Array.isArray(remote)) {
+              const listEl = document.getElementById('list-cat-public-share');
+              if (listEl) this.renderPublicShares(listEl);
+            }
+          } catch {}
+        }
+
+        // 时钟
+        startClock() {
+          const update = () => {
+            const now = new Date();
+            document.getElementById('time').textContent = now.toLocaleTimeString('zh-CN', { hour12: false });
+            document.getElementById('date').textContent = now.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+          };
+          update();
+          setInterval(update, 1000);
+        }
+
+        // 主题
+        initTheme() {
+          const saved = localStorage.getItem(STORAGE_KEYS.THEME);
+          if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else if (saved === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+          } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+        }
+
+        toggleTheme() {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem(STORAGE_KEYS.THEME, next);
+        }
+
+        // 分享网站
+        shareSite() {
+          const url = window.location.href;
+          navigator.clipboard.writeText(url).then(() => {
+            showNotification('网站链接已复制到剪贴板');
+          }).catch(() => {
+            showNotification('复制失败，请手动复制');
+          });
+        }
+
+        // 反馈
+        openFeedback() {
+          this.openModal('feedback-modal');
+        }
+
+        // 事件绑定
+        attachEvents() {
+          document.addEventListener('click', (e) => {
+            const target = e.target;
+
+            // 模态框关闭
+            if (target.matches('.close-btn')) {
+              const modalId = target.getAttribute('data-close');
+              this.closeModal(modalId);
+            }
+
+            // 打开模态框
+            if (target.matches('[data-modal]')) {
+              const modalId = target.getAttribute('data-modal');
+              this.openModal(modalId);
+            }
+
+            // 快速链接
+            if (target.matches('[data-quick]')) {
+              const cmd = target.getAttribute('data-quick');
+              if (cmd === 'resource') openLink('https://www.pandashi8.com/');
+              else if (cmd === 'short') openLink('https://www.urlc.cn/');
+              else if (cmd === 'video') openLink('https://dy.kukutool.com/');
+            }
+
+            // 关于
+            if (target.matches('[data-about]')) {
+              showNotification('欢迎使用百宝袋AI工具箱！');
+            }
+
+            // 数据URL按钮
+            if (target.matches('[data-url]')) {
+              openLink(target.getAttribute('data-url'));
+            }
+
+            // 添加网盘
+            if (target.matches('[data-add="cloud"]')) {
+              this.addCloudResource();
+            }
+
+            // 添加收藏
+            if (target.matches('[data-add="custom"]')) {
+              this.addCustomLink();
+            }
+
+            // 添加公开分享
+            if (target.matches('[data-add="public"]')) {
+              this.addPublicShare();
+            }
+
+            // 导出
+            if (target.matches('[data-export]')) {
+              this.exportLinks();
+            }
+
+            // 导入触发
+            if (target.matches('[data-import]')) {
+              document.getElementById('import-file').click();
+            }
+
+            // 同步
+            if (target.matches('[data-sync]')) {
+              this.syncToGist();
+            }
+
+            // 恢复
+            if (target.matches('[data-restore]')) {
+              this.restoreFromGist();
+            }
+
+            // 发布
+            if (target.matches('[data-publish]')) {
+              this.publishPublicShare();
+            }
+
+            // 刷新公开
+            if (target.matches('[data-refresh-public]')) {
+              this.refreshPublicShares();
+            }
+
+            // 保存Token
+            if (target.matches('#saveTokenBtn')) {
+              this.saveToken();
+            }
+
+            // 日志筛选
+            if (target.matches('#applyLogFilter')) {
+              this.applyLogFilter();
+            }
+            if (target.matches('#resetLogFilter')) {
+              this.resetLogFilter();
+            }
+            if (target.matches('#clearLogBtn')) {
+              this.clearLog();
+            }
+            if (target.matches('#exportLogBtn')) {
+              this.exportLogCSV();
+            }
+
+            // 分类折叠
+            if (target.matches('.category-title')) {
+              const cat = target.closest('.category');
+              if (cat) this.toggleCategory(cat.id);
+            }
+
+            // 解锁点击
+            if (target.matches('[data-unlock="true"]') || target.closest('[data-unlock="true"]')) {
+              this.unlockFavorites();
+            }
+
+            // 分享网站
+            if (target.matches('#shareSiteBtn')) {
+              this.shareSite();
+            }
+
+            // 反馈
+            if (target.matches('#feedbackBtn')) {
+              this.openFeedback();
+            }
+
+            // 清空搜索
+            if (target.matches('#clearSearchBtn')) {
+              this.clearSearch();
+            }
+          });
+
+          // 文件导入
+          document.getElementById('import-file')?.addEventListener('change', (e) => this.importLinks(e));
+
+          // 搜索防抖
+          document.getElementById('global-search')?.addEventListener('input', this.debounce(() => this.doSearch(), 300));
+
+          // 主题切换
+          document.getElementById('themeToggle')?.addEventListener('click', () => this.toggleTheme());
+
+          // 返回顶部
+          document.getElementById('backToTop')?.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+
+          // 模态框背景关闭
+          document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+              if (e.target === modal) this.closeModal(modal.id);
+            });
+          });
+        }
+
+        debounce(fn, delay) {
+          let timer;
+          return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn.apply(this, args), delay);
+          };
+        }
+      }
+
+      // 启动应用
+      window.app = new BaibaoApp();
+    })();
+  </script>
+</body>
+</html>
