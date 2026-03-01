@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>百宝袋 · 最终融合版</title>
+  <title>百宝袋 · 深度优化版</title>
   <style>
     /* 合并所有版本的样式，并优化 */
     * {
@@ -544,15 +544,15 @@
         COLLAPSED_CATS: 'baibaodai_collapsed_categories'
       };
 
-      // 公开分享的初始 Gist URL（占位，发布后会提示替换）
-      const PUBLIC_SHARE_GIST_RAW_URL = 'https://gist.githubusercontent.com/你的用户名/你的GistID/raw/public_shares.json';
+      // 公开分享的 Gist URL（请替换为您自己的真实地址）
+      const PUBLIC_SHARE_GIST_RAW_URL = 'https://gist.githubusercontent.com/China2026124/f65f710801c2ceb8ad9dcb0b1085f703/raw/public_shares.json';
 
-      // 收藏密码
+      // 收藏密码（不再显示提示）
       const FAVORITE_PASSWORD = '2026';
       const MAX_PASSWORD_ATTEMPTS = 3;
       const LOCK_TIME = 10 * 60 * 1000; // 10分钟
 
-      // ---------- 合并后的工具数据（从三个版本整合，去重）----------
+      // ---------- 工具数据（精简并优化）----------
       // 万能工具合集
       const TOOLS_DATA = [
         { name: "在线工具大全，图片/PDF/格式转换一站式", url: "https://tools.miku.ac", tag: "tool" },
@@ -648,11 +648,9 @@
         { name: "奈菲影视", url: "https://www.nfmovies.com", tag: "" }
       ];
 
-      // 网盘资源共享
+      // 网盘资源共享（仅保留一条）
       const CLOUD_DATA = [
-        { name: "常用软件合集 (123684)", url: "https://www.123684.com/s/5VtiVv-tGKH?提取码：ymt6", tag: "阿里" },
-        { name: "办公模板大全", url: "https://pan.baidu.com/s/", tag: "百度" },
-        { name: "高清壁纸资源", url: "https://www.aliyundrive.com/s/", tag: "阿里" }
+        { name: "常用软件合集 (123684)", url: "https://www.123684.com/s/5VtiVv-tGKH?提取码：ymt6", tag: "阿里" }
       ];
 
       // 音乐与小说
@@ -728,13 +726,12 @@
         { name: "盘了个盘", url: "https://www.panlegepan.com" }
       ];
 
-      // 分类定义
+      // 分类定义（移除了“我的收藏”主分类，改为通过“关于”模态框展示）
       const TOOL_CATEGORIES = [
         { id: 'cat-tools', title: '🔧 万能工具合集', items: TOOLS_DATA },
         { id: 'cat-movie', title: '🎬 影视资源', items: MOVIE_DATA },
         { id: 'cat-cloud', title: '☁️ 网盘资源共享', items: CLOUD_DATA, allowAdd: true },
         { id: 'cat-music-novel', title: '🎵 音乐与小说', items: MUSIC_NOVEL_DATA },
-        { id: 'cat-custom', title: '⭐ 我的收藏', items: [], allowAdd: true, custom: true, needPassword: true },
         { id: 'cat-public-share', title: '📤 公开资源分享', items: [], allowAdd: true, publicShare: true }
       ];
 
@@ -846,7 +843,7 @@
                 <button class="btn" data-modal="cloud-modal">网盘搜索</button>
                 <button class="btn" data-modal="wandoujia-modal">豌豆荚</button>
                 <button class="btn" data-modal="ai-modal">AI助手</button>
-                <button class="btn" data-about>关于</button>
+                <button class="btn" data-modal="favorites-modal">关于</button>
               </div>
 
               <div id="categories-container"></div>
@@ -881,23 +878,50 @@
               </div>
             </div>
 
-            <!-- 模态框：AI助手 -->
+            <!-- 模态框：AI助手（深度优化版） -->
             <div id="ai-modal" class="modal">
               <div class="modal-content">
                 <div class="modal-header">
                   <div class="modal-title">🤖 AI助手推荐</div>
                   <button class="close-btn" data-close="ai-modal">&times;</button>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 20px;">
+                  <div style="grid-column: span 2; font-weight: bold; margin-bottom: 5px;">💬 对话类</div>
                   <button class="btn" data-url="https://chat.deepseek.com/">DeepSeek</button>
                   <button class="btn" data-url="https://chat.openai.com/">ChatGPT</button>
                   <button class="btn" data-url="https://kimi.moonshot.cn/">Kimi</button>
                   <button class="btn" data-url="https://tongyi.aliyun.com/">通义千问</button>
+                  <button class="btn" data-url="https://www.doubao.com/">豆包</button>
+                  <button class="btn" data-url="https://xinghuo.xfyun.cn/">讯飞星火</button>
+                  
+                  <div style="grid-column: span 2; font-weight: bold; margin-top: 10px; margin-bottom: 5px;">🎨 绘画类</div>
+                  <button class="btn" data-url="https://www.midjourney.com/">Midjourney</button>
+                  <button class="btn" data-url="https://stablediffusionweb.com/">Stable Diffusion</button>
+                  <button class="btn" data-url="https://www.draft.art/">Draft</button>
+                  <button class="btn" data-url="https://www.wenxin.baidu.com/">文心一格</button>
+                  
+                  <div style="grid-column: span 2; font-weight: bold; margin-top: 10px; margin-bottom: 5px;">📚 其他工具</div>
+                  <button class="btn" data-url="https://www.perplexity.ai/">Perplexity</button>
+                  <button class="btn" data-url="https://www.notion.so/">Notion AI</button>
                 </div>
               </div>
             </div>
 
-            <!-- 模态框：Token设置 -->
+            <!-- 模态框：关于（集成我的收藏） -->
+            <div id="favorites-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title">⭐ 关于 & 我的收藏</div>
+                  <button class="close-btn" data-close="favorites-modal">&times;</button>
+                </div>
+                <div style="margin-bottom: 20px; font-size: 0.95rem; color: var(--text); opacity: 0.8;">
+                  欢迎使用百宝袋AI工具箱！以下为您的个人收藏（密码保护）。
+                </div>
+                <div id="favorites-modal-content"></div>
+              </div>
+            </div>
+
+            <!-- 模态框：Token设置（独立，便于调用） -->
             <div id="token-modal" class="modal">
               <div class="modal-content">
                 <div class="modal-header">
@@ -906,7 +930,7 @@
                 </div>
                 <p style="margin-bottom: 16px;">请输入 GitHub Personal Access Token (需 gist 权限):</p>
                 <input type="password" id="github-token" class="form-input" placeholder="ghp_..." style="width: 100%; margin-bottom: 16px;" value="${this.state.token}">
-                <p style="margin-bottom: 16px; font-size:0.9rem; color:var(--success);">⚠️ 建议使用最小权限（仅gist），并定期更换。</p>
+                <p style="margin-bottom: 16px; font-size:0.9rem; color:var(--success);">⚠️ 建议使用最小权限（仅gist），可避免401错误。</p>
                 <button class="add-btn" id="saveTokenBtn" style="width: 100%;">保存</button>
                 <p style="margin-top: 16px; font-size: 0.9em; color: #666;">Token 仅保存在本地浏览器，不会上传。</p>
               </div>
@@ -979,7 +1003,6 @@
             catDiv.innerHTML = `
               <div class="category-title">
                 ${cat.title}
-                ${cat.needPassword && this.state.favoritesUnlocked ? '<span class="unlocked-badge">已解锁</span>' : ''}
               </div>
               <div class="category-content">
                 <ul class="link-list" id="list-${cat.id}"></ul>
@@ -992,9 +1015,7 @@
           TOOL_CATEGORIES.forEach(cat => {
             const listEl = document.getElementById(`list-${cat.id}`);
             if (!listEl) return;
-            if (cat.custom) {
-              this.renderCustomLinks(listEl);
-            } else if (cat.publicShare) {
+            if (cat.publicShare) {
               this.renderPublicShares(listEl);
             } else {
               cat.items.forEach(item => this.appendLinkItem(listEl, item));
@@ -1015,30 +1036,6 @@
                   <option value="迅雷云盘">迅雷云盘</option>
                 </select>
                 <button class="add-btn" data-add="cloud">+添加</button>
-              </div>
-            `;
-          } else if (cat.id === 'cat-custom') {
-            if (!this.state.favoritesUnlocked) return '';
-            return `
-              <div class="add-form">
-                <input type="text" id="link-name" class="form-input" placeholder="链接名称" maxlength="20">
-                <input type="text" id="link-url" class="form-input" placeholder="https://">
-                <select id="link-tag" class="form-input">
-                  <option value="工作">工作</option>
-                  <option value="学习">学习</option>
-                  <option value="娱乐">娱乐</option>
-                  <option value="其他">其他</option>
-                </select>
-                <button class="add-btn" data-add="custom">+添加</button>
-              </div>
-              <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;">
-                <button class="btn" data-export>导出收藏</button>
-                <button class="btn" data-import>导入收藏</button>
-                <input type="file" id="import-file" accept=".json" style="display:none">
-                <button class="btn" data-modal="token-modal">设置 Token</button>
-                <button class="btn" data-sync>同步到云端</button>
-                <button class="btn" data-restore>↓从云端恢复</button>
-                <button class="btn" data-modal="log-modal">查看同步日志</button>
               </div>
             `;
           } else if (cat.id === 'cat-public-share') {
@@ -1083,8 +1080,12 @@
           listEl.appendChild(li);
         }
 
-        renderCustomLinks(listEl) {
-          listEl.innerHTML = '';
+        // 渲染我的收藏（用于“关于”模态框）
+        renderFavoritesInModal() {
+          const container = document.getElementById('favorites-modal-content');
+          if (!container) return;
+          container.innerHTML = '';
+
           if (!this.state.favoritesUnlocked) {
             if (this.state.lockUntil > Date.now()) {
               const lockDiv = document.createElement('div');
@@ -1093,7 +1094,7 @@
                 <div class="lock-icon">🔒</div>
                 <div class="lock-text">密码错误次数过多，已锁定10分钟</div>
               `;
-              listEl.appendChild(lockDiv);
+              container.appendChild(lockDiv);
               return;
             }
             const lockDiv = document.createElement('div');
@@ -1102,38 +1103,81 @@
             lockDiv.innerHTML = `
               <div class="lock-icon">🔒</div>
               <div class="lock-text">点击输入密码解锁收藏</div>
-              <div style="font-size:0.8rem; margin-top:8px; opacity:0.5;">密码: ${FAVORITE_PASSWORD}</div>
             `;
-            listEl.appendChild(lockDiv);
+            container.appendChild(lockDiv);
             return;
           }
 
+          // 已解锁，显示收藏列表和操作
           const links = this.state.links;
+          const listEl = document.createElement('ul');
+          listEl.className = 'link-list';
           if (!links.length) {
             listEl.innerHTML = '<li class="link-item"><span class="link-name">暂无收藏，快去添加吧~</span></li>';
-            return;
-          }
-          links.forEach((item, idx) => {
-            this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: item.tag || '其他' }, true, idx);
-          });
-        }
+          } else {
+            links.forEach((item, idx) => {
+              const li = document.createElement('li');
+              li.className = 'link-item';
+              li.setAttribute('data-url', item.url);
+              li.setAttribute('data-name', item.name);
+              li.setAttribute('data-tag', item.tag || '');
+              const nameSpan = document.createElement('span');
+              nameSpan.className = 'link-name';
+              nameSpan.textContent = item.name;
+              const tagSpan = document.createElement('span');
+              tagSpan.className = 'link-tag';
+              tagSpan.textContent = item.tag || '自定义';
+              li.appendChild(nameSpan);
+              li.appendChild(tagSpan);
 
-        async renderPublicShares(listEl) {
-          listEl.innerHTML = '<div class="loading">加载公开资源中...</div>';
-          const localShares = this.state.publicShares;
-          listEl.innerHTML = '';
-          localShares.forEach(item => this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: '本地' }));
+              li.addEventListener('dblclick', (e) => {
+                e.stopPropagation();
+                if (confirm('确定删除该收藏？')) {
+                  this.state.links.splice(idx, 1);
+                  setStorage(STORAGE_KEYS.LINKS, this.state.links);
+                  this.renderFavoritesInModal(); // 重新渲染
+                  showNotification('已删除');
+                }
+              });
 
-          try {
-            const res = await fetch(PUBLIC_SHARE_GIST_RAW_URL, { cache: 'no-cache' });
-            if (!res.ok) throw new Error('远程加载失败');
-            const remote = await res.json();
-            if (Array.isArray(remote)) {
-              remote.forEach(item => this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: '公开' }));
-            }
-          } catch (err) {
-            // 静默失败，不影响本地显示
+              li.addEventListener('click', () => openLink(item.url));
+              listEl.appendChild(li);
+            });
           }
+          container.appendChild(listEl);
+
+          // 添加表单
+          const addForm = document.createElement('div');
+          addForm.className = 'add-form';
+          addForm.innerHTML = `
+            <input type="text" id="modal-link-name" class="form-input" placeholder="链接名称" maxlength="20">
+            <input type="text" id="modal-link-url" class="form-input" placeholder="https://">
+            <select id="modal-link-tag" class="form-input">
+              <option value="工作">工作</option>
+              <option value="学习">学习</option>
+              <option value="娱乐">娱乐</option>
+              <option value="其他">其他</option>
+            </select>
+            <button class="add-btn" id="modal-add-custom">+添加</button>
+          `;
+          container.appendChild(addForm);
+
+          // 操作按钮组
+          const actionDiv = document.createElement('div');
+          actionDiv.style.marginTop = '18px';
+          actionDiv.style.display = 'flex';
+          actionDiv.style.gap = '12px';
+          actionDiv.style.flexWrap = 'wrap';
+          actionDiv.innerHTML = `
+            <button class="btn" id="modal-export">导出收藏</button>
+            <button class="btn" id="modal-import">导入收藏</button>
+            <input type="file" id="modal-import-file" accept=".json" style="display:none">
+            <button class="btn" data-modal="token-modal">设置 Token</button>
+            <button class="btn" id="modal-sync">同步到云端</button>
+            <button class="btn" id="modal-restore">↓从云端恢复</button>
+            <button class="btn" data-modal="log-modal">查看同步日志</button>
+          `;
+          container.appendChild(actionDiv);
         }
 
         // 解锁收藏
@@ -1150,7 +1194,8 @@
             sessionStorage.setItem('favoritesUnlocked', 'true');
             sessionStorage.setItem('passwordAttempts', '0');
             sessionStorage.removeItem('lockUntil');
-            this.renderCategories();
+            // 重新渲染收藏模态框内容
+            this.renderFavoritesInModal();
             showNotification('🔓 收藏已解锁');
             return true;
           } else {
@@ -1162,7 +1207,7 @@
               this.state.favoritesUnlocked = false;
               sessionStorage.setItem('favoritesUnlocked', 'false');
               showNotification('❌ 错误次数过多，锁定10分钟');
-              this.renderCategories();
+              this.renderFavoritesInModal();
             } else {
               showNotification(`❌ 密码错误，还剩 ${MAX_PASSWORD_ATTEMPTS - this.state.passwordAttempts} 次机会`);
             }
@@ -1170,114 +1215,29 @@
           }
         }
 
-        // 删除收藏
+        // 删除收藏（由事件处理）
         deleteCustomLink(idx) {
           if (!confirm('确定删除该收藏？')) return;
           this.state.links.splice(idx, 1);
           setStorage(STORAGE_KEYS.LINKS, this.state.links);
-          const listEl = document.getElementById('list-cat-custom');
-          this.renderCustomLinks(listEl);
+          this.renderFavoritesInModal();
           showNotification('已删除');
         }
 
-        // 添加自定义收藏
-        addCustomLink() {
-          const name = document.getElementById('link-name')?.value.trim();
-          let url = document.getElementById('link-url')?.value.trim();
-          const tag = document.getElementById('link-tag')?.value || '其他';
+        // 添加收藏（模态框内）
+        addCustomLinkFromModal() {
+          const name = document.getElementById('modal-link-name')?.value.trim();
+          let url = document.getElementById('modal-link-url')?.value.trim();
+          const tag = document.getElementById('modal-link-tag')?.value || '其他';
           if (!name || !url) return showNotification('请填写完整');
           if (!url.startsWith('http')) url = 'https://' + url;
           const newLink = { name, url, tag };
           this.state.links.push(newLink);
           setStorage(STORAGE_KEYS.LINKS, this.state.links);
-          const listEl = document.getElementById('list-cat-custom');
-          this.renderCustomLinks(listEl);
-          document.getElementById('link-name').value = '';
-          document.getElementById('link-url').value = '';
+          document.getElementById('modal-link-name').value = '';
+          document.getElementById('modal-link-url').value = '';
+          this.renderFavoritesInModal();
           showNotification('✅ 已添加收藏');
-        }
-
-        // 添加网盘资源
-        addCloudResource() {
-          const name = document.getElementById('cloud-name')?.value.trim();
-          let url = document.getElementById('cloud-url')?.value.trim();
-          const type = document.getElementById('cloud-type')?.value || '云盘';
-          if (!name || !url) return showNotification('请填写完整');
-          if (!url.startsWith('http')) url = 'https://' + url;
-          // 临时添加到当前列表（不保存到localStorage，仅展示）
-          const listEl = document.getElementById('list-cat-cloud');
-          this.appendLinkItem(listEl, { name: `${name} (${type})`, url, tag: type });
-          document.getElementById('cloud-name').value = '';
-          document.getElementById('cloud-url').value = '';
-          showNotification('已添加到网盘列表（临时）');
-        }
-
-        // 添加公开分享
-        addPublicShare() {
-          const name = document.getElementById('share-name')?.value.trim();
-          let url = document.getElementById('share-url')?.value.trim();
-          if (!name || !url) return showNotification('请填写完整');
-          if (!url.startsWith('http')) url = 'https://' + url;
-          this.state.publicShares.push({ name, url });
-          setStorage(STORAGE_KEYS.PUBLIC_SHARES, this.state.publicShares);
-          const listEl = document.getElementById('list-cat-public-share');
-          this.renderPublicShares(listEl);
-          document.getElementById('share-name').value = '';
-          document.getElementById('share-url').value = '';
-          showNotification('已添加到本地公开分享');
-        }
-
-        // 刷新公开资源
-        async refreshPublicShares() {
-          const listEl = document.getElementById('list-cat-public-share');
-          await this.renderPublicShares(listEl);
-          showNotification('公开资源已刷新');
-        }
-
-        // 发布公开分享
-        async publishPublicShare() {
-          if (!confirm('此操作将公开您添加的所有本地公开分享，其他人可见。确定继续？')) return;
-          const token = this.state.token;
-          if (!token) {
-            showNotification('请先设置 Token');
-            this.openModal('token-modal');
-            return;
-          }
-          const shares = this.state.publicShares;
-          if (!shares.length) return showNotification('没有公开分享可发布');
-
-          const filename = 'public_shares.json';
-          const content = JSON.stringify(shares, null, 2);
-          const body = { description: '百宝袋AI工具箱 - 公开资源分享', public: true, files: { [filename]: { content } } };
-
-          try {
-            let res;
-            if (this.state.publicGistId) {
-              res = await this.fetchWithRetry(`https://api.github.com/gists/${this.state.publicGistId}`, {
-                method: 'PATCH',
-                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
-                body: JSON.stringify(body)
-              });
-            } else {
-              res = await this.fetchWithRetry('https://api.github.com/gists', {
-                method: 'POST',
-                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
-                body: JSON.stringify(body)
-              });
-            }
-            const data = await res.json();
-            if (!this.state.publicGistId) {
-              this.state.publicGistId = data.id;
-              localStorage.setItem(STORAGE_KEYS.PUBLIC_GIST_ID, data.id);
-            }
-            const newRawUrl = `https://gist.githubusercontent.com/${data.owner.login}/${data.id}/raw/${filename}`;
-            showNotification('🚀 已发布到公开 Gist');
-            this.writeLog('发布公开分享', true, `Gist ID: ${data.id}`);
-            alert('请将代码中的 PUBLIC_SHARE_GIST_RAW_URL 替换为：\n' + newRawUrl);
-          } catch (err) {
-            showNotification('❌ 发布失败：' + err.message);
-            this.writeLog('发布公开分享', false, err.message);
-          }
         }
 
         // 导出收藏
@@ -1306,8 +1266,7 @@
               this.state.links = links;
               setStorage(STORAGE_KEYS.LINKS, links);
               showNotification(`✅ 导入成功，共 ${links.length} 条`);
-              const listEl = document.getElementById('list-cat-custom');
-              this.renderCustomLinks(listEl);
+              this.renderFavoritesInModal();
             } catch (err) {
               showNotification('❌ 导入失败：' + err.message);
             }
@@ -1396,16 +1355,107 @@
             if (!Array.isArray(links)) throw new Error('数据格式错误');
             this.state.links = links;
             setStorage(STORAGE_KEYS.LINKS, links);
-            const listEl = document.getElementById('list-cat-custom');
-            this.renderCustomLinks(listEl);
             showNotification('✅ 已从云端恢复');
             this.writeLog('从云端恢复', true, `恢复 ${links.length} 条`);
+            this.renderFavoritesInModal();
           } catch (err) {
             showNotification('❌ 恢复失败：' + err.message);
             this.writeLog('从云端恢复', false, err.message);
           } finally {
             this.state.syncInProgress = false;
           }
+        }
+
+        // 添加网盘资源
+        addCloudResource() {
+          const name = document.getElementById('cloud-name')?.value.trim();
+          let url = document.getElementById('cloud-url')?.value.trim();
+          const type = document.getElementById('cloud-type')?.value || '云盘';
+          if (!name || !url) return showNotification('请填写完整');
+          if (!url.startsWith('http')) url = 'https://' + url;
+          const listEl = document.getElementById('list-cat-cloud');
+          this.appendLinkItem(listEl, { name: `${name} (${type})`, url, tag: type });
+          document.getElementById('cloud-name').value = '';
+          document.getElementById('cloud-url').value = '';
+          showNotification('已添加到网盘列表（临时）');
+        }
+
+        // 添加公开分享
+        addPublicShare() {
+          const name = document.getElementById('share-name')?.value.trim();
+          let url = document.getElementById('share-url')?.value.trim();
+          if (!name || !url) return showNotification('请填写完整');
+          if (!url.startsWith('http')) url = 'https://' + url;
+          this.state.publicShares.push({ name, url });
+          setStorage(STORAGE_KEYS.PUBLIC_SHARES, this.state.publicShares);
+          const listEl = document.getElementById('list-cat-public-share');
+          this.renderPublicShares(listEl);
+          document.getElementById('share-name').value = '';
+          document.getElementById('share-url').value = '';
+          showNotification('已添加到本地公开分享');
+        }
+
+        // 刷新公开资源
+        async refreshPublicShares() {
+          const listEl = document.getElementById('list-cat-public-share');
+          await this.renderPublicShares(listEl);
+          showNotification('公开资源已刷新');
+        }
+
+        // 发布公开分享
+        async publishPublicShare() {
+          if (!confirm('此操作将公开您添加的所有本地公开分享，其他人可见。确定继续？')) return;
+          const token = this.state.token;
+          if (!token) {
+            showNotification('请先设置 Token');
+            this.openModal('token-modal');
+            return;
+          }
+          const shares = this.state.publicShares;
+          if (!shares.length) return showNotification('没有公开分享可发布');
+
+          const filename = 'public_shares.json';
+          const content = JSON.stringify(shares, null, 2);
+          const body = { description: '百宝袋AI工具箱 - 公开资源分享', public: true, files: { [filename]: { content } } };
+
+          try {
+            let res;
+            if (this.state.publicGistId) {
+              res = await this.fetchWithRetry(`https://api.github.com/gists/${this.state.publicGistId}`, {
+                method: 'PATCH',
+                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+                body: JSON.stringify(body)
+              });
+            } else {
+              res = await this.fetchWithRetry('https://api.github.com/gists', {
+                method: 'POST',
+                headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
+                body: JSON.stringify(body)
+              });
+            }
+            const data = await res.json();
+            if (!this.state.publicGistId) {
+              this.state.publicGistId = data.id;
+              localStorage.setItem(STORAGE_KEYS.PUBLIC_GIST_ID, data.id);
+            }
+            const newRawUrl = `https://gist.githubusercontent.com/${data.owner.login}/${data.id}/raw/${filename}`;
+            showNotification('🚀 已发布到公开 Gist');
+            this.writeLog('发布公开分享', true, `Gist ID: ${data.id}`);
+            alert('请将代码中的 PUBLIC_SHARE_GIST_RAW_URL 替换为：\n' + newRawUrl);
+          } catch (err) {
+            showNotification('❌ 发布失败：' + err.message + ' 请确认 Token 具有 gist 权限');
+            this.writeLog('发布公开分享', false, err.message);
+          }
+        }
+
+        // 保存Token
+        saveToken() {
+          const token = document.getElementById('github-token').value.trim();
+          if (!token) return showNotification('Token 不能为空');
+          localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+          this.state.token = token;
+          showNotification('Token 已保存');
+          this.closeModal('token-modal');
         }
 
         // 带重试的fetch
@@ -1434,16 +1484,6 @@
           this.state.logs = logs;
           setStorage(STORAGE_KEYS.LOG, logs);
           this.renderLogPanel();
-        }
-
-        // 保存Token
-        saveToken() {
-          const token = document.getElementById('github-token').value.trim();
-          if (!token) return showNotification('Token 不能为空');
-          localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-          this.state.token = token;
-          showNotification('Token 已保存');
-          this.closeModal('token-modal');
         }
 
         // 搜索
@@ -1497,7 +1537,14 @@
 
         // 模态框控制
         openModal(id) {
-          document.getElementById(id)?.classList.add('active');
+          const modal = document.getElementById(id);
+          if (modal) {
+            modal.classList.add('active');
+            // 如果是收藏模态框，渲染内容
+            if (id === 'favorites-modal') {
+              this.renderFavoritesInModal();
+            }
+          }
         }
 
         closeModal(id) {
@@ -1594,7 +1641,7 @@
           }
         }
 
-        // 加载公开Gist（仅用于尝试加载，占位URL会失败但不影响）
+        // 加载公开Gist
         async loadPublicSharesFromGist() {
           try {
             const res = await fetch(PUBLIC_SHARE_GIST_RAW_URL, { cache: 'no-cache' });
@@ -1605,6 +1652,24 @@
               if (listEl) this.renderPublicShares(listEl);
             }
           } catch {}
+        }
+
+        async renderPublicShares(listEl) {
+          listEl.innerHTML = '<div class="loading">加载公开资源中...</div>';
+          const localShares = this.state.publicShares;
+          listEl.innerHTML = '';
+          localShares.forEach(item => this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: '本地' }));
+
+          try {
+            const res = await fetch(PUBLIC_SHARE_GIST_RAW_URL, { cache: 'no-cache' });
+            if (!res.ok) throw new Error('远程加载失败');
+            const remote = await res.json();
+            if (Array.isArray(remote)) {
+              remote.forEach(item => this.appendLinkItem(listEl, { name: item.name, url: item.url, tag: '公开' }));
+            }
+          } catch (err) {
+            // 静默失败
+          }
         }
 
         // 时钟
@@ -1677,9 +1742,10 @@
               else if (cmd === 'video') openLink('https://dy.kukutool.com/');
             }
 
-            // 关于
+            // 关于（不再使用旧的通知）
             if (target.matches('[data-about]')) {
-              showNotification('欢迎使用百宝袋AI工具箱！');
+              // 已被收藏模态框替代
+              this.openModal('favorites-modal');
             }
 
             // 数据URL按钮
@@ -1692,34 +1758,9 @@
               this.addCloudResource();
             }
 
-            // 添加收藏
-            if (target.matches('[data-add="custom"]')) {
-              this.addCustomLink();
-            }
-
             // 添加公开分享
             if (target.matches('[data-add="public"]')) {
               this.addPublicShare();
-            }
-
-            // 导出
-            if (target.matches('[data-export]')) {
-              this.exportLinks();
-            }
-
-            // 导入触发
-            if (target.matches('[data-import]')) {
-              document.getElementById('import-file').click();
-            }
-
-            // 同步
-            if (target.matches('[data-sync]')) {
-              this.syncToGist();
-            }
-
-            // 恢复
-            if (target.matches('[data-restore]')) {
-              this.restoreFromGist();
             }
 
             // 发布
@@ -1757,7 +1798,7 @@
               if (cat) this.toggleCategory(cat.id);
             }
 
-            // 解锁点击
+            // 解锁点击（在模态框内）
             if (target.matches('[data-unlock="true"]') || target.closest('[data-unlock="true"]')) {
               this.unlockFavorites();
             }
@@ -1776,9 +1817,29 @@
             if (target.matches('#clearSearchBtn')) {
               this.clearSearch();
             }
+
+            // 模态框内收藏操作
+            if (target.matches('#modal-add-custom')) {
+              this.addCustomLinkFromModal();
+            }
+            if (target.matches('#modal-export')) {
+              this.exportLinks();
+            }
+            if (target.matches('#modal-import')) {
+              document.getElementById('modal-import-file').click();
+            }
+            if (target.matches('#modal-sync')) {
+              this.syncToGist();
+            }
+            if (target.matches('#modal-restore')) {
+              this.restoreFromGist();
+            }
           });
 
-          // 文件导入
+          // 文件导入（模态框内）
+          document.getElementById('modal-import-file')?.addEventListener('change', (e) => this.importLinks(e));
+
+          // 普通导入（旧页面可能还有，保留）
           document.getElementById('import-file')?.addEventListener('change', (e) => this.importLinks(e));
 
           // 搜索防抖
@@ -1815,4 +1876,3 @@
   </script>
 </body>
 </html>
-
