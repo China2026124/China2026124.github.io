@@ -88,6 +88,7 @@
       font-size: 2.8rem;
       font-weight: 200;
       margin-bottom: 10px;
+      font-variant-numeric: tabular-nums;
     }
 
     .date {
@@ -215,12 +216,6 @@
       border-radius: 25px;
       color: #fff;
       white-space: nowrap;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .link-tag:hover {
-      opacity: 0.8;
     }
 
     .add-form {
@@ -374,19 +369,6 @@
       background: rgba(0, 0, 0, 0.08);
       font-size: 1em;
       color: var(--text);
-    }
-
-    .tag-filter {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .tag-filter .btn {
-      padding: 8px 16px;
-      font-size: 0.85em;
     }
 
     .highlight {
@@ -803,7 +785,6 @@
             passwordAttempts: parseInt(sessionStorage.getItem('passwordAttempts') || '0'),
             lockUntil: parseInt(sessionStorage.getItem('lockUntil') || '0'),
             collapsedCategories: getStorage(STORAGE_KEYS.COLLAPSED_CATS, {}),
-            currentTagFilter: '',
           };
           this.searchKeyword = '';
           this.init();
@@ -856,8 +837,6 @@
                 <button class="btn" id="clearSearchBtn" style="padding:0 16px;">✖</button>
               </div>
 
-              <div class="tag-filter" id="tag-filter"></div>
-
               <div class="quick-links">
                 <button class="btn" data-quick="resource">📦 资源</button>
                 <button class="btn" data-quick="short">短链生成</button>
@@ -865,7 +844,8 @@
               </div>
               <div class="btn-group">
                 <button class="btn" data-modal="cloud-modal">网盘搜索</button>
-                <button class="btn" data-modal="qqwx-modal">QQ/微信历史版</button>
+                <button class="btn" data-modal="wandoujia-modal">豌豆荚</button>
+                <button class="btn" data-modal="ai-modal">AI助手</button>
                 <button class="btn" data-about>关于</button>
               </div>
 
@@ -888,16 +868,31 @@
               </div>
             </div>
 
-            <!-- 模态框：QQ/微信历史版 -->
-            <div id="qqwx-modal" class="modal">
+            <!-- 模态框：豌豆荚 -->
+            <div id="wandoujia-modal" class="modal">
               <div class="modal-content">
                 <div class="modal-header">
-                  <div class="modal-title">📱 QQ/微信历史版本</div>
-                  <button class="close-btn" data-close="qqwx-modal">&times;</button>
+                  <div class="modal-title">📱 豌豆荚官网</div>
+                  <button class="close-btn" data-close="wandoujia-modal">&times;</button>
+                </div>
+                <div style="text-align:center; margin-top:20px;">
+                  <button class="btn" data-url="https://m.wandoujia.com/" style="width:100%;">前往豌豆荚</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 模态框：AI助手 -->
+            <div id="ai-modal" class="modal">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="modal-title">🤖 AI助手推荐</div>
+                  <button class="close-btn" data-close="ai-modal">&times;</button>
                 </div>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px;">
-                  <button class="btn" data-url="https://pc.qq.com/detail/1/detail_2662.html">手机QQ历史版</button>
-                  <button class="btn" data-url="https://dldir1.qq.com/weixin/android/weixinXXX.apk">安卓微信旧版</button>
+                  <button class="btn" data-url="https://chat.deepseek.com/">DeepSeek</button>
+                  <button class="btn" data-url="https://chat.openai.com/">ChatGPT</button>
+                  <button class="btn" data-url="https://kimi.moonshot.cn/">Kimi</button>
+                  <button class="btn" data-url="https://tongyi.aliyun.com/">通义千问</button>
                 </div>
               </div>
             </div>
@@ -1005,8 +1000,6 @@
               cat.items.forEach(item => this.appendLinkItem(listEl, item));
             }
           });
-
-          this.renderTagFilter();
         }
 
         getAddFormHTML(cat) {
@@ -1064,57 +1057,6 @@
           return '';
         }
 
-        renderTagFilter() {
-          const filterDiv = document.getElementById('tag-filter');
-          if (!filterDiv) return;
-          const allTags = new Set();
-          TOOL_CATEGORIES.forEach(cat => {
-            if (cat.items) cat.items.forEach(item => item.tag && allTags.add(item.tag));
-          });
-          this.state.links.forEach(link => link.tag && allTags.add(link.tag));
-          const tags = Array.from(allTags).filter(t => t);
-          filterDiv.innerHTML = '<span style="opacity:0.7;">标签筛选:</span>';
-          tags.forEach(tag => {
-            const btn = document.createElement('button');
-            btn.className = 'btn' + (this.state.currentTagFilter === tag ? ' active' : '');
-            btn.textContent = tag;
-            btn.style.padding = '6px 12px';
-            btn.style.fontSize = '0.85em';
-            btn.addEventListener('click', () => {
-              this.state.currentTagFilter = this.state.currentTagFilter === tag ? '' : tag;
-              this.renderTagFilter();
-              this.filterByTag();
-            });
-            filterDiv.appendChild(btn);
-          });
-          if (tags.length > 0) {
-            const clearBtn = document.createElement('button');
-            clearBtn.className = 'btn';
-            clearBtn.textContent = '清除';
-            clearBtn.style.padding = '6px 12px';
-            clearBtn.addEventListener('click', () => {
-              this.state.currentTagFilter = '';
-              this.renderTagFilter();
-              this.filterByTag();
-            });
-            filterDiv.appendChild(clearBtn);
-          }
-        }
-
-        filterByTag() {
-          const keyword = this.state.currentTagFilter;
-          const allItems = document.querySelectorAll('.link-item');
-          allItems.forEach(item => {
-            const tagSpan = item.querySelector('.link-tag');
-            const tag = tagSpan ? tagSpan.textContent.trim() : '';
-            if (!keyword || tag === keyword) {
-              item.style.display = 'flex';
-            } else {
-              item.style.display = 'none';
-            }
-          });
-        }
-
         appendLinkItem(listEl, item, deletable = false, idx = null) {
           const li = document.createElement('li');
           li.className = 'link-item';
@@ -1127,12 +1069,6 @@
           const tagSpan = document.createElement('span');
           tagSpan.className = 'link-tag';
           tagSpan.textContent = item.tag || '链接';
-          tagSpan.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.state.currentTagFilter = item.tag || '';
-            this.renderTagFilter();
-            this.filterByTag();
-          });
           li.appendChild(nameSpan);
           li.appendChild(tagSpan);
 
@@ -1241,7 +1177,6 @@
           setStorage(STORAGE_KEYS.LINKS, this.state.links);
           const listEl = document.getElementById('list-cat-custom');
           this.renderCustomLinks(listEl);
-          this.renderTagFilter();
           showNotification('已删除');
         }
 
@@ -1259,7 +1194,6 @@
           this.renderCustomLinks(listEl);
           document.getElementById('link-name').value = '';
           document.getElementById('link-url').value = '';
-          this.renderTagFilter();
           showNotification('✅ 已添加收藏');
         }
 
