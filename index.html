@@ -544,8 +544,8 @@
         COLLAPSED_CATS: 'baibaodai_collapsed_categories'
       };
 
-      // 公开分享的 Gist URL（请替换为您自己的真实地址）
-      const PUBLIC_SHARE_GIST_RAW_URL = 'https://gist.githubusercontent.com/China2026124/f65f710801c2ceb8ad9dcb0b1085f703/raw/public_shares.json';
+      // 公开分享的 Gist URL（已替换为最新的真实地址）
+      const PUBLIC_SHARE_GIST_RAW_URL = 'https://gist.githubusercontent.com/China2026124/da97689e531632528d33b1840fe5c76f/raw/public_shares.json';
 
       // 收藏密码（不再显示提示）
       const FAVORITE_PASSWORD = '2026';
@@ -1641,7 +1641,7 @@
           }
         }
 
-        // 加载公开Gist
+        // 加载公开Gist（现在使用真实地址）
         async loadPublicSharesFromGist() {
           try {
             const res = await fetch(PUBLIC_SHARE_GIST_RAW_URL, { cache: 'no-cache' });
